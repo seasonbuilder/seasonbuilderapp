@@ -9,7 +9,7 @@ from openai import OpenAI
 
 # Initialize OpenAI client
 client = OpenAI()
-assistant_id = "asst_Nl7k4mZVMvGbYCjm3pzfXLWx"
+assistant_id = [OPENAI_ASSISTANT]
 # Your chosen model
 MODEL = "gpt-4-1106-preview"
 
