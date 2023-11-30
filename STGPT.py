@@ -39,7 +39,6 @@ with header:
     with col2:
         st.header("Coach Aidge")
         st.subheader("Your Virtual Life Coach Trained by Season Builder")
-    st.divider()
 
 
 with body:
