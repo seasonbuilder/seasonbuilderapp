@@ -8,9 +8,7 @@ import io
 from openai import OpenAI
 
 # Initialize OpenAI client
-api_key = st.secrets["OPENAI_API_KEY"]
-assistant_id = st.secrets["OPENAI_ASSISTANT"]
-client = OpenAI(api_key)
+client = OpenAI()
 
 # Your chosen model
 MODEL = "gpt-4-1106-preview"
@@ -46,9 +44,8 @@ with header:
 with body:
     # Initialize OpenAI assistant
     if "assistant" not in st.session_state:
-        #openai.api_key = st.secrets["OPENAI_API_KEY"]
-        #st.session_state.assistant = openai.beta.assistants.retrieve(st.secrets["OPENAI_ASSISTANT"])
-        st.session_state.assistant = openai.beta.assistants.retrieve(assistant_id)
+        openai.api_key = st.secrets["OPENAI_API_KEY"]
+        st.session_state.assistant = openai.beta.assistants.retrieve(st.secrets["OPENAI_ASSISTANT"])
         st.session_state.thread = client.beta.threads.create(
             metadata={'session_id': st.session_state.session_id}
         )
