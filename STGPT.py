@@ -32,7 +32,7 @@ header = st.container()
 body = st.container()
 
 with header:
-    st.image("https://static.wixstatic.com/media/b748e0_99b186cc5e45401487188f7dc1b4eaae~mv2.png","",200)
+    st.image("https://static.wixstatic.com/media/b748e0_3d5d304967484a6db8794389ab2d2df5~mv2.png")
     #st.image("https://static.wixstatic.com/media/b748e0_50957b895eab47bf88d7d7582979e24f~mv2.png/v1/crop/x_0,y_174,w_1600,h_551/fill/w_383,h_132,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/SB%20Home%20Logo%20Transparent.png")
     st.header("Coach Aidge")
     st.caption("Your Virtual Life Coach")
