@@ -8,8 +8,10 @@ import io
 from openai import OpenAI
 
 # Initialize OpenAI client
-client = OpenAI()
-assistant_id = [OPENAI_ASSISTANT]
+api_key = st.secrets("OPENAI_API_KEY")
+assistant_id = st.secrets["OPENAI_ASSISTANT"]
+client = OpenAI(api_key)
+
 # Your chosen model
 MODEL = "gpt-4-1106-preview"
 
