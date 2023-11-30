@@ -8,7 +8,7 @@ import io
 from openai import OpenAI
 
 # Initialize OpenAI client
-api_key = st.secrets("OPENAI_API_KEY")
+api_key = st.secrets["OPENAI_API_KEY"]
 assistant_id = st.secrets["OPENAI_ASSISTANT"]
 client = OpenAI(api_key)
 
