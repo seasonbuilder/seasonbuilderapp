@@ -15,18 +15,14 @@ MODEL = "gpt-4-1106-preview"
 
 # Set up the page
 st.set_page_config(page_title="Coach Aidge - Virtual Life Coach")
-col1,col2 = st.columns(2)
 header = st.container()
 body =st.container()
 
 with header:
-    with col1:
-        st.image("https://static.wixstatic.com/media/b748e0_3d5d304967484a6db8794389ab2d2df5~mv2.png")
-    with col2:
-        st.header("Coach Aidge")
-        st.caption("Your Virtual Life Coach Trained by Season Builder")
-    st.divider()
-
+    st.image("https://static.wixstatic.com/media/b748e0_3d5d304967484a6db8794389ab2d2df5~mv2.png")
+    st.header("Coach Aidge")
+    st.caption("Your Virtual Life Coach Trained by Season Builder")
+    
 with body:
     # Initialize session state variables
     if "session_id" not in st.session_state:
