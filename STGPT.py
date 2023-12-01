@@ -15,8 +15,9 @@ MODEL = "gpt-4-1106-preview"
 
 # Set up the page
 st.set_page_config(page_title="Coach Aidge - Virtual Life Coach")
-header = st.container()
 col1,col2 = st.columns(2)
+header = st.container()
+
 
 with header:
     with col1:
