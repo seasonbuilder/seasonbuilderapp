@@ -29,7 +29,6 @@ if "retry_error" not in st.session_state:
 # Set up the page
 st.set_page_config(page_title="Coach Aidge - Virtual Life Coach")
 header = st.container()
-col1, col2 = st.columns(2)
 body = st.container()
 
 
