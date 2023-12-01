@@ -34,9 +34,11 @@ col1,col2 = st.columns(2)
 
 
 with header:
-    st.col1.image("https://static.wixstatic.com/media/b748e0_3d5d304967484a6db8794389ab2d2df5~mv2.png")
-    st.col2.header("Coach Aidge")
-    st.col2.subheader("Your Virtual Life Coach Trained by Season Builder")
+    with col1:
+        st.image("https://static.wixstatic.com/media/b748e0_3d5d304967484a6db8794389ab2d2df5~mv2.png")
+    with col2:
+        st.header("Coach Aidge")
+        st.subheader("Your Virtual Life Coach Trained by Season Builder")
 
 #with body:
 # Initialize OpenAI assistant
