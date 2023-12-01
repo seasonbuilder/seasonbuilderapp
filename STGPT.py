@@ -29,13 +29,14 @@ if "retry_error" not in st.session_state:
 # Set up the page
 st.set_page_config(page_title="Coach Aidge - Virtual Life Coach")
 header = st.container()
-body = st.container()
+col1,col2 = st.columns(2)
+#body = st.container()
 
 
 with header:
-    st.image("https://static.wixstatic.com/media/b748e0_3d5d304967484a6db8794389ab2d2df5~mv2.png")
-    st.header("Coach Aidge")
-    st.subheader("Your Virtual Life Coach Trained by Season Builder")
+    st.col1.image("https://static.wixstatic.com/media/b748e0_3d5d304967484a6db8794389ab2d2df5~mv2.png")
+    st.col2.header("Coach Aidge")
+    st.col2.subheader("Your Virtual Life Coach Trained by Season Builder")
 
 #with body:
 # Initialize OpenAI assistant
