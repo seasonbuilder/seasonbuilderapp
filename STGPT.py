@@ -84,7 +84,7 @@ if prompt := st.chat_input("How can I help you?"):
 if hasattr(st.session_state.run, 'status'):
     if st.session_state.run.status == "in_progress":
         with st.chat_message('assistant'):
-            st.spinner("Thinking ....")
+            st.write("Thinking ....")
         if st.session_state.retry_error < 3:
             time.sleep(1)
             st.rerun()
@@ -104,6 +104,7 @@ if hasattr(st.session_state.run, 'status'):
             thread_id=st.session_state.thread.id,
             run_id=st.session_state.run.id,
         )
+        st.write("in !=complete part")
         if st.session_state.retry_error < 3:
             time.sleep(3)
             st.rerun()
