@@ -87,7 +87,6 @@ if hasattr(st.session_state.run, 'status'):
             st.write("Thinking ......")
         if st.session_state.retry_error < 3:
             time.sleep(1)
-            st.write("in the if statement of the in progress")
             st.rerun()
 
     elif st.session_state.run.status == "failed":
@@ -107,4 +106,5 @@ if hasattr(st.session_state.run, 'status'):
         )
         if st.session_state.retry_error < 3:
             time.sleep(3)
+            st.write("in the !=complete section")
             st.rerun()
