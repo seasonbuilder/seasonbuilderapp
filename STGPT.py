@@ -104,7 +104,7 @@ if hasattr(st.session_state.run, 'status'):
             thread_id=st.session_state.thread.id,
             run_id=st.session_state.run.id,
         )
+        st.write("in the !=complete section")
         if st.session_state.retry_error < 3:
             time.sleep(3)
-            st.write("in the !=complete section")
             st.rerun()
