@@ -103,9 +103,8 @@ if hasattr(st.session_state.run, 'status'):
         st.session_state.run = client.beta.threads.runs.retrieve(
             thread_id=st.session_state.thread.id,
             run_id=st.session_state.run.id,
-        )
-        with st.chat_message('assistant'):
-            st.write("Thinking ....")
+        )    
+        st.spinner("Thinking ....")
         if st.session_state.retry_error < 3:
             time.sleep(3)
             st.rerun()
