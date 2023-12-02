@@ -82,12 +82,15 @@ if prompt := st.chat_input("How can I help you?"):
 
 # Handle run status
 if hasattr(st.session_state.run, 'status'):
-    if st.session_state.run.status == "in progress":
+    if st.session_state.run.status == "in_progress":
         with st.chat_message('assistant'):
             st.write("Thinking ....")
-        if st.session_state.retry_error < 3:
-            time.sleep(1)
-            st.rerun()
+        st.session_state.run = client.beta.threads.runs.retrieve(
+            thread_id=st.session_state.thread.id,
+            run_id=st.session_state.run.id,
+        ) 
+        time.sleep(1)
+        st.rerun()
 
     elif st.session_state.run.status == "failed":
         st.session_state.retry_error += 1
@@ -104,7 +107,7 @@ if hasattr(st.session_state.run, 'status'):
             thread_id=st.session_state.thread.id,
             run_id=st.session_state.run.id,
         )    
-        st.spinner("Thinking ....")
+
         if st.session_state.retry_error < 3:
             time.sleep(3)
             st.rerun()
