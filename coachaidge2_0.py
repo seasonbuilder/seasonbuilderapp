@@ -83,7 +83,7 @@ if 'prompt' not in st.session_state:
 # Step 1:  Retrieve an Assistant if not already created
 # Initialize OpenAI assistant
 if "assistant" not in st.session_state:
-    openai.api_key = st.secrets["OPENAI_API_KEY"]
+    OpenAI.api_key = st.secrets["OPENAI_API_KEY"]
     st.session_state.assistant = openai.beta.assistants.retrieve(st.secrets["OPENAI_ASSISTANT"])
     st.session_state.thread = client.beta.threads.create(
         metadata={'session_id': st.session_state.session_id}
