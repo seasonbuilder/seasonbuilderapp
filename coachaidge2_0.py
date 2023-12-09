@@ -1,7 +1,8 @@
-from openai import OpenAI
+import openai
 import time
 import uuid
 import streamlit as st
+from openai import OpenAI
 
 # Function to update the run status (simulating the retrieval process)
 def update_run_status():
@@ -83,7 +84,7 @@ if 'prompt' not in st.session_state:
 # Step 1:  Retrieve an Assistant if not already created
 # Initialize OpenAI assistant
 if "assistant" not in st.session_state:
-    OpenAI.api_key = st.secrets["OPENAI_API_KEY"]
+    openai.api_key = st.secrets["OPENAI_API_KEY"]
     st.session_state.assistant = openai.beta.assistants.retrieve(st.secrets["OPENAI_ASSISTANT"])
     st.session_state.thread = client.beta.threads.create(
         metadata={'session_id': st.session_state.session_id}
