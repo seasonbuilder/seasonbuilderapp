@@ -51,12 +51,12 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-#col1,col2 = st.columns([1,3])
-#header = st.container()
+col1,col2,col3 = st.columns(3)
+header = st.container()
 
-#with header:
- #   with col1:
-st.image("https://static.wixstatic.com/media/b748e0_63138ac0289c4c3897697d41503ee7f7~mv2.png")
+with header:
+   with col2:
+        st.image("https://static.wixstatic.com/media/b748e0_63138ac0289c4c3897697d41503ee7f7~mv2.png")
 #    with col2:
  #       st.header("Coach Aidge")
   #      st.caption("Your Virtual Life Coach Trained by Season Builder")
