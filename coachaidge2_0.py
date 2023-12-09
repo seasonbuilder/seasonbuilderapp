@@ -82,20 +82,13 @@ if 'prompt' not in st.session_state:
 
 # Step 1:  Retrieve an Assistant if not already created
 # Initialize OpenAI assistant
-#if "assistant" not in st.session_state:
-#    openai.api_key = st.secrets["OPENAI_API_KEY"]
-#    st.session_state.assistant = openai.beta.assistants.retrieve(st.secrets["OPENAI_ASSISTANT"])
-#    st.session_state.thread = client.beta.threads.create(
-#        metadata={'session_id': st.session_state.session_id}
-#    )
-
-
 if "assistant" not in st.session_state:
-    # Retrieve assistant
-    st.session_state.assistant = client.beta.assistants.retrieve("asst_Nl7k4mZVMvGbYCjm3pzfXLWx")
-  
-    # Create a Thread
-    st.session_state.thread = client.beta.threads.create()
+    openai.api_key = st.secrets["OPENAI_API_KEY"]
+    st.session_state.assistant = openai.beta.assistants.retrieve(st.secrets["OPENAI_ASSISTANT"])
+    st.session_state.thread = client.beta.threads.create(
+        metadata={'session_id': st.session_state.session_id}
+    )
+
 
 # Create Predefine prompt buttons
 if st.button('How can I balance sports and school effectively?'):
