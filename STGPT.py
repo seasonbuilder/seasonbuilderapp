@@ -15,8 +15,6 @@ MODEL = "gpt-4-1106-preview"
 
 # Set up the page
 
-st.set_page_config(page_title="Coach Aidge - Virtual Life Coach")
-
 hide_st_style = """
             <style>
             #MainMenu {visibility: hidden;}
@@ -25,6 +23,8 @@ hide_st_style = """
             </style>
             """
 st.markdown(hide_st_style, unsafe_allow_html=True)
+
+st.set_page_config(page_title="Coach Aidge - Virtual Life Coach")
 
 col1,col2 = st.columns([1,3])
 header = st.container()
