@@ -1,8 +1,18 @@
 import openai
 import time
+import datetime
 import uuid
 import streamlit as st
 from openai import OpenAI
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+
+#Use creds to create a client to interact with the Google Drive API
+scope = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets',
+         "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
+google_service_account_info = st.secrets['google_service_account']
+creds = ServiceAccountCredentials.from_json_keyfile_dict(google_service_account_info, scope)
+gclient = gspread.authorize(creds)
 
 # Function to update the run status (simulating the retrieval process)
 def update_run_status():
@@ -24,8 +34,15 @@ def display_results():
                     message_text = content_part.text.value
                     st.markdown(message_text)
 
+# Function to find next empty Google Sheets row
+def find_next_empty_row(sheet):
+    all_values = sheet.get_all_values()
+    return len(all_values) + 1
+
+
 # Initialize the client
 client = OpenAI()
+sheet = gclient.open(st.secrets['spreadsheet']).sheet1
     
 # Your chosen model
 MODEL = "gpt-4-1106-preview"
@@ -62,6 +79,7 @@ with header:
   #      st.caption("Your Virtual Life Coach Trained by Season Builder")
 
 
+
 # Initialize session state variables
 
 if "session_id" not in st.session_state:
@@ -89,6 +107,9 @@ if "assistant" not in st.session_state:
         metadata={'session_id': st.session_state.session_id}
     )
 
+# Get the current date and time
+current_datetime = datetime.datetime.now()
+formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as desired
 
 # Create Predefine prompt buttons
 if st.button('How can I balance sports and school effectively?'):
@@ -122,7 +143,8 @@ if typed_input:
 if st.session_state.prompt:
     with st.chat_message('user'):
         st.write(st.session_state.prompt)
-
+    
+    
     st.session_state.message = client.beta.threads.messages.create(
         thread_id=st.session_state.thread.id,
         role="user",
@@ -137,6 +159,11 @@ if st.session_state.prompt:
     
     update_run_status()   
     
+    # Find the next empty row
+    next_row = find_next_empty_row(sheet)
+    # Write data to the next row
+    sheet.update(f"A{next_row}:B{next_row}", [[formatted_datetime, st.session_state.prompt]])
+
     # Handle run status
     # Check and handle the run status
     while st.session_state.run.status not in ["completed", "max_retries"]:
