@@ -14,6 +14,8 @@ google_service_account_info = st.secrets['google_service_account']
 creds = ServiceAccountCredentials.from_json_keyfile_dict(google_service_account_info, scope)
 gclient = gspread.authorize(creds)
 
+st.write(st.secrets['google_service_account'])
+
 # Function to update the run status (simulating the retrieval process)
 def update_run_status():
     # Retrieving run status
