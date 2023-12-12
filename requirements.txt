@@ -1,3 +1,5 @@
 openai
 streamlit
 pandas
+gspread
+ServiceAccountCredentials
