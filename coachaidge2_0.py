@@ -65,7 +65,6 @@ gclient = gspread.authorize(creds)
 
 # Initialize the client
 client = OpenAI()
-st.write(st.secrets["spreadsheet"])
 sheet = gclient.open(st.secrets["spreadsheet"]).sheet1
     
 # Your chosen model
