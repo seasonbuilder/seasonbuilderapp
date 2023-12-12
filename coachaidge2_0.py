@@ -7,12 +7,29 @@ from openai import OpenAI
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-#Use creds to create a client to interact with the Google Drive API
-scope = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets',
-         "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
-google_service_account_info = st.secrets['google_service_account']
-creds = ServiceAccountCredentials.from_json_keyfile_dict(google_service_account_info, scope)
-gclient = gspread.authorize(creds)
+st.set_page_config(page_title="Coach Aidge - Virtual Life Coach")
+
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
+
+st.markdown("""
+    <style>
+           .block-container {
+                padding-top: 1rem;
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+    </style>
+    """, unsafe_allow_html=True)
+
+col1,col2,col3 = st.columns(3)
+header = st.container()
 
 # Function to update the run status (simulating the retrieval process)
 def update_run_status():
@@ -39,6 +56,12 @@ def find_next_empty_row(sheet):
     all_values = sheet.get_all_values()
     return len(all_values) + 1
 
+#Use creds to create a client to interact with the Google Drive API
+scope = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets',
+         "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
+google_service_account_info = st.secrets['google_service_account']
+creds = ServiceAccountCredentials.from_json_keyfile_dict(google_service_account_info, scope)
+gclient = gspread.authorize(creds)
 
 # Initialize the client
 client = OpenAI()
@@ -48,29 +71,7 @@ sheet = gclient.open(st.secrets["spreadsheet"]).sheet1
 # Your chosen model
 MODEL = "gpt-4-1106-preview"
 
-st.set_page_config(page_title="Coach Aidge - Virtual Life Coach")
 
-hide_st_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            header {visibility: hidden;}
-            </style>
-            """
-st.markdown(hide_st_style, unsafe_allow_html=True)
-
-st.markdown("""
-    <style>
-           .block-container {
-                padding-top: 1rem;
-                padding-left: 1rem;
-                padding-right: 1rem;
-            }
-    </style>
-    """, unsafe_allow_html=True)
-
-col1,col2,col3 = st.columns(3)
-header = st.container()
 
 with header:
    with col2:
