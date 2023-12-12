@@ -42,6 +42,7 @@ def find_next_empty_row(sheet):
 
 # Initialize the client
 client = OpenAI()
+st.write(st.secrets["spreadsheet"])
 sheet = gclient.open(st.secrets["spreadsheet"]).sheet1
     
 # Your chosen model
