@@ -14,8 +14,6 @@ google_service_account_info = st.secrets['google_service_account']
 creds = ServiceAccountCredentials.from_json_keyfile_dict(google_service_account_info, scope)
 gclient = gspread.authorize(creds)
 
-st.write(st.secrets['google_service_account'])
-
 # Function to update the run status (simulating the retrieval process)
 def update_run_status():
     # Retrieving run status
@@ -44,7 +42,7 @@ def find_next_empty_row(sheet):
 
 # Initialize the client
 client = OpenAI()
-sheet = gclient.open(st.secrets['spreadsheet']).sheet1
+sheet = gclient.open(st.secrets["spreadsheet"]).sheet1
     
 # Your chosen model
 MODEL = "gpt-4-1106-preview"
