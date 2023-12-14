@@ -76,7 +76,7 @@ with header:
     with col1:
         pass
     with col2:
-        st.image("https://static.wixstatic.com/media/b748e0_63138ac0289c4c3897697d41503ee7f7~mv2.png")
+        st.image("https://https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png")
     with col3:
         st.markdown("**Pick a question or type your own at the bottom!**")    
 #   with col2:
