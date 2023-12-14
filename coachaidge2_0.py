@@ -28,7 +28,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-col1,col2,col3 = st.columns(3)
+col1,col2,col3 = st.columns(2)
 header = st.container()
 
 # Function to update the run status (simulating the retrieval process)
@@ -74,10 +74,8 @@ MODEL = "gpt-4-1106-preview"
 
 with header:
     with col1:
-        pass
-    with col2:
         st.image("https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png")
-    with col3:
+    with col2:
         st.markdown("**Pick a question or type your own at the bottom!**")    
 #   with col2:
  #       st.header("Coach Aidge")
