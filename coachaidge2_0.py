@@ -73,9 +73,13 @@ MODEL = "gpt-4-1106-preview"
 
 
 with header:
-   with col2:
+    with col1:
+        pass
+    with col2:
         st.image("https://static.wixstatic.com/media/b748e0_63138ac0289c4c3897697d41503ee7f7~mv2.png")
-#    with col2:
+    with col3:
+        pass    
+#   with col2:
  #       st.header("Coach Aidge")
   #      st.caption("Your Virtual Life Coach Trained by Season Builder")
 
@@ -125,14 +129,14 @@ if st.button('How can I reduce stress and anxiety caused by sports and school?')
 if st.button('How do I stay positive while recovering from an injury?'):
     st.session_state.prompt = 'How do I stay positive while recovering from an injury?'
 
-if st.button('How can I maintain a social life with my athletic schedule?'):
-    st.session_state.prompt = 'How can I maintain a social life with my athletic schedule?'
+#if st.button('How can I maintain a social life with my athletic schedule?'):
+#    st.session_state.prompt = 'How can I maintain a social life with my athletic schedule?'
 
 if st.button('How do I find my identity beyond being an athlete?'):
     st.session_state.prompt = 'How do I find my identity beyond being an athlete?'
 
-if st.button('How should I start planning for a career outside of sports?'):
-    st.session_state.prompt = 'How should I start planning for a career outside of sports?'
+#if st.button('How should I start planning for a career outside of sports?'):
+#    st.session_state.prompt = 'How should I start planning for a career outside of sports?'
 
 typed_input = st.chat_input("How can I help you?")
 
