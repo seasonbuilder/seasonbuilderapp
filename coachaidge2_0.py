@@ -75,7 +75,7 @@ MODEL = "gpt-4-1106-preview"
 with header:
     with col1:
         st.image("https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png")
-    with col2:
+#    with col2:
         st.markdown("**Pick a question or type your own at the bottom!**")    
 #   with col2:
  #       st.header("Coach Aidge")
