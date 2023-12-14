@@ -28,7 +28,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-col1,col2,col3 = st.columns(2)
+col1,col2 = st.columns(2)
 header = st.container()
 
 # Function to update the run status (simulating the retrieval process)
