@@ -116,7 +116,7 @@ if "assistant" not in st.session_state:
 current_datetime = datetime.datetime.now()
 formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as desired
 
-st.markdown("# H1 Here are some questions you may already have to get you started. Pick one or type your own at the bottom!")
+st.markdown("### Here are some questions you may already have to get you started. Pick one or type your own at the bottom!")
 # Create Predefine prompt buttons
 if st.button('How can I balance sports and school effectively?'):
     st.session_state.prompt = 'How can I balance sports and school effectively?'
