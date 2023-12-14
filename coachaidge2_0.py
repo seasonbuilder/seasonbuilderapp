@@ -78,7 +78,7 @@ with header:
     with col2:
         st.image("https://static.wixstatic.com/media/b748e0_63138ac0289c4c3897697d41503ee7f7~mv2.png")
     with col3:
-        pass    
+        st.markdown("**Pick a question or type your own at the bottom!**")    
 #   with col2:
  #       st.header("Coach Aidge")
   #      st.caption("Your Virtual Life Coach Trained by Season Builder")
@@ -116,7 +116,6 @@ if "assistant" not in st.session_state:
 current_datetime = datetime.datetime.now()
 formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as desired
 
-st.markdown("**Pick a question or type your own at the bottom!**")
 # Create Predefine prompt buttons
 if st.button('How can I balance sports and school effectively?'):
     st.session_state.prompt = 'How can I balance sports and school effectively?'
