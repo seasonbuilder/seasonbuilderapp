@@ -28,9 +28,6 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-col1,col2 = st.columns(2)
-header = st.container()
-
 # Function to update the run status (simulating the retrieval process)
 def update_run_status():
     # Retrieving run status
@@ -71,18 +68,6 @@ sheet = gclient.open(st.secrets["spreadsheet"]).sheet1
 MODEL = "gpt-4-1106-preview"
 
 
-
-with header:
-    with col1:
-        st.image("https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png")
-#    with col2:
-        st.markdown("**Pick a question or type your own at the bottom!**")    
-#   with col2:
- #       st.header("Coach Aidge")
-  #      st.caption("Your Virtual Life Coach Trained by Season Builder")
-
-
-
 # Initialize session state variables
 
 if "session_id" not in st.session_state:
@@ -113,6 +98,8 @@ if "assistant" not in st.session_state:
 # Get the current date and time
 current_datetime = datetime.datetime.now()
 formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as desired
+
+st.markdown("**Pick a question or type your own at the bottom!**")    
 
 # Create Predefine prompt buttons
 if st.button('How can I balance sports and school effectively?'):
