@@ -108,6 +108,9 @@ if st.button('How important are relationships to my overall well being and how d
 if st.button('What are quick tips for better time management?'):
     st.session_state.prompt = 'What are quick tips for better time management?'
 
+if st.button('How do I combat the negative voice in my head?'):
+    st.session_state.prompt = 'How do I combat the negative voice in my head?'
+
 if st.button('How can I reduce stress and anxiety caused by sports and school?'):
     st.session_state.prompt = 'How can I reduce stress and anxiety caused by sports and school?'
 
@@ -117,11 +120,8 @@ if st.button('How do I stay positive while recovering from an injury?'):
 #if st.button('How can I maintain a social life with my athletic schedule?'):
 #    st.session_state.prompt = 'How can I maintain a social life with my athletic schedule?'
 
-if st.button('what are limiting beliefs and how are they impacting my life right now?'):
-    st.session_state.prompt = 'what are limiting beliefs and how are they impacting my life right now?'
-
-#if st.button('How should I start planning for a career outside of sports?'):
-#    st.session_state.prompt = 'How should I start planning for a career outside of sports?'
+if st.button('What are limiting beliefs and how are they impacting my life right now?'):
+    st.session_state.prompt = 'What are limiting beliefs and how are they impacting my life right now?'
 
 typed_input = st.chat_input("How can I help you elevate your life?")
 
