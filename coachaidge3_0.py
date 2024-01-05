@@ -102,8 +102,8 @@ formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as
 st.markdown("**Pick a question or type your own at the bottom!**")    
 
 # Create Predefine prompt buttons
-if st.button('How can I balance sports and school effectively?'):
-    st.session_state.prompt = 'How can I balance sports and school effectively?'
+if st.button('How important are relationships to my overall well being and how do I create meaningful ones?'):
+    st.session_state.prompt = 'How important are relationships to my overall well being and how do I create meaningful ones?'
 
 if st.button('What are quick tips for better time management?'):
     st.session_state.prompt = 'What are quick tips for better time management?'
@@ -117,13 +117,13 @@ if st.button('How do I stay positive while recovering from an injury?'):
 #if st.button('How can I maintain a social life with my athletic schedule?'):
 #    st.session_state.prompt = 'How can I maintain a social life with my athletic schedule?'
 
-if st.button('How do I find my identity beyond being an athlete?'):
-    st.session_state.prompt = 'How do I find my identity beyond being an athlete?'
+if st.button('what are limiting beliefs and how are they impacting my life right now?'):
+    st.session_state.prompt = 'what are limiting beliefs and how are they impacting my life right now?'
 
 #if st.button('How should I start planning for a career outside of sports?'):
 #    st.session_state.prompt = 'How should I start planning for a career outside of sports?'
 
-typed_input = st.chat_input("How can I help you?")
+typed_input = st.chat_input("How can I help you elevate your life?")
 
 # Check if there is typed input
 if typed_input:
