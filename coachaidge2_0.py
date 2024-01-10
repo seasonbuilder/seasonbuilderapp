@@ -144,22 +144,22 @@ if typed_input:
 
 #Chat input and message creation
 if st.session_state.prompt:
-    with st.chat_message('user'):
-        st.write(st.session_state.prompt)
+    #with st.chat_message('user'):
+    #    st.write(st.session_state.prompt)
     
     
     st.session_state.message = client.beta.threads.messages.create(
         thread_id=st.session_state.thread.id,
         role="user",
-        content=st.session_state.prompt
+        content=st.session_state.prompt         
     )
-
+            
     # Step 4: Run the Assistant
     st.session_state.run = client.beta.threads.runs.create(
         thread_id=st.session_state.thread.id,
         assistant_id=st.session_state.assistant.id
     )
-    
+            
     update_run_status()   
     
     # Find the next empty row
