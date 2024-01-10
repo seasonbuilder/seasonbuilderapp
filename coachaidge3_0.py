@@ -131,8 +131,8 @@ if typed_input:
 
 #Chat input and message creation
 if st.session_state.prompt:
-    with st.chat_message('user'):
-        st.write(st.session_state.prompt)
+    #with st.chat_message('user'):
+     #   st.write(st.session_state.prompt)
     
     
     st.session_state.message = client.beta.threads.messages.create(
