@@ -152,17 +152,16 @@ if st.session_state.prompt:
     st.session_state.message = client.beta.threads.messages.create(
         thread_id=st.session_state.thread.id,
         role="user",
-        content=st.session_state.prompt
-        st.write('this is a test 3\n')         
+        content=st.session_state.prompt         
     )
+    st.write('this is a test 3\n')
 
     # Step 4: Run the Assistant
     st.session_state.run = client.beta.threads.runs.create(
         thread_id=st.session_state.thread.id,
         assistant_id=st.session_state.assistant.id
-        st.write('this is a test 4\n') 
     )
-    
+    st.write('this is a test 4\n') 
     update_run_status()   
     
     # Find the next empty row
