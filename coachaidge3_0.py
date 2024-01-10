@@ -132,7 +132,7 @@ if typed_input:
 #Chat input and message creation
 if st.session_state.prompt:
     with st.chat_message('user'):
-        print('this is a test\n')    
+        st.write('this is a test')    
         st.write(st.session_state.prompt)
     
     
