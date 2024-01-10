@@ -173,9 +173,8 @@ if st.session_state.prompt:
 
         if st.session_state.run.status == "in_progress":
             with st.chat_message("assistant"):
-                st.write('this is a test 2\n')         
                 st.write("Thinking ......give me a minute")
-            time.sleep(15)  # Simulate delay
+            #time.sleep(15)  # Simulate delay
             update_run_status()  # Update the status after delay
            
         elif st.session_state.run.status == "failed":
