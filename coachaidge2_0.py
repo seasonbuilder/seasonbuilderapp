@@ -145,7 +145,7 @@ if typed_input:
 #Chat input and message creation
 if st.session_state.prompt:
     with st.chat_message('user'):
-        print('this is a test\n')        
+        st.write('this is a test\n')        
         #st.write(st.session_state.prompt)
     
     
@@ -154,14 +154,13 @@ if st.session_state.prompt:
         role="user",
         content= st.session_state.prompt         
     )
-    print('this is a test 3\n')
-
+            
     # Step 4: Run the Assistant
     st.session_state.run = client.beta.threads.runs.create(
         thread_id=st.session_state.thread.id,
         assistant_id=st.session_state.assistant.id
     )
-    print('this is a test 4\n') 
+            
     update_run_status()   
     
     # Find the next empty row
@@ -175,7 +174,7 @@ if st.session_state.prompt:
 
         if st.session_state.run.status == "in_progress":
             with st.chat_message("assistant"):
-                print('this is a test 2\n')         
+                st.write('this is a test 2\n')         
                 st.write("Thinking ......give me a minute")
             time.sleep(15)  # Simulate delay
             update_run_status()  # Update the status after delay
