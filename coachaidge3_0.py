@@ -146,6 +146,9 @@ if st.session_state.prompt:
         thread_id=st.session_state.thread.id,
         assistant_id=st.session_state.assistant.id
     )
+
+    with st.chat_message("assistant"):
+                st.write("This is a test")
     
     update_run_status()   
     
