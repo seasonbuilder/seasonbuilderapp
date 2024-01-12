@@ -46,6 +46,7 @@ def display_results():
             with st.chat_message(message.role):
                 for content_part in message.content:
                     message_text = content_part.text.value
+                    st.write("This is a test")
                     st.markdown(message_text)
 
 # Function to find next empty Google Sheets row
