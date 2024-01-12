@@ -87,6 +87,9 @@ if "retry_error" not in st.session_state:
 if 'prompt' not in st.session_state:
     st.session_state.prompt = ''
 
+if 'loading_message' not in st.session_state:
+    st.sessions_state.loading_message = ''
+
 
 # Step 1:  Retrieve an Assistant if not already created
 # Initialize OpenAI assistant
