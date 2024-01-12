@@ -154,8 +154,6 @@ if st.session_state.prompt:
     next_row = find_next_empty_row(sheet)
     # Write data to the next row
     sheet.update(f"A{next_row}:B{next_row}", [[formatted_datetime, st.session_state.prompt]])
-
-    display_results()
             
     # Handle run status
     # Check and handle the run status
@@ -184,4 +182,4 @@ if st.session_state.prompt:
             if st.session_state.retry_error < 3:
                 time.sleep(2)  # Simulate delay
                 
-    #display_results()
+    display_results()
