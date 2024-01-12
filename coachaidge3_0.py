@@ -144,12 +144,6 @@ if st.session_state.prompt:
         content=st.session_state.prompt
     )
 
-    st.session_state.loading_message = client.beta.threads.messages.create(
-        thread_id=st.session_state.thread.id,
-        role="assistant",
-        content="Thinking... please give me a moment"
-    )
-
     # Step 4: Run the Assistant
     st.session_state.run = client.beta.threads.runs.create(
         thread_id=st.session_state.thread.id,
