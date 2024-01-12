@@ -166,7 +166,7 @@ if st.session_state.prompt:
             #with st.chat_message("assistant"):
             #    st.write("Thinking ......give me a minute")
                 time.sleep(15)  # Simulate delay
-                update_run_status()  # Update the status after delay
+            update_run_status()  # Update the status after delay
            
         elif st.session_state.run.status == "failed":
             st.session_state.retry_error += 1
