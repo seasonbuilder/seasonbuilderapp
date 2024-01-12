@@ -162,10 +162,11 @@ if st.session_state.prompt:
     while st.session_state.run.status not in ["completed", "max_retries"]:
 
         if st.session_state.run.status == "in_progress":
-            with st.spinner("Thinking... please give me a moment"):
+            status_message.error("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
+            #with st.spinner("Thinking... please give me a moment"):
             #with st.chat_message("assistant"):
             #    st.write("Thinking ......give me a minute")
-                time.sleep(15)  # Simulate delay
+            #    time.sleep(15)  # Simulate delay
             update_run_status()  # Update the status after delay
            
         elif st.session_state.run.status == "failed":
