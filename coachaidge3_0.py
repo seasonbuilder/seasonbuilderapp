@@ -42,8 +42,7 @@ def display_results():
     st.session_state.messages = client.beta.threads.messages.list(
         thread_id=st.session_state.thread.id
     )
-    with st.chat_message("assistant"):
-        st.write(st.session_state.messages)
+            
     for message in reversed(st.session_state.messages.data):
         if message.role in ["user", "assistant"]:
             with st.chat_message(message.role):
