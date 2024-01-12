@@ -162,7 +162,7 @@ if st.session_state.prompt:
     while st.session_state.run.status not in ["completed", "max_retries"]:
 
         if st.session_state.run.status == "in_progress":
-            st.session_state.messages.content.text.value = "Thinking... please give me a moment"
+            st.session_state.message.content.text.value = "Thinking... please give me a moment"
             with st.spinner(st.session_state.messages.content.text.value):
             #with st.chat_message("assistant"):
             #    st.write("Thinking ......give me a minute")
