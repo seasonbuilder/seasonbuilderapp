@@ -37,16 +37,22 @@ def update_run_status():
     )
    
 def display_results():
+    while st.session_state.run.status not in ["completed", "max_retries"]:
+
+        if st.session_state.run.status == "in_progress":
+            with st.chat_message("assistant"):
+                st.write("Thinking ......give me a minute")
+            time.sleep(15)  # Simulate delay
+            update_run_status()  # Update the status after delay
     # If run is completed, get messages
-    st.session_state.messages = client.beta.threads.messages.list(0)
-        #thread_id=st.session_state.thread.id
-    #)
+    st.session_state.messages = client.beta.threads.messages.list(
+        thread_id=st.session_state.thread.id
+    )
     for message in reversed(st.session_state.messages.data):
         if message.role in ["user","assistant"]:    
             with st.chat_message(message.role):
                 for content_part in message.content:
                     message_text = content_part.text.value
-                    st.write(message_text) #remove
                     st.markdown(message_text)
 
 # Function to find next empty Google Sheets row
@@ -155,30 +161,32 @@ if st.session_state.prompt:
     # Write data to the next row
     sheet.update(f"A{next_row}:B{next_row}", [[formatted_datetime, st.session_state.prompt]])
 
+    display_results()
+            
     # Handle run status
     # Check and handle the run status
-    while st.session_state.run.status not in ["completed", "max_retries"]:
+    #while st.session_state.run.status not in ["completed", "max_retries"]:
 
-        if st.session_state.run.status == "in_progress":
-            #with st.chat_message("assistant"):
-                #st.write("Thinking ......give me a minute") #uncomment
-            time.sleep(15)  # Simulate delay
-            update_run_status()  # Update the status after delay
+    #    if st.session_state.run.status == "in_progress":
+    #        with st.chat_message("assistant"):
+    #            st.write("Thinking ......give me a minute")
+    #        time.sleep(15)  # Simulate delay
+    #        update_run_status()  # Update the status after delay
            
-        elif st.session_state.run.status == "failed":
-            st.session_state.retry_error += 1
-            if st.session_state.retry_error < 3:
-                status_message.write("Run failed, retrying ......")
-                if retry_button.button('Retry'):
-                    update_run_status()
+    #    elif st.session_state.run.status == "failed":
+    #        st.session_state.retry_error += 1
+    #        if st.session_state.retry_error < 3:
+    #            status_message.write("Run failed, retrying ......")
+    #            if retry_button.button('Retry'):
+    #                update_run_status()
                     
-            else:
-                status_message.error("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
+    #        else:
+    #            status_message.error("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
 
-        elif st.session_state.run.status != "completed":
-            # Simulate updating the run status
-            update_run_status()
-            if st.session_state.retry_error < 3:
-                time.sleep(2)  # Simulate delay
+    #    elif st.session_state.run.status != "completed":
+    #        # Simulate updating the run status
+    #        update_run_status()
+    #        if st.session_state.retry_error < 3:
+    #            time.sleep(2)  # Simulate delay
                 
-    display_results()
+    #display_results()
