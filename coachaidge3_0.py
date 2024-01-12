@@ -87,10 +87,6 @@ if "retry_error" not in st.session_state:
 if 'prompt' not in st.session_state:
     st.session_state.prompt = ''
 
-if 'loading_message' not in st.session_state:
-    st.session_state.loading_message = ''
-
-
 # Step 1:  Retrieve an Assistant if not already created
 # Initialize OpenAI assistant
 if "assistant" not in st.session_state:
@@ -144,12 +140,6 @@ if st.session_state.prompt:
         thread_id=st.session_state.thread.id,
         role="user",
         content=st.session_state.prompt
-    )
-
-    st.session_state.loading_message = client.beta.threads.messages.create(
-        thread_id=st.session_state.thread.id,
-        role="assistant",
-        content="Thinking... please give me a moment"
     )
 
     # Step 4: Run the Assistant
