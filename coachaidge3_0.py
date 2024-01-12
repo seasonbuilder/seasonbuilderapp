@@ -50,6 +50,7 @@ def display_results():
                 for content_part in message.content:
                     message_text = content_part.text.value
                     st.markdown(message_text)
+                    status_message.write("Run failed, retrying ......")
 
 # Function to find next empty Google Sheets row
 def find_next_empty_row(sheet):
@@ -162,11 +163,10 @@ if st.session_state.prompt:
     while st.session_state.run.status not in ["completed", "max_retries"]:
 
         if st.session_state.run.status == "in_progress":
-            status_message.error("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
-            #with st.spinner("Thinking... please give me a moment"):
+            with st.spinner("Thinking... please give me a moment"):
             #with st.chat_message("assistant"):
             #    st.write("Thinking ......give me a minute")
-            #    time.sleep(15)  # Simulate delay
+                time.sleep(15)  # Simulate delay
             update_run_status()  # Update the status after delay
            
         elif st.session_state.run.status == "failed":
