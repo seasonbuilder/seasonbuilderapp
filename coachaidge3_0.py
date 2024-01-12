@@ -183,4 +183,3 @@ if st.session_state.prompt:
                 time.sleep(2)  # Simulate delay
                 
     display_results()
-    st.write("Test")
