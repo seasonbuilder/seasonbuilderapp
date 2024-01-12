@@ -185,4 +185,8 @@ if st.session_state.prompt:
             if st.session_state.retry_error < 3:
                 time.sleep(2)  # Simulate delay
                 
-    display_results()
+    #display_results()
+    with st.chat_message("user"):
+        st.write(st.session_state.messages.data[1].content[0].text.value)
+    with st.chat_message("assistant"):
+        st.write(st.session_state.messages.data[0].content[0].text.value)
