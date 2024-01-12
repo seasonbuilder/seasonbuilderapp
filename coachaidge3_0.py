@@ -186,6 +186,10 @@ if st.session_state.prompt:
                 time.sleep(2)  # Simulate delay
                 
     #display_results()
+    # If run is completed, get messages
+    st.session_state.messages = client.beta.threads.messages.list(
+        thread_id=st.session_state.thread.id
+    )
     with st.chat_message("user"):
         st.write(st.session_state.messages.data[1].content[0].text.value)
     with st.chat_message("assistant"):
