@@ -38,9 +38,10 @@ def update_run_status():
    
 def display_results():
     # If run is completed, get messages
-    st.session_state.messages = client.beta.threads.messages.list(
-        thread_id=st.session_state.thread.id
-    )
+    client.beta.threads.messages.list(0) = "Test"
+    st.session_state.messages = client.beta.threads.messages.list(0)
+        #thread_id=st.session_state.thread.id
+    #)
     for message in reversed(st.session_state.messages.data):
         if message.role in ["user","assistant"]:    
             with st.chat_message(message.role):
