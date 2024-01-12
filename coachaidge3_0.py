@@ -46,7 +46,7 @@ def display_results():
             with st.chat_message(message.role):
                 for content_part in message.content:
                     message_text = content_part.text.value
-                    st.write(message_text)
+                    st.write(message_text) #remove
                     st.markdown(message_text)
 
 # Function to find next empty Google Sheets row
@@ -160,8 +160,8 @@ if st.session_state.prompt:
     while st.session_state.run.status not in ["completed", "max_retries"]:
 
         if st.session_state.run.status == "in_progress":
-            with st.chat_message("assistant"):
-                st.write("Thinking ......give me a minute")
+            #with st.chat_message("assistant"):
+                #st.write("Thinking ......give me a minute") #uncomment
             time.sleep(15)  # Simulate delay
             update_run_status()  # Update the status after delay
            
