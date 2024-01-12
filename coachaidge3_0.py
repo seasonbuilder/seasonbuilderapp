@@ -37,23 +37,29 @@ def update_run_status():
     )
    
 def display_results():
-    while st.session_state.run.status not in ["completed", "max_retries"]:
+    with st.chat_message("assistant"):
+        while st.session_state.run.status not in ["completed", "max_retries"]:
 
-        if st.session_state.run.status == "in_progress":
-            with st.chat_message("assistant"):
+            if st.session_state.run.status == "in_progress":
+            
                 st.write("Thinking ......give me a minute")
             time.sleep(15)  # Simulate delay
             update_run_status()  # Update the status after delay
-    # If run is completed, get messages
-    st.session_state.messages = client.beta.threads.messages.list(
-        thread_id=st.session_state.thread.id
-    )
-    for message in reversed(st.session_state.messages.data):
-        if message.role in ["user","assistant"]:    
-            with st.chat_message(message.role):
+                    
+        # If run is completed, get messages
+        st.session_state.messages = client.beta.threads.messages.list(
+           thread_id=st.session_state.thread.id
+        )
+        for message in reversed(st.session_state.messages.data):
+            if message.role in ["user"]:    #"assistant"
+                with st.chat_message(message.role):
+                    for content_part in message.content:
+                        message_text = content_part.text.value
+                        st.markdown(message_text)
+            else:
                 for content_part in message.content:
-                    message_text = content_part.text.value
-                    st.markdown(message_text)
+                        message_text = content_part.text.value
+                        st.markdown(message_text)
 
 # Function to find next empty Google Sheets row
 def find_next_empty_row(sheet):
