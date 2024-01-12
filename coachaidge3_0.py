@@ -44,6 +44,7 @@ def display_results():
     )
             
     for message in reversed(st.session_state.messages.data):
+        st.write(st.session_state.messages.data)
         if message.role in ["user", "assistant"]:
             with st.chat_message(message.role):
                 for content_part in message.content:
