@@ -44,8 +44,6 @@ def display_results():
     )
             
     for message in reversed(st.session_state.messages.data):
-        st.write(st.session_state.messages.data[0].content[0].text.value)
-        st.write(st.session_state.messages.data[1].content[0].text.value)
         if message.role in ["user", "assistant"]:
             with st.chat_message(message.role):
                 for content_part in message.content:
@@ -185,12 +183,4 @@ if st.session_state.prompt:
             if st.session_state.retry_error < 3:
                 time.sleep(2)  # Simulate delay
                 
-    #display_results()
-    # If run is completed, get messages
-    st.session_state.messages = client.beta.threads.messages.list(
-        thread_id=st.session_state.thread.id
-    )
-    with st.chat_message("user"):
-        st.write(st.session_state.messages.data[1].content[0].text.value)
-    with st.chat_message("assistant"):
-        st.write(st.session_state.messages.data[0].content[0].text.value)
+    display_results()
