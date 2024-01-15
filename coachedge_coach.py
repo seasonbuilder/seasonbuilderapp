@@ -117,8 +117,8 @@ current_datetime = datetime.datetime.now()
 formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as desired
 
 # Create Predefine prompt buttons
-if st.button('How can I manage my coaching resposibilities together with my personal responsibilities in a healhy way?'):
-    st.session_state.prompt = 'How can I manage my coaching resposibilities together with my personal responsibilities in a healhy way?'
+if st.button('How can I manage my coaching responsibilities together with my personal responsibilities in a healthy way?'):
+    st.session_state.prompt = 'How can I manage my coaching responsibilities together with my personal responsibilities in a healthy way?'
 
 if st.button('Give me 5 specific ways that enable my staff and I to better connect with our players?'):
     st.session_state.prompt = 'Give me 5 specific ways that enable my staff and I to better connect with our players?'
