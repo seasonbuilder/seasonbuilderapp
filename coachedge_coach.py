@@ -123,8 +123,8 @@ if st.button('How can I manage my coaching resposibilities together with my pers
 if st.button('Give me 5 specific ways that enable my staff and I to better connect with our players?'):
     st.session_state.prompt = 'Give me 5 specific ways that enable my staff and I to better connect with our players?'
 
-if st.button('What are 5 example ways to weave our core values into our practice, film sessions, and weights workouts'):
-    st.session_state.prompt = 'What are 5 example ways to weave our core values into our practice, film sessions, and weights workouts'
+if st.button('What are 5 example ways to weave our core values into our practice, film sessions, and weights workouts?'):
+    st.session_state.prompt = 'What are 5 example ways to weave our core values into our practice, film sessions, and weights workouts?'
 
 if st.button('Suggest 4 activities we can do as a coaching staff to build our relationship?'):
     st.session_state.prompt = 'Suggest 4 activities we can do as a coaching staff to build our relationship?'
