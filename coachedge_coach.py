@@ -48,12 +48,12 @@ def display_results():
        # if message.role in ["user","assistant"]: 
         #    with st.chat_message(message.role):
         if message.role in ["user"]: 
-            with st.chat_message("user"):
+            with st.chat_message('user'):
                 for content_part in message.content:
                     message_text = content_part.text.value
                     st.markdown(message_text)
         elif
-            with st.chat_message("assistant",avatar="https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png"):
+            with st.chat_message('assistant',avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
                 for content_part in message.content:
                     message_text = content_part.text.value
                     st.markdown(message_text)
