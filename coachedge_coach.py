@@ -138,7 +138,7 @@ if st.button('What specific positive, encouraging words can I use with my player
 #if st.button('How should I start planning for a career outside of sports?'):
 #    st.session_state.prompt = 'How should I start planning for a career outside of sports?'
 
-typed_input = st.chat_input("What challenges or topics can I help with? The more specific you can be, the better I am")
+typed_input = st.chat_input("Reply or ask questions here ...?")
 
 # Check if there is typed input
 if typed_input:
