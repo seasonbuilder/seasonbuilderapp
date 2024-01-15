@@ -115,28 +115,28 @@ current_datetime = datetime.datetime.now()
 formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as desired
 
 # Create Predefine prompt buttons
-if st.button('How can I balance sports and school effectively?'):
-    st.session_state.prompt = 'How can I balance sports and school effectively?'
+if st.button('How can I manage my coaching resposibilities together with my personal responsibilities in a healhy way?'):
+    st.session_state.prompt = 'How can I manage my coaching resposibilities together with my personal responsibilities in a healhy way?'
 
-if st.button('What are quick tips for better time management?'):
-    st.session_state.prompt = 'What are quick tips for better time management?'
+if st.button('Give me 5 specific ways that enable my staff and I to better connect with our players?'):
+    st.session_state.prompt = 'Give me 5 specific ways that enable my staff and I to better connect with our players?'
 
-if st.button('How can I reduce stress and anxiety caused by sports and school?'):
-    st.session_state.prompt = 'How can I reduce stress and anxiety caused by sports and school?'
+if st.button('What are 5 example ways to weave our core values into our practice, film sessions, and weights workouts'):
+    st.session_state.prompt = 'What are 5 example ways to weave our core values into our practice, film sessions, and weights workouts'
 
-if st.button('How do I stay positive while recovering from an injury?'):
-    st.session_state.prompt = 'How do I stay positive while recovering from an injury?'
+if st.button('Suggest 4 activities we can do as a coaching staff to build our relationship?'):
+    st.session_state.prompt = 'Suggest 4 activities we can do as a coaching staff to build our relationship?'
 
 #if st.button('How can I maintain a social life with my athletic schedule?'):
 #    st.session_state.prompt = 'How can I maintain a social life with my athletic schedule?'
 
-if st.button('How do I find my identity beyond being an athlete?'):
-    st.session_state.prompt = 'How do I find my identity beyond being an athlete?'
+if st.button('What specific positive, encouraging words can I use with my players in place of potentially critical and demeaning that I am in the habit of using?'):
+    st.session_state.prompt = 'What specific positive, encouraging words can I use with my players in place of potentially critical and demeaning that I am in the habit of using?'
 
 #if st.button('How should I start planning for a career outside of sports?'):
 #    st.session_state.prompt = 'How should I start planning for a career outside of sports?'
 
-typed_input = st.chat_input("How can I help you?")
+typed_input = st.chat_input("What challenges or topics can I help with? The more specific you can be, the better I am")
 
 # Check if there is typed input
 if typed_input:
