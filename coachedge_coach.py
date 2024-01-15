@@ -181,9 +181,9 @@ if st.session_state.prompt:
     while st.session_state.run.status not in ["completed", "max_retries"]:
 
         if st.session_state.run.status == "in_progress":
-            with st.chat_message("assistant"):
+            with st.chat_message('assistant',avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png')):
                 st.write("Thinking ......give me a minute")
-            time.sleep(15)  # Simulate delay
+            time.sleep(10)  # Simulate delay
             update_run_status()  # Update the status after delay
            
         elif st.session_state.run.status == "failed":
