@@ -76,7 +76,7 @@ MODEL = "gpt-4-1106-preview"
  #   with col1:
         #st.image("https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png")
 #    with col2:
-st.markdown("**First tell me what sport you coach and at what level in the prompt at the bottom. Then pick a predefined question or type in your own**")    
+st.markdown("**First tell me what sport you coach and at what level.**")    
 st.markdown("Then pick a predefined question or type in your own")    
 
 #   with col2:
