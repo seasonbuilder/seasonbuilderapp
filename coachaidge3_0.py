@@ -123,8 +123,8 @@ if st.button('How can I reduce stress and anxiety caused by sports and school?')
 if st.button('How do I stay positive while recovering from an injury?'):
     st.session_state.prompt = 'How do I stay positive while recovering from an injury?'
 
-if st.button('Give me 15 possible insecurities I might have about myself that is keeping me from playing at the level i know i am capable of'):
-    st.session_state.prompt = 'Give me 15 possible insecurities I might have about myself that is keeping me from playing at the level i know i am capable of?'
+if st.button('Give me 15 possible insecurities I might have about myself that is keeping me from playing at the level I know I am capable of'):
+    st.session_state.prompt = 'Give me 15 possible insecurities I might have about myself that is keeping me from playing at the level I know I am capable of?'
 
 if st.button('What are limiting beliefs and how are they impacting my life right now?'):
     st.session_state.prompt = 'What are limiting beliefs and how are they impacting my life right now?'
