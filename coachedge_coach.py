@@ -136,8 +136,8 @@ if st.button('What are 5 example ways to weave our core values into our practice
 if st.button('Suggest 4 activities we can do as a coaching staff to build our relationship?'):
     st.session_state.prompt = 'Suggest 4 activities we can do as a coaching staff to build our relationship?'
 
-#if st.button('How can I maintain a social life with my athletic schedule?'):
-#    st.session_state.prompt = 'How can I maintain a social life with my athletic schedule?'
+if st.button('How can I lead coaches and athletes through questions rather than commands?'):
+    st.session_state.prompt = 'How can I lead coaches and athletes through questions rather than commands?'
 
 if st.button('What specific positive, encouraging words can I use with my players in place of potentially critical and demeaning that I am in the habit of using?'):
     st.session_state.prompt = 'What specific positive, encouraging words can I use with my players in place of potentially critical and demeaning that I am in the habit of using?'
