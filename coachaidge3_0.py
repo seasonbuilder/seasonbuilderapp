@@ -113,11 +113,11 @@ st.markdown("**Pick a question or type your own at the bottom!**")
 # Create Predefine prompt buttons
 if st.button('How important are relationships to my overall well being and how do I create meaningful ones? ', disabled = st.session_state.button_disabled):
     st.session_state.prompt = 'How important are relationships to my overall well being and how do I create meaningful ones?'
-    st.session_state.button_disabled = True 
+    #st.session_state.button_disabled = True 
 
 if st.button('What are quick tips for better time management?', disabled = st.session_state.button_disabled):
     st.session_state.prompt = 'What are quick tips for better time management?'
-    st.session_state.button_disabled = True 
+    #st.session_state.button_disabled = True 
 
 if st.button('How do I combat the negative voice in my head?', disabled = st.session_state.button_disabled):
     st.session_state.prompt = 'How do I combat the negative voice in my head?'
@@ -125,19 +125,19 @@ if st.button('How do I combat the negative voice in my head?', disabled = st.ses
 
 if st.button('How can I reduce stress and anxiety caused by sports and school?', disabled = st.session_state.button_disabled):
     st.session_state.prompt = 'How can I reduce stress and anxiety caused by sports and school?'
-    st.session_state.button_disabled = True 
+    #st.session_state.button_disabled = True 
 
 if st.button('How do I stay positive while recovering from an injury?', disabled = st.session_state.button_disabled):
     st.session_state.prompt = 'How do I stay positive while recovering from an injury?'
-    st.session_state.button_disabled = True 
+    #st.session_state.button_disabled = True 
 
 if st.button('Give me 15 possible insecurities I might have about myself that are keeping me from playing at the level I know I am capable of', disabled = st.session_state.button_disabled):
     st.session_state.prompt = 'Give me 15 possible insecurities I might have about myself that are keeping me from playing at the level I know I am capable of?'
-    st.session_state.button_disabled = True 
+    #st.session_state.button_disabled = True 
 
 if st.button('What are limiting beliefs and how are they impacting my life right now?', disabled = st.session_state.button_disabled):
     st.session_state.prompt = 'What are limiting beliefs and how are they impacting my life right now?'
-    st.session_state.button_disabled = True 
+    #st.session_state.button_disabled = True 
 
 typed_input = st.chat_input("How can I help you elevate your life?")
 
