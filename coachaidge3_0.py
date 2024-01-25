@@ -169,6 +169,7 @@ if st.session_state.prompt:
     while st.session_state.run.status not in ["completed", "max_retries"]:
         if st.session_state.run.status == "in_progress":
             st.session_state.button_disabled = True
+            st.write(st.session_state.button_disabled)
             with st.spinner("Thinking ......give me a minute"):
             #with st.chat_message("assistant"):
             #    st.write("Thinking ......give me a minute")
