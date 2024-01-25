@@ -93,7 +93,7 @@ if 'prompt' not in st.session_state:
     st.session_state.prompt = ''
 
 if 'button_disabled' not in st.session_state:
-    st.session_state.button_disabled = False
+    st.session_state.button_disabled = True
 
 # Step 1:  Retrieve an Assistant if not already created
 # Initialize OpenAI assistant
