@@ -93,7 +93,7 @@ if 'prompt' not in st.session_state:
     st.session_state.prompt = ''
 
 if 'button_disabled' not in st.session_state:
-    st.session_state.button_disabled = True
+    st.session_state.button_disabled = False
 
 # Step 1:  Retrieve an Assistant if not already created
 # Initialize OpenAI assistant
@@ -113,7 +113,7 @@ st.markdown("**Pick a question or type your own at the bottom!**")
 # Create Predefine prompt buttons
 if st.button('How important are relationships to my overall well being and how do I create meaningful ones? ', disabled = st.session_state.button_disabled):
     st.session_state.prompt = 'How important are relationships to my overall well being and how do I create meaningful ones?'
-    st.write(st.session_state.button_disabled)
+    st.session_state.button_disabled = True
 
 if st.button('What are quick tips for better time management?', disabled = st.session_state.button_disabled):
     st.session_state.prompt = 'What are quick tips for better time management?'
@@ -168,8 +168,6 @@ if st.session_state.prompt:
     # Check and handle the run status
     while st.session_state.run.status not in ["completed", "max_retries"]:
         if st.session_state.run.status == "in_progress":
-            st.session_state.button_disabled = True
-            st.write(st.session_state.button_disabled)
             with st.spinner("Thinking ......give me a minute"):
             #with st.chat_message("assistant"):
             #    st.write("Thinking ......give me a minute")
