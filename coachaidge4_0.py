@@ -114,8 +114,7 @@ def disable(b):
     st.session_state["disabled"] = b
 
 # Create Predefine prompt buttons
-if st.button('How important are relationships to my overall well being and how do I create meaningful ones?', on_click=disable, args=(True), 
-        disabled=st.session_state.get("disabled", False)):
+if st.button('How important are relationships to my overall well being and how do I create meaningful ones?', on_click=disable, args=(True), disabled=st.session_state.get("disabled", False)):
     st.session_state.prompt = 'How important are relationships to my overall well being and how do I create meaningful ones?'
 
 if st.button('What are quick tips for better time management?', on_click=disable, args=(True), disabled=st.session_state.get("disabled", False)):
@@ -130,8 +129,7 @@ if st.button('How can I reduce stress and anxiety caused by sports and school?',
 if st.button('How do I stay positive while recovering from an injury?', on_click=disable, args=(True), disabled=st.session_state.get("disabled", False)):
     st.session_state.prompt = 'How do I stay positive while recovering from an injury?'
 
-if st.button('Give me 15 possible insecurities I might have about myself that are keeping me from playing at the level I know I am capable of', on_click=disable, args=(True), 
-        disabled=st.session_state.get("disabled", False)):
+if st.button('Give me 15 possible insecurities I might have about myself that are keeping me from playing at the level I know I am capable of', on_click=disable, args=(True), disabled=st.session_state.get("disabled", False)):
     st.session_state.prompt = 'Give me 15 possible insecurities I might have about myself that are keeping me from playing at the level I know I am capable of?'
 
 if st.button('What are limiting beliefs and how are they impacting my life right now?', on_click=disable, args=(True), disabled=st.session_state.get("disabled", False)):
