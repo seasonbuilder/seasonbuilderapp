@@ -123,7 +123,7 @@ if st.button('What are quick tips for better time management?', disabled=st.sess
 if st.button('How do I combat the negative voice in my head?', disabled=st.session_state.get("disabled", False)):
     st.session_state.prompt = 'How do I combat the negative voice in my head?'
 
-if st.button('How can I reduce stress and anxiety caused by sports and school?'), disabled=st.session_state.get("disabled", False)):
+if st.button('How can I reduce stress and anxiety caused by sports and school?', disabled=st.session_state.get("disabled", False)):
     st.session_state.prompt = 'How can I reduce stress and anxiety caused by sports and school?'
 
 if st.button('How do I stay positive while recovering from an injury?', disabled=st.session_state.get("disabled", False)):
