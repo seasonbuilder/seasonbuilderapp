@@ -118,7 +118,7 @@ button_b = st.button('b', key='but_b', on_click=disable, args=(True,))
 button_c = st.button('c', key='but_c', disabled=st.session_state.get("disabled", True))
 
 # Create Predefine prompt buttons
-if st.button('How important are relationships to my overall well being and how do I create meaningful ones?', disabled=st.session_state.get("disabled", False)):
+if st.button('How important are relationships to my overall well being and how do I create meaningful ones?', on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
     st.session_state.prompt = 'How important are relationships to my overall well being and how do I create meaningful ones?'
 
 if st.button('What are quick tips for better time management?', disabled=st.session_state.get("disabled", False)):
