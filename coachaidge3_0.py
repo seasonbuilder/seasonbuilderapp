@@ -114,11 +114,11 @@ st.markdown("**Pick a question or type your own at the bottom!**")
 if st.button('How important are relationships to my overall well being and how do I create meaningful ones? ', disabled = st.session_state.button_disabled):
     st.session_state.prompt = 'How important are relationships to my overall well being and how do I create meaningful ones?'
 
-if st.button('What are quick tips for better time management?', disabled = st.session_state.button_disabled):
-    st.session_state.prompt = 'What are quick tips for better time management?'
+if st.button('What are specifics things I can do to better utilize my time and be more productive?', disabled = st.session_state.button_disabled):
+    st.session_state.prompt = 'What are specifics things I can do to better utilize my time and be more productive?'
 
-if st.button('How do I combat the negative voice in my head?', disabled = st.session_state.button_disabled):
-    st.session_state.prompt = 'How do I combat the negative voice in my head?'
+if st.button('How do I learn to reject the negative voice in my head and respond more positively?', disabled = st.session_state.button_disabled):
+    st.session_state.prompt = 'How do I learn to reject the negative voice in my head and respond more positively?'
 
 if st.button('How can I reduce stress and anxiety caused by sports and school?', disabled = st.session_state.button_disabled):
     st.session_state.prompt = 'How can I reduce stress and anxiety caused by sports and school?'
