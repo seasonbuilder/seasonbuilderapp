@@ -45,10 +45,8 @@ def display_results():
         thread_id=st.session_state.thread.id
     )
     for message in reversed(st.session_state.messages.data):
-       # if message.role in ["user","assistant"]: 
-        #    with st.chat_message(message.role):
         if message.role in ["user"]: 
-            with st.chat_message('user'):
+            with st.chat_message('user',avatar='https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png'):
                 for content_part in message.content:
                     message_text = content_part.text.value
                     st.markdown(message_text)
@@ -57,7 +55,7 @@ def display_results():
                 for content_part in message.content:
                     message_text = content_part.text.value
                     st.markdown(message_text)
-
+                    
 # Function to find next empty Google Sheets row
 def find_next_empty_row(sheet):
     all_values = sheet.get_all_values()
