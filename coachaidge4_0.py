@@ -92,6 +92,9 @@ if "retry_error" not in st.session_state:
 if 'prompt' not in st.session_state:
     st.session_state.prompt = ''
 
+if 'button_disabled' not in st.session_state:
+    st.session_state.button_disabled = False
+
 # Step 1:  Retrieve an Assistant if not already created
 # Initialize OpenAI assistant
 if "assistant" not in st.session_state:
@@ -107,26 +110,33 @@ formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as
 
 st.markdown("**Pick a question or type your own at the bottom!**")    
 
+def disable(b):
+    st.session_state["disabled"] = b
+
+button_a = st.button('a', key='but_a', on_click=disable, args=(False,))
+button_b = st.button('b', key='but_b', on_click=disable, args=(True,))
+button_c = st.button('c', key='but_c', disabled=st.session_state.get("disabled", True))
+
 # Create Predefine prompt buttons
-if st.button('How important are relationships to my overall well being and how do I create meaningful ones?'):
+if st.button('How important are relationships to my overall well being and how do I create meaningful ones?', on_click=disable):
     st.session_state.prompt = 'How important are relationships to my overall well being and how do I create meaningful ones?'
 
-if st.button('What are quick tips for better time management?'):
+if st.button('What are quick tips for better time management?', disabled = st.session_state.button_disabled):
     st.session_state.prompt = 'What are quick tips for better time management?'
 
-if st.button('How do I combat the negative voice in my head?'):
+if st.button('How do I combat the negative voice in my head?', disabled = st.session_state.button_disabled):
     st.session_state.prompt = 'How do I combat the negative voice in my head?'
 
-if st.button('How can I reduce stress and anxiety caused by sports and school?'):
+if st.button('How can I reduce stress and anxiety caused by sports and school?', disabled = st.session_state.button_disabled):
     st.session_state.prompt = 'How can I reduce stress and anxiety caused by sports and school?'
 
-if st.button('How do I stay positive while recovering from an injury?'):
+if st.button('How do I stay positive while recovering from an injury?', disabled = st.session_state.button_disabled):
     st.session_state.prompt = 'How do I stay positive while recovering from an injury?'
 
-if st.button('Give me 15 possible insecurities I might have about myself that are keeping me from playing at the level I know I am capable of'):
+if st.button('Give me 15 possible insecurities I might have about myself that are keeping me from playing at the level I know I am capable of', disabled = st.session_state.button_disabled):
     st.session_state.prompt = 'Give me 15 possible insecurities I might have about myself that are keeping me from playing at the level I know I am capable of?'
 
-if st.button('What are limiting beliefs and how are they impacting my life right now?'):
+if st.button('What are limiting beliefs and how are they impacting my life right now?', disabled = st.session_state.button_disabled):
     st.session_state.prompt = 'What are limiting beliefs and how are they impacting my life right now?'
 
 typed_input = st.chat_input("How can I help you elevate your life?")
