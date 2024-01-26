@@ -117,7 +117,7 @@ def disable(b):
 if st.button('How important are relationships to my overall well being and how do I create meaningful ones?', on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
     st.session_state.prompt = 'How important are relationships to my overall well being and how do I create meaningful ones?'
 
-if st.button('What are quick tips for better time management?', disabled=st.session_state.get("disabled", False)):
+if st.button('What are quick tips for better time management?', on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
     st.session_state.prompt = 'What are quick tips for better time management?'
 
 if st.button('How do I combat the negative voice in my head?', disabled=st.session_state.get("disabled", False)):
