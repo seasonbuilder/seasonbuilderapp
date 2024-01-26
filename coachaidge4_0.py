@@ -113,7 +113,7 @@ st.markdown("**Pick a question or type your own at the bottom!**")
 def disable(b):
     st.session_state["disabled"] = b
 
-button_a = st.button('a', key='but_a', on_click=disable, args=(False,))
+button_a = st.button('a', key='but_a', disabled=st.session_state.get("disabled", True))
 button_b = st.button('b', key='but_b', on_click=disable, args=(True,))
 button_c = st.button('c', key='but_c', disabled=st.session_state.get("disabled", True))
 
