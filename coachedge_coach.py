@@ -192,7 +192,7 @@ if st.session_state.prompt:
                      
             else:
                 st.write("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
-
+                break
         elif st.session_state.run.status != "completed":
             # Simulate updating the run status
             update_run_status()
