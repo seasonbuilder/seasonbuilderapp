@@ -132,7 +132,7 @@ def disable(b):
  if st.button('What are limiting beliefs and how are they impacting my life right now?', on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = 'What are limiting beliefs and how are they impacting my life right now?'
 
-typed_input = st.chat_input("How can I help you elevate your life?")
+typed_input = st.chat_input("How can I help you elevate your life?") 
 
 # Check if there is typed input
 if typed_input:
