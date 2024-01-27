@@ -119,7 +119,7 @@ if 'reset' not in st.session_state:
     st.session_state.reset = False
  
 def btn_b_callback(b):
-    st.session_state.display_result=True
+    st.session_state.display_result=False
     st.session_state.reset=False
     st.session_state["disabled"] = b
     
