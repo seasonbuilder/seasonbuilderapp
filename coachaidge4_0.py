@@ -137,7 +137,8 @@ typed_input = st.chat_input("How can I help you elevate your life?")
 # Check if there is typed input
 if typed_input:
     st.session_state.prompt = typed_input
-    disable(False)
+    off = False
+    disable(off)
 
 #Chat input and message creation
 if st.session_state.prompt:
