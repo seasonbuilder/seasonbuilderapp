@@ -116,7 +116,7 @@ button_prompt5 = 'How do I stay positive while recovering from an injury?'
 button_prompt6 = 'Give me 15 possible insecurities I might have about myself that are keeping me from playing at the level I know I am capable of?'
 button_prompt7 = 'What are limiting beliefs and how are they impacting my life right now?'
 
-def disable(disable_button,prompt):
+def disable(disable_button):
     st.session_state['disabled'] = disable_button
 
 # Create Predefine prompt buttons
