@@ -91,6 +91,13 @@ if "retry_error" not in st.session_state:
 
 if 'prompt' not in st.session_state:
     st.session_state.prompt = ''
+ 
+ if 'display_result' not in st.session_state:
+    st.session_state.display_result = True
+  
+if 'reset' not in st.session_state:
+    st.session_state.reset = False
+
 
 # Step 1:  Retrieve an Assistant if not already created
 # Initialize OpenAI assistant
@@ -108,32 +115,41 @@ formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as
 st.markdown("**Pick a question or type your own at the bottom!**")    
 
 button_prompt1 = 'Test - How important are relationships to my overall well being and how do I create meaningful ones?'
+button_prompt2 = 'What are quick tips for better time management?'
+button_prompt3 = 'How do I combat the negative voice in my head?'
+button_prompt4 = 'How can I reduce stress and anxiety caused by sports and school?'
+button_prompt5 = 'How do I stay positive while recovering from an injury?'
+button_prompt6 = 'Give me 15 possible insecurities I might have about myself that are keeping me from playing at the level I know I am capable of?'
+button_prompt7 = 'What are limiting beliefs and how are they impacting my life right now?'
 
-def disable(b,c):
-    st.session_state["disabled"] = b
-    st.session_state.prompt = c
+def disable(prompt):
+    st.session_state.display_result=False
+    st.session_state.reset=False
+    st.session_state.prompt = prompt
+
+if st.session_state.display_result:
  
-# Create Predefine prompt buttons
-if st.button(button_prompt1, on_click=disable, args=(True,button_prompt1), disabled=st.session_state.get("disabled", False)):
-     st.write(button_prompt1)
+    # Create Predefine prompt buttons
+    if st.button(button_prompt1, on_click=disable, args=(button_prompt1,)):
+         st.session_state.prompt = button_prompt1
 
-if st.button('What are quick tips for better time management?', on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
-     st.session_state.prompt = 'What are quick tips for better time management?'
+    if st.button(button_prompt2, on_click=disable, args=(button_prompt2,)):
+         st.session_state.prompt = button_prompt2
 
-if st.button('How do I combat the negative voice in my head?', on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
-     st.session_state.prompt = 'How do I combat the negative voice in my head?'
+    if st.button(button_prompt3, on_click=disable, args=(button_prompt3,)):
+         st.session_state.prompt = button_prompt3
 
-if st.button('How can I reduce stress and anxiety caused by sports and school?', on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
-     st.session_state.prompt = 'How can I reduce stress and anxiety caused by sports and school?'
+    if st.button(button_prompt4, on_click=disable, args=(button_prompt4,)):
+         st.session_state.prompt = button_prompt4
 
-if st.button('How do I stay positive while recovering from an injury?', on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
-     st.session_state.prompt = 'How do I stay positive while recovering from an injury?'
+    if st.button(button_prompt5, on_click=disable, args=(button_prompt5,)):
+         st.session_state.prompt = button_prompt5
 
-if st.button('Give me 15 possible insecurities I might have about myself that are keeping me from playing at the level I know I am capable of', on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
-     st.session_state.prompt = 'Give me 15 possible insecurities I might have about myself that are keeping me from playing at the level I know I am capable of?'
+    if st.button(button_prompt6, on_click=disable, args=(button_prompt1,)):
+         st.session_state.prompt = button_prompt6
 
-if st.button('What are limiting beliefs and how are they impacting my life right now?', on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
-     st.session_state.prompt = 'What are limiting beliefs and how are they impacting my life right now?'
+    if st.button(button_prompt7, on_click=disable, args=(button_prompt1,)):
+         st.session_state.prompt = button_prompt7
 
 typed_input = st.chat_input("How can I help you elevate your life?") 
 
