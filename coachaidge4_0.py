@@ -7,7 +7,7 @@ from openai import OpenAI
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-st.set_page_config(page_title="Coach Aidge - Virtual Life Coach") 
+st.set_page_config(page_title="Coach Aidge - Virtual Life Coach")
  
 hide_st_style = """
             <style>
