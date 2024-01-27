@@ -119,7 +119,7 @@ if 'reset' not in st.session_state:
     st.session_state.reset = False
  
 def btn_b_callback(b):
-    st.session_state.display_result=False
+    st.session_state.display_result=True
     st.session_state.reset=False
     st.session_state["disabled"] = b
     
@@ -127,7 +127,7 @@ button_a = st.button('Button A')
 if button_a :
     st.session_state.display_result = True
 
-if st.session_state.display_result:
+if st.session_state.display_result == False:
     button_b = st.button('Button B', on_click=btn_b_callback, args=(True,))
 
 # Create Predefine prompt buttons
