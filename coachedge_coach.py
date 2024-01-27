@@ -188,8 +188,7 @@ if st.session_state.prompt:
             st.session_state.retry_error += 1
             if st.session_state.retry_error < 3:
                 st.write("Run failed, retrying ......")
-                if retry_button.button('Retry'):
-                    update_run_status()
+                update_run_status()
                      
             else:
                 st.write("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
