@@ -114,7 +114,7 @@ def disable(b):
     st.session_state["disabled"] = b
 
 if 'display_result' not in st.session_state:
-    st.session_state.display_result = False
+    st.session_state.display_result = True
 if 'reset' not in st.session_state:
     st.session_state.reset = False
  
@@ -123,12 +123,12 @@ def btn_b_callback(b):
     st.session_state.reset=False
     st.session_state["disabled"] = b
     
-button_a = st.button('Button TestA')
+button_a = st.button('Button Test1A')
 if button_a :
-    st.session_state.display_result = True
+    st.session_state.display_result = False
 
-#st.session_state.display_result == False:
-button_b = st.button('Button Test', on_click=btn_b_callback, args=(True,), disabled=st.session_state.get("disabled", False))
+if st.session_state.display_result:
+    button_b = st.button('Button Test', on_click=btn_b_callback, args=(True,), disabled=st.session_state.get("disabled", False))
 
 # Create Predefine prompt buttons
 if st.button('How important are relationships to my overall well being and how do I create meaningful ones?', 
