@@ -128,7 +128,7 @@ if button_a :
     st.session_state.display_result = True
 
 #st.session_state.display_result == False:
-button_b = st.button('Button Test', on_click=btn_b_callback, args=(True,))
+button_b = st.button('Button Test', on_click=btn_b_callback, args=(True,), disabled=st.session_state.get("disabled", False))
 
 # Create Predefine prompt buttons
 if st.button('How important are relationships to my overall well being and how do I create meaningful ones?', 
