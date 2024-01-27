@@ -107,13 +107,15 @@ formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as
 
 st.markdown("**Pick a question or type your own at the bottom!**")    
 
+button_prompt1 = 'How important are relationships to my overall well being and how do I create meaningful ones?'
+
 def disable(b,c):
     st.session_state["disabled"] = b
     st.session_state.prompt = c
  
 # Create Predefine prompt buttons
-if st.button('How important are relationships to my overall well being and how do I create meaningful ones?', on_click=disable, args=(True,'How important are relationships to my overall well being and how do I create meaningful ones?'), disabled=st.session_state.get("disabled", False)):
-     st.write('How important are relationships to my overall well being and how do I create meaningful ones?')
+if st.button(button_prompt1, on_click=disable, args=(True,button_prompt1), disabled=st.session_state.get("disabled", False)):
+     st.write(button_prompt1)
 
 if st.button('What are quick tips for better time management?', on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = 'What are quick tips for better time management?'
