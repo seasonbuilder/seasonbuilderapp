@@ -126,12 +126,13 @@ def disable(disable_button,prompt):
     st.session_state.display_buttons=False
     st.session_state.reset=False
     st.session_state['disabled'] = disable_button
-    st.session_state.prompt = prompt
+    #st.session_state.prompt = prompt
 
 if st.session_state.display_buttons:
  
     # Create Predefine prompt buttons
     if st.button(button_prompt1, on_click=disable, args=(True,button_prompt1), disabled=st.session_state.get("disabled", False)):
+         st.write(button_prompt1)
          st.session_state.prompt = button_prompt1
 
     if st.button(button_prompt2, on_click=disable, args=(True,button_prompt2), disabled=st.session_state.get("disabled", False)):
