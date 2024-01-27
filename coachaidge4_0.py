@@ -11,7 +11,7 @@ st.set_page_config(page_title="Coach Aidge - Virtual Life Coach")
  
 hide_st_style = """
             <style>
-            #MainMenu {visibility: hidden;}
+            #MainMenu {visibility: hidden;} 
             footer {visibility: hidden;}
             header {visibility: hidden;}
             </style>
