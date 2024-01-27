@@ -92,7 +92,7 @@ if "retry_error" not in st.session_state:
 if 'prompt' not in st.session_state:
     st.session_state.prompt = ''
  
- if 'display_result' not in st.session_state:
+if 'display_result' not in st.session_state:
     st.session_state.display_result = True
   
 if 'reset' not in st.session_state:
