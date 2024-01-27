@@ -91,12 +91,6 @@ if "retry_error" not in st.session_state:
 
 if 'prompt' not in st.session_state:
     st.session_state.prompt = ''
- 
-if 'display_buttons' not in st.session_state:
-    st.session_state.display_buttons = True
-  
-if 'reset' not in st.session_state:
-    st.session_state.reset = False
 
 
 # Step 1:  Retrieve an Assistant if not already created
@@ -114,7 +108,7 @@ formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as
 
 st.markdown("**Pick a question or type your own at the bottom!**")    
 
-button_prompt1 = 'Test2 - How important are relationships to my overall well being and how do I create meaningful ones?'
+button_prompt1 = 'How important are relationships to my overall well being and how do I create meaningful ones?'
 button_prompt2 = 'What are quick tips for better time management?'
 button_prompt3 = 'How do I combat the negative voice in my head?'
 button_prompt4 = 'How can I reduce stress and anxiety caused by sports and school?'
@@ -123,35 +117,29 @@ button_prompt6 = 'Give me 15 possible insecurities I might have about myself tha
 button_prompt7 = 'What are limiting beliefs and how are they impacting my life right now?'
 
 def disable(disable_button,prompt):
-    st.session_state.display_buttons=False
-    st.session_state.reset=False
     st.session_state['disabled'] = disable_button
-    #st.session_state.prompt = prompt
 
-if st.session_state.display_buttons:
- 
-    # Create Predefine prompt buttons
-    if st.button(button_prompt1, on_click=disable, args=(True,button_prompt1), disabled=st.session_state.get("disabled", False)):
-         st.write(button_prompt1)
-         st.session_state.prompt = button_prompt1
+# Create Predefine prompt buttons
+if st.button(button_prompt1, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+     st.session_state.prompt = button_prompt1
 
-    if st.button(button_prompt2, on_click=disable, args=(True,button_prompt2), disabled=st.session_state.get("disabled", False)):
-         st.session_state.prompt = button_prompt2
+if st.button(button_prompt2, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+     st.session_state.prompt = button_prompt2
 
-    if st.button(button_prompt3, on_click=disable, args=(True,button_prompt3), disabled=st.session_state.get("disabled", False)):
-         st.session_state.prompt = button_prompt3
+if st.button(button_prompt3, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+     st.session_state.prompt = button_prompt3
 
-    if st.button(button_prompt4, on_click=disable, args=(True,button_prompt4), disabled=st.session_state.get("disabled", False)):
-         st.session_state.prompt = button_prompt4
+if st.button(button_prompt4, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+     st.session_state.prompt = button_prompt4
 
-    if st.button(button_prompt5, on_click=disable, args=(True,button_prompt5), disabled=st.session_state.get("disabled", False)):
-         st.session_state.prompt = button_prompt5
+if st.button(button_prompt5, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+     st.session_state.prompt = button_prompt5
 
-    if st.button(button_prompt6, on_click=disable, args=(True,button_prompt6), disabled=st.session_state.get("disabled", False)):
-         st.session_state.prompt = button_prompt6
+if st.button(button_prompt6, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+     st.session_state.prompt = button_prompt6
 
-    if st.button(button_prompt7, on_click=disable, args=(True,button_prompt7), disabled=st.session_state.get("disabled", False)):
-         st.session_state.prompt = button_prompt7
+if st.button(button_prompt7, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+     st.session_state.prompt = button_prompt7
 
 typed_input = st.chat_input("How can I help you elevate your life?") 
 
