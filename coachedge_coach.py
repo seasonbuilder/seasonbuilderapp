@@ -55,7 +55,7 @@ def display_results():
                 for content_part in message.content:
                     message_text = content_part.text.value
                     st.markdown(message_text)
-                    
+
 # Function to find next empty Google Sheets row
 def find_next_empty_row(sheet):
     all_values = sheet.get_all_values()
@@ -151,8 +151,8 @@ if typed_input:
 
 #Chat input and message creation
 if st.session_state.prompt:
-    with st.chat_message('user'):
-        st.write(st.session_state.prompt)
+    #with st.chat_message('user'):
+        #st.write(st.session_state.prompt)
     
     
     st.session_state.message = client.beta.threads.messages.create(
