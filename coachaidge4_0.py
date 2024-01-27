@@ -123,7 +123,7 @@ def btn_b_callback(b):
     st.session_state.reset=False
     st.session_state["disabled"] = b
     
-button_a = st.button('Button Test1A')
+button_a = st.button('Button Test 1A')
 if button_a :
     st.session_state.display_result = False
 
