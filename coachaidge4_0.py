@@ -107,11 +107,12 @@ formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as
 
 st.markdown("**Pick a question or type your own at the bottom!**")    
 
-def disable(b):
+def disable(b,c):
     st.session_state["disabled"] = b
+    st.session_state.prompt = c
  
 # Create Predefine prompt buttons
-if st.button('How important are relationships to my overall well being and how do I create meaningful ones?', on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+if st.button('How important are relationships to my overall well being and how do I create meaningful ones?', on_click=disable, args=(True,'How important are relationships to my overall well being and how do I create meaningful ones?'), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = 'How important are relationships to my overall well being and how do I create meaningful ones?'
 
 if st.button('What are quick tips for better time management?', on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
@@ -137,8 +138,6 @@ typed_input = st.chat_input("How can I help you elevate your life?")
 # Check if there is typed input
 if typed_input:
     st.session_state.prompt = typed_input
-    off = False
-    disable(off)
 
 #Chat input and message creation
 if st.session_state.prompt:
