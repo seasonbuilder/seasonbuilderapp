@@ -117,25 +117,22 @@ if 'display_result' not in st.session_state:
     st.session_state.display_result = False
 if 'reset' not in st.session_state:
     st.session_state.reset = False
-
-st.header("My Demo App")
-result="My Custom Text"
-
-def btn_b_callback():
+ 
+def btn_b_callback(b):
     st.session_state.display_result=False
     st.session_state.reset=False
+    st.session_state["disabled"] = b
     
 button_a = st.button('Button A')
 if button_a :
     st.session_state.display_result = True
 
 if st.session_state.display_result:
-    st.write(result)
     button_b = st.button('Button B', on_click=btn_b_callback)
 
 # Create Predefine prompt buttons
 if st.button('How important are relationships to my overall well being and how do I create meaningful ones?', 
-             on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+             on_click=btn_b_callback, args=(True,), disabled=st.session_state.get("disabled", False)):
     st.session_state.prompt = 'How important are relationships to my overall well being and how do I create meaningful ones?'
 
 if st.button('What are quick tips for better time management?', on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
