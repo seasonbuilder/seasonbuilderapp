@@ -109,9 +109,9 @@ formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as
 st.markdown("**Pick a question or type your own at the bottom!**")    
 
 button_prompt1 = 'How important are relationships to my overall well being and how do I create meaningful ones?'
-button_prompt2 = 'What are quick tips for better time management?'
-button_prompt3 = 'How do I combat the negative voice in my head?'
-button_prompt4 = 'How can I reduce stress and anxiety caused by sports and school?'
+button_prompt2 = 'What are quick tips for better time management and more productivity in my day?'
+button_prompt3 = 'How do I recognize the negative voice in my head and change my thoughts?'
+button_prompt4 = 'How can I reduce stress and anxiety I feel caused by sports and school?'
 button_prompt5 = 'How do I stay positive while recovering from an injury?'
 button_prompt6 = 'Give me 15 possible insecurities I might have about myself that are keeping me from playing at the level I know I am capable of?'
 button_prompt7 = 'What are limiting beliefs and how are they impacting my life right now?'
