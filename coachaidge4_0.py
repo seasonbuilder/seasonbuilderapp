@@ -150,7 +150,7 @@ if typed_input:
 #Chat input and message creation
 if st.session_state.prompt:
     with st.spinner("Thinking ......give me a minute"):
-         time.sleep(1)  # Simulate immediate delay
+         time.sleep(3)  # Simulate immediate delay
  
     st.session_state.message = client.beta.threads.messages.create(
         thread_id=st.session_state.thread.id,
