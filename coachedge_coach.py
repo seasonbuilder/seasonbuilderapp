@@ -111,12 +111,12 @@ formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as
 
 st.markdown("**Pick a prompt or type your own question at the bottom. Include your sport and level for more specific answers.**")
 
-button_prompt1 = 'How can I manage my coaching responsibilities together with my personal responsibilities in a healthy way?'
+button_prompt1 = 'How can I manage my coaching and personal responsibilities in a healthy way?'
 button_prompt2 = 'Give me 5 specific ways that enable my staff and I to better connect with our players.'
 button_prompt3 = 'What are 5 ways to weave our core values into our practice, film sessions, and weights workouts?'
 button_prompt4 = 'Suggest 4 activities we can do as a coaching staff to build our relationship.'
 button_prompt5 = 'How can I lead coaches and athletes through questions rather than commands?'
-button_prompt6 = 'What specific positive, encouraging words can I use with my players in place of potentially critical and demeaning that I am in the habit of using?'
+button_prompt6 = 'What specific positive, encouraging words can I use with my players in place of critical, demeaning one?'
 #button_prompt7 = 'What are limiting beliefs and how might they be impacting my life right now?'
 
 def disable(disable_button):
