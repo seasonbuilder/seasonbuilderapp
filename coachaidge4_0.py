@@ -147,7 +147,7 @@ if st.button(button_prompt7, on_click=disable, args=(True,), disabled=st.session
 st.title("Chat Application")
 
 # Flag to control the state of text_input
-enable_input = False
+enable_input = True
 
 if not enable_input:
     st.text("Processing... Please wait until the script finishes.")
@@ -161,7 +161,7 @@ else:
 time.sleep(3)
 
 # Enable input after processing
-enable_input = True
+enable_input = False
 #typed_input = st.chat_input("How can I help you elevate your life?") 
 
 # Check if there is typed input
