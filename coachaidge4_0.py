@@ -144,29 +144,11 @@ if st.button(button_prompt6, on_click=disable, args=(True,), disabled=st.session
 if st.button(button_prompt7, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt7
 
-st.title("Chat Application")
-
-# Flag to control the state of text_input
-enable_input = True
-
-if not enable_input:
-    st.text("Processing... Please wait until the script finishes.")
-else:
-    user_input = st.chat_input("How can I help you elevate your life?") 
-
-    if st.button("Send"):
-        # Process user_input here
-        st.success("Response received!")
-# Simulate processing time
-time.sleep(3)
-
-# Enable input after processing
-enable_input = False
-#typed_input = st.chat_input("How can I help you elevate your life?") 
+typed_input = st.chat_input("How can I help you elevate your life?") 
 
 # Check if there is typed input
-#if typed_input:
-    #st.session_state.prompt = typed_input 
+if typed_input:
+    st.session_state.prompt = typed_input 
 
 #Chat input and message creation
 if st.session_state.prompt:
