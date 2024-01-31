@@ -149,11 +149,8 @@ if typed_input:
 
 #Chat input and message creation
 if st.session_state.prompt:
-    
-    if st.session_state.run.status == "in_progress":
-         with st.spinner("Thinking ......give me a minute"):
-             time.sleep(15)  # Simulate delay
-         update_run_status()  # Update the status after delay
+    with st.spinner("Thinking ......give me a minute"):
+         time.sleep(15)  # Simulate delay
  
     st.session_state.message = client.beta.threads.messages.create(
         thread_id=st.session_state.thread.id,
