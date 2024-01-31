@@ -121,23 +121,22 @@ button_prompt7 = 'What are limiting beliefs and how might they be impacting my l
 
 st.title("Chat Application")
 
-    # Flag to control the state of text_input
-    enable_input = False
+# Flag to control the state of text_input
+enable_input = False
 
-    if not enable_input:
-        st.text("Processing... Please wait until the script finishes.")
-    else:
-        user_input = st.text_input("Enter your message")
+if not enable_input:
+    st.text("Processing... Please wait until the script finishes.")
+else:
+    user_input = st.text_input("Enter your message")
 
-        if st.button("Send"):
-            # Process user_input here
-            st.success("Response received!")
+    if st.button("Send"):
+        # Process user_input here
+        st.success("Response received!")
+# Simulate processing time
+time.sleep(3)
 
-    # Simulate processing time
-    time.sleep(3)
-
-    # Enable input after processing
-    enable_input = True
+# Enable input after processing
+enable_input = True
 
 def disable(disable_button):
     st.session_state['disabled'] = disable_button
