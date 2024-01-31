@@ -149,6 +149,11 @@ if typed_input:
 
 #Chat input and message creation
 if st.session_state.prompt:
+    
+    if st.session_state.run.status == "in_progress":
+         with st.spinner("Thinking ......give me a minute"):
+             time.sleep(15)  # Simulate delay
+         update_run_status()  # Update the status after delay
  
     st.session_state.message = client.beta.threads.messages.create(
         thread_id=st.session_state.thread.id,
@@ -162,19 +167,12 @@ if st.session_state.prompt:
         assistant_id=st.session_state.assistant.id
     )
     update_run_status() 
-    
-    # Find the next empty row
-    next_row = find_next_empty_row(sheet)
-    # Write data to the next row
-    sheet.update(f"A{next_row}:B{next_row}", [[formatted_datetime, st.session_state.prompt]])
             
     # Handle run status
     # Check and handle the run status
     while st.session_state.run.status not in ["completed", "max_retries"]:
         if st.session_state.run.status == "in_progress":
             with st.spinner("Thinking ......give me a minute"):
-            #with st.chat_message("assistant"):
-            #    st.write("Thinking ......give me a minute")
                 time.sleep(15)  # Simulate delay
             update_run_status()  # Update the status after delay
            
@@ -193,5 +191,10 @@ if st.session_state.prompt:
             update_run_status()
             if st.session_state.retry_error < 3:
                 time.sleep(2)  # Simulate delay
+             
+    # Find the next empty row
+    next_row = find_next_empty_row(sheet)
+    # Write data to the next row
+    sheet.update(f"A{next_row}:B{next_row}", [[formatted_datetime, st.session_state.prompt]])
                 
     display_results()
