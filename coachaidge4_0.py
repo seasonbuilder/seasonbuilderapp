@@ -92,6 +92,9 @@ if "retry_error" not in st.session_state:
 if 'prompt' not in st.session_state:
     st.session_state.prompt = ''
 
+if 'last_input' not in st.session_state:
+    st.session_state.last_input = ''
+
 
 # Step 1:  Retrieve an Assistant if not already created
 # Initialize OpenAI assistant
@@ -117,7 +120,8 @@ button_prompt6 = 'Give me 10 common insecurities athletes have that may be keepi
 button_prompt7 = 'What are limiting beliefs and how might they be impacting my life right now?'
 
 def disable(disable_button):
-    st.session_state['disabled'] = disable_button
+    if st.session_state.run.status not in ["completed", "max_retries"]:
+       st.session_state['disabled'] = disable_button
 
 # Create Predefine prompt buttons
 if st.button(button_prompt1, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
@@ -141,7 +145,7 @@ if st.button(button_prompt6, on_click=disable, args=(True,), disabled=st.session
 if st.button(button_prompt7, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt7
 
-typed_input = st.chat_input("How can I help you elevate your life?", key="real_chat_input") 
+typed_input = st.chat_input("How can I help you elevate your life?") 
 
 # Check if there is typed input
 if typed_input:
@@ -149,7 +153,6 @@ if typed_input:
 
 #Chat input and message creation
 if st.session_state.prompt:
-    st.chat_input("Ask a question", key="disabled_chat_input", disabled=True)
     with st.spinner("Thinking ......give me a minute"):
          time.sleep(3)  # Simulate immediate delay
  
