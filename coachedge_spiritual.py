@@ -7,11 +7,11 @@ from openai import OpenAI
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-st.set_page_config(page_title="Coach Aidge - Virtual Life Coach") 
+st.set_page_config(page_title="Coach Aidge - Virtual Life Coach")
  
 hide_st_style = """
             <style>
-            #MainMenu {visibility: hidden;}
+            #MainMenu {visibility: hidden;} 
             footer {visibility: hidden;}
             header {visibility: hidden;}
             </style>
@@ -54,7 +54,7 @@ def display_results():
                 for content_part in message.content:
                     message_text = content_part.text.value
                     st.markdown(message_text)
-
+                 
 # Function to find next empty Google Sheets row
 def find_next_empty_row(sheet):
     all_values = sheet.get_all_values()
@@ -92,8 +92,9 @@ if "retry_error" not in st.session_state:
 if 'prompt' not in st.session_state:
     st.session_state.prompt = ''
 
-if 'button_disabled' not in st.session_state:
-    st.session_state.button_disabled = False
+if 'last_input' not in st.session_state:
+    st.session_state.last_input = ''
+
 
 # Step 1:  Retrieve an Assistant if not already created
 # Initialize OpenAI assistant
@@ -110,83 +111,90 @@ formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as
 
 st.markdown("**Pick a question or type your own at the bottom!**")    
 
+button_prompt1 = 'How can I be a better Christian example to my team?'
+button_prompt2 = 'How do I better align with my Christian identity'
+button_prompt3 = 'What are 5 scriptures that help me stay positive and resilient'
+button_prompt4 = 'How do I find more purpose in my sport?'
+button_prompt5 = 'How can I be a servant leader?'
+button_prompt6 = 'Ask me some questions about my personal faith journey and discuss it with me.'
+button_prompt7 = 'Help me determine what insecurities I may have and then how to overcome them?'
+
+def disable(disable_button):
+    st.session_state['disabled'] = disable_button
+
 # Create Predefine prompt buttons
-if st.button('How important are relationships to my overall well being and how do I create meaningful ones? ', disabled = st.session_state.button_disabled):
-    st.session_state.prompt = 'How important are relationships to my overall well being and how do I create meaningful ones?'
+if st.button(button_prompt1, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+     st.session_state.prompt = button_prompt1
 
-if st.button('How do I grow in my faith?', disabled = st.session_state.button_disabled):
-    st.session_state.prompt = 'How do I grow my faith?'
+if st.button(button_prompt2, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+     st.session_state.prompt = button_prompt2
 
-if st.button('How do I combat the negative voice in my head?', disabled = st.session_state.button_disabled):
-    st.session_state.prompt = 'How do I combat the negative voice in my head?'
+if st.button(button_prompt3, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+     st.session_state.prompt = button_prompt3
 
-if st.button('How can I reduce stress and anxiety caused by sports and school?', disabled = st.session_state.button_disabled):
-    st.session_state.prompt = 'How can I reduce stress and anxiety caused by sports and school?'
+if st.button(button_prompt4, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+     st.session_state.prompt = button_prompt4
 
-if st.button('How do I stay positive while recovering from an injury?', disabled = st.session_state.button_disabled):
-    st.session_state.prompt = 'How do I stay positive while recovering from an injury?'
+if st.button(button_prompt5, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+     st.session_state.prompt = button_prompt5
 
-if st.button('Give me 15 possible insecurities I might have about myself that are keeping me from playing at the level I know I am capable of', disabled = st.session_state.button_disabled):
-    st.session_state.prompt = 'Give me 15 possible insecurities I might have about myself that are keeping me from playing at the level I know I am capable of?'
+if st.button(button_prompt6, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+     st.session_state.prompt = button_prompt6
 
-if st.button('What are limiting beliefs and how are they impacting my life right now?', disabled = st.session_state.button_disabled):
-    st.session_state.prompt = 'What are limiting beliefs and how are they impacting my life right now?'
+if st.button(button_prompt7, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+     st.session_state.prompt = button_prompt7
 
-typed_input = st.chat_input("How can I help you elevate your life?")
+typed_input = st.chat_input("How can I help you elevate your life?") 
 
 # Check if there is typed input
 if typed_input:
-    st.session_state.prompt = typed_input
+    st.session_state.prompt = typed_input 
 
 #Chat input and message creation
 if st.session_state.prompt:
-    #with st.chat_message('user'):
-     #   st.write(st.session_state.prompt)
-    
-    
-    st.session_state.message = client.beta.threads.messages.create(
-        thread_id=st.session_state.thread.id,
-        role="user",
-        content=st.session_state.prompt
-    )
+    with st.spinner("Thinking ......give me a minute"):
+        time.sleep(3)  # Simulate immediate delay
+ 
+        st.session_state.message = client.beta.threads.messages.create(
+            thread_id=st.session_state.thread.id,
+            role="user",
+            content=st.session_state.prompt
+        )
 
-    # Step 4: Run the Assistant
-    st.session_state.run = client.beta.threads.runs.create(
-        thread_id=st.session_state.thread.id,
-        assistant_id=st.session_state.assistant.id
-    )
-    
-    update_run_status()   
-    
+        # Step 4: Run the Assistant
+        st.session_state.run = client.beta.threads.runs.create(
+            thread_id=st.session_state.thread.id,
+            assistant_id=st.session_state.assistant.id
+        )
+        update_run_status() 
+            
+        # Handle run status
+        # Check and handle the run status
+        while st.session_state.run.status not in ["completed", "max_retries"]:
+            if st.session_state.run.status == "in_progress":
+                with st.spinner("Thinking ......give me a minute"):
+                    time.sleep(15)  # Simulate delay
+                update_run_status()  # Update the status after delay
+           
+            elif st.session_state.run.status == "failed":
+                st.session_state.retry_error += 1
+                if st.session_state.retry_error < 3:
+                    status_message.write("Run failed, retrying ......")
+                    if retry_button.button('Retry'):
+                        update_run_status()
+                     
+                else:
+                    status_message.error("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
+
+            elif st.session_state.run.status != "completed":
+                # Simulate updating the run status
+                update_run_status()
+                if st.session_state.retry_error < 3:
+                    time.sleep(2)  # Simulate delay
+             
     # Find the next empty row
     next_row = find_next_empty_row(sheet)
     # Write data to the next row
     sheet.update(f"A{next_row}:B{next_row}", [[formatted_datetime, st.session_state.prompt]])
-            
-    # Handle run status
-    # Check and handle the run status
-    while st.session_state.run.status not in ["completed", "max_retries"]:
-        if st.session_state.run.status == "in_progress":
-            with st.spinner("Thinking ......give me a minute"):
-            #with st.chat_message("assistant"):
-            #    st.write("Thinking ......give me a minute")
-                time.sleep(15)  # Simulate delay
-            update_run_status()  # Update the status after delay
-           
-        elif st.session_state.run.status == "failed":
-            st.session_state.retry_error += 1
-            if st.session_state.retry_error < 3:
-                status_message.write("Run failed, retrying ......")
-                if retry_button.button('Retry'):
-                    update_run_status()
-                     
-            else:
-                status_message.error("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
-
-        elif st.session_state.run.status != "completed":
-            # Simulate updating the run status
-            update_run_status()
-            if st.session_state.retry_error < 3:
-                time.sleep(2)  # Simulate delay
                 
     display_results()
