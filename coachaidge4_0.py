@@ -141,7 +141,7 @@ if st.button(button_prompt6, on_click=disable, args=(True,), disabled=st.session
 if st.button(button_prompt7, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt7
 
-typed_input = st.chat_input("How can I help you elevate your life?", key="real_chat_input") 
+typed_input = st.chat_input("How can I help you elevate your life?") 
 
 # Check if there is typed input
 if typed_input:
@@ -149,11 +149,7 @@ if typed_input:
 
 #Chat input and message creation
 if st.session_state.prompt:
-    st.chat_input("Ask a question", key="disabled_chat_input", disabled=True)
-    #with st.chat_message('user'):
-     #   st.write(st.session_state.prompt)
-    
-    
+ 
     st.session_state.message = client.beta.threads.messages.create(
         thread_id=st.session_state.thread.id,
         role="user",
@@ -165,7 +161,6 @@ if st.session_state.prompt:
         thread_id=st.session_state.thread.id,
         assistant_id=st.session_state.assistant.id
     )
-    st.rerun()
     update_run_status() 
     
     # Find the next empty row
