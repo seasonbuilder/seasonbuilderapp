@@ -119,9 +119,28 @@ button_prompt5 = 'How do I stay positive while recovering from an injury?'
 button_prompt6 = 'Give me 10 common insecurities athletes have that may be keeping me from playing my best.'
 button_prompt7 = 'What are limiting beliefs and how might they be impacting my life right now?'
 
+st.title("Chat Application")
+
+    # Flag to control the state of text_input
+    enable_input = False
+
+    if not enable_input:
+        st.text("Processing... Please wait until the script finishes.")
+    else:
+        user_input = st.text_input("Enter your message")
+
+        if st.button("Send"):
+            # Process user_input here
+            st.success("Response received!")
+
+    # Simulate processing time
+    time.sleep(3)
+
+    # Enable input after processing
+    enable_input = True
+
 def disable(disable_button):
-    if st.session_state.run.status not in ["completed", "max_retries"]:
-       st.session_state['disabled'] = disable_button
+    st.session_state['disabled'] = disable_button
 
 # Create Predefine prompt buttons
 if st.button(button_prompt1, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
