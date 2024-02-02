@@ -126,26 +126,32 @@ def disable(disable_button):
 # Create Predefine prompt buttons
 if st.button(button_prompt1, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt1
+     st.session_state.input_count += 1
 
 if st.button(button_prompt2, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt2
+     st.session_state.input_count += 1
 
 if st.button(button_prompt3, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt3
+     st.session_state.input_count += 1
 
 if st.button(button_prompt4, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt4
+     st.session_state.input_count += 1
 
 if st.button(button_prompt5, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt5
+     st.session_state.input_count += 1
 
 if st.button(button_prompt6, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt6
+     st.session_state.input_count += 1
 
 if st.button(button_prompt7, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt7
+     st.session_state.input_count += 1
  
-st.session_state.input_count += 1
 typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(True,)) 
 
 # Check if there is typed input
