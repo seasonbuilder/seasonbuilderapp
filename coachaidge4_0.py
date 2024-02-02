@@ -154,6 +154,7 @@ if typed_input:
 
 if st.session_state.input_count > 1:
     st.rerun()
+    st.session_state.input_count = 0
 
 #Chat input and message creation
 if st.session_state.prompt:
