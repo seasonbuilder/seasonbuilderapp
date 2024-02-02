@@ -54,6 +54,7 @@ def display_results():
                 for content_part in message.content:
                     message_text = content_part.text.value
                     st.markdown(message_text)
+    st.session_state.input_count = 0
                  
 # Function to find next empty Google Sheets row
 def find_next_empty_row(sheet):
@@ -92,8 +93,8 @@ if "retry_error" not in st.session_state:
 if 'prompt' not in st.session_state:
     st.session_state.prompt = ''
 
-if 'last_input' not in st.session_state:
-    st.session_state.last_input = ''
+if 'input_count' not in st.session_state:
+    st.session_state.input_count = 0
 
 
 # Step 1:  Retrieve an Assistant if not already created
@@ -143,13 +144,16 @@ if st.button(button_prompt6, on_click=disable, args=(True,), disabled=st.session
 
 if st.button(button_prompt7, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt7
-
+ 
+st.session_state.input_count += 1
 typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(True,)) 
 
 # Check if there is typed input
 if typed_input:
-    st.session_state.prompt = typed_input 
-
+    st.session_state.input_count += 1
+    if st.session_state.input_count == 1:
+        st.session_state.prompt = typed_input 
+ 
 #Chat input and message creation
 if st.session_state.prompt:
     with st.spinner("Thinking ......give me a minute"):
