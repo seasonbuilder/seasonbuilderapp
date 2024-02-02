@@ -42,7 +42,6 @@ def display_results():
     st.session_state.messages = client.beta.threads.messages.list(
         thread_id=st.session_state.thread.id
     )
-            
     for message in reversed(st.session_state.messages.data):
         if message.role in ["user"]: 
             with st.chat_message('user',avatar='https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png'):
@@ -55,6 +54,7 @@ def display_results():
                     message_text = content_part.text.value
                     st.markdown(message_text)
     st.session_state.input_count = 0
+    st.write(st.session_state.input_count)
                  
 # Function to find next empty Google Sheets row
 def find_next_empty_row(sheet):
@@ -150,11 +150,12 @@ typed_input = st.chat_input("How can I help you elevate your life?", on_submit=d
 
 # Check if there is typed input
 if typed_input:
-    st.session_state.prompt = typed_input 
+    if st.session_state.input_count == 1:
+        st.session_state.prompt = typed_input 
 
 #Chat input and message creation
 st.write(st.session_state.input_count)
-if st.session_state.prompt and (st.session_state.input_count == 1):
+if st.session_state.prompt:
     with st.spinner("Thinking ......give me a minute"):
          time.sleep(3)  # Simulate immediate delay
  
