@@ -167,7 +167,7 @@ if st.session_state.prompt:
             thread_id=st.session_state.thread.id,
             assistant_id=st.session_state.assistant.id
         )
-        update_run_status() 
+    update_run_status() 
             
     # Handle run status
     # Check and handle the run status
