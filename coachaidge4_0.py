@@ -118,11 +118,11 @@ button_prompt3 = 'How do I stop/redirect the negative voice in my head?'
 button_prompt4 = 'How do I reduce stress and anxiety from sports / school?'
 button_prompt5 = 'How do I stay positive while recovering from an injury?'
 button_prompt6 = 'Give me 10 common insecurities athletes have that may be keeping me from playing my best.'
-button_prompt7 = 'What are limiting beliefs and how might they be impacting my life right now?1'
+button_prompt7 = 'What are limiting beliefs and how might they be impacting my life right now?2'
 
 def disable(disable_button):
     st.session_state['disabled'] = disable_button
-    st.session_state.input_count = 0
+    st.session_state.input_count += 1
 
 # Create Predefine prompt buttons
 if st.button(button_prompt1, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
@@ -151,9 +151,9 @@ typed_input = st.chat_input("How can I help you elevate your life?", on_submit=d
 # Check if there is typed input
 if typed_input:
     st.session_state.prompt = typed_input 
-    st.session_state.input_count += 1
- 
+
 #Chat input and message creation
+st.write(st.session_state.input_count)
 if st.session_state.prompt and (st.session_state.input_count == 1):
     with st.spinner("Thinking ......give me a minute"):
          time.sleep(3)  # Simulate immediate delay
