@@ -144,7 +144,7 @@ if st.button(button_prompt6, on_click=disable, args=(True,), disabled=st.session
 if st.button(button_prompt7, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt7
 
-typed_input = st.chat_input("How can I help you elevate your life?") 
+typed_input = st.chat_input("How can I help you elevate your life?", onsubmit=disable, args=(True,)) 
 
 # Check if there is typed input
 if typed_input:
