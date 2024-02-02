@@ -53,7 +53,6 @@ def display_results():
                 for content_part in message.content:
                     message_text = content_part.text.value
                     st.markdown(message_text)
-    st.session_state.input_count = 0
                  
 # Function to find next empty Google Sheets row
 def find_next_empty_row(sheet):
@@ -192,10 +191,11 @@ if st.session_state.prompt:
                 update_run_status()
                 if st.session_state.retry_error < 3:
                     time.sleep(2)  # Simulate delay
+        display_results()
              
     # Find the next empty row
     next_row = find_next_empty_row(sheet)
     # Write data to the next row
     sheet.update(f"A{next_row}:B{next_row}", [[formatted_datetime, st.session_state.prompt]])
-                
-    display_results()
+
+    st.session_state.input_count = 0
