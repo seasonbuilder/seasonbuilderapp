@@ -156,6 +156,7 @@ typed_input = st.chat_input("How can I help you elevate your life?", on_submit=d
 
 # Check if there is typed input
 if typed_input:
+    st.write(st.session_state.input_count)
     st.session_state.input_count += 1
     if st.session_state.input_count == 1:
         st.session_state.prompt = typed_input 
