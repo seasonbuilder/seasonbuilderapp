@@ -42,7 +42,6 @@ def display_results():
     st.session_state.messages = client.beta.threads.messages.list(
         thread_id=st.session_state.thread.id
     )
-            
     for message in reversed(st.session_state.messages.data):
         if message.role in ["user"]: 
             with st.chat_message('user',avatar='https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png'):
@@ -92,8 +91,8 @@ if "retry_error" not in st.session_state:
 if 'prompt' not in st.session_state:
     st.session_state.prompt = ''
 
-if 'last_input' not in st.session_state:
-    st.session_state.last_input = ''
+if 'input_count' not in st.session_state:
+    st.session_state.input_count = 0
 
 
 # Step 1:  Retrieve an Assistant if not already created
@@ -121,6 +120,7 @@ button_prompt7 = 'Help me determine what insecurities I may have and then how to
 
 def disable(disable_button):
     st.session_state['disabled'] = disable_button
+    st.session_state.input_count += 1
 
 # Create Predefine prompt buttons
 if st.button(button_prompt1, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
@@ -144,7 +144,7 @@ if st.button(button_prompt6, on_click=disable, args=(True,), disabled=st.session
 if st.button(button_prompt7, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt7
 
-typed_input = st.chat_input("How can I help you elevate your life?") 
+typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(True,))
 
 # Check if there is typed input
 if typed_input:
@@ -153,8 +153,8 @@ if typed_input:
 #Chat input and message creation
 if st.session_state.prompt:
     with st.spinner("Thinking ......give me a minute"):
-        time.sleep(3)  # Simulate immediate delay
- 
+         time.sleep(3)  # Simulate immediate delay
+    if st.session_state.input_count == 1:
         st.session_state.message = client.beta.threads.messages.create(
             thread_id=st.session_state.thread.id,
             role="user",
@@ -173,7 +173,7 @@ if st.session_state.prompt:
         while st.session_state.run.status not in ["completed", "max_retries"]:
             if st.session_state.run.status == "in_progress":
                 with st.spinner("Thinking ......give me a minute"):
-                    time.sleep(15)  # Simulate delay
+                   time.sleep(15)  # Simulate delay
                 update_run_status()  # Update the status after delay
            
             elif st.session_state.run.status == "failed":
@@ -191,10 +191,11 @@ if st.session_state.prompt:
                 update_run_status()
                 if st.session_state.retry_error < 3:
                     time.sleep(2)  # Simulate delay
+        display_results()
              
     # Find the next empty row
     next_row = find_next_empty_row(sheet)
     # Write data to the next row
     sheet.update(f"A{next_row}:B{next_row}", [[formatted_datetime, st.session_state.prompt]])
-                
-    display_results()
+
+    st.session_state.input_count = 0
