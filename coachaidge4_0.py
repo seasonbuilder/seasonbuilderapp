@@ -149,8 +149,7 @@ if st.button(button_prompt7, on_click=disable, args=(True,), disabled=st.session
 typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(True,)) 
 
 # Check if there is typed input
-if typed_input:
-    if st.session_state.input_count == 1:
+if typed_input and (st.session_state.input_count == 1):
         st.session_state.prompt = typed_input 
 
 #Chat input and message creation
