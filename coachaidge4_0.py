@@ -54,7 +54,6 @@ def display_results():
                     message_text = content_part.text.value
                     st.markdown(message_text)
     st.session_state.input_count = 0
-    st.write(st.session_state.input_count)
                  
 # Function to find next empty Google Sheets row
 def find_next_empty_row(sheet):
@@ -145,16 +144,15 @@ if st.button(button_prompt6, on_click=disable, args=(True,), disabled=st.session
 
 if st.button(button_prompt7, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt7
- 
-typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(True,)) 
+
+if st.session_state.input_count == 0:
+     typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(True,))
+else:
+     typed_input = st.chat_input("How can I help you elevate your life?", disabled=True)
 
 # Check if there is typed input
 if typed_input:
     st.session_state.prompt = typed_input 
-
-if st.session_state.input_count > 1:
-    st.session_state.input_count = 0
-    st.rerun()
 
 #Chat input and message creation
 if st.session_state.prompt:
