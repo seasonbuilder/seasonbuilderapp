@@ -145,30 +145,29 @@ if st.button(button_prompt6, on_click=disable, args=(True,), disabled=st.session
 if st.button(button_prompt7, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt7
 
-if st.session_state.input_count == 0:
-     typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(True,))
+typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(True,))
 
 # Check if there is typed input
-if typed_input is not None:
+if typed_input:
     st.session_state.prompt = typed_input 
 
 #Chat input and message creation
 if st.session_state.prompt:
     with st.spinner("Thinking ......give me a minute"):
          time.sleep(3)  # Simulate immediate delay
- 
-    st.session_state.message = client.beta.threads.messages.create(
-        thread_id=st.session_state.thread.id,
-        role="user",
-        content=st.session_state.prompt
-    )
+    if st.session_state.input_count == 1:
+        st.session_state.message = client.beta.threads.messages.create(
+            thread_id=st.session_state.thread.id,
+            role="user",
+            content=st.session_state.prompt
+        )
 
-    # Step 4: Run the Assistant
-    st.session_state.run = client.beta.threads.runs.create(
-        thread_id=st.session_state.thread.id,
-        assistant_id=st.session_state.assistant.id
-    )
-    update_run_status() 
+        # Step 4: Run the Assistant
+        st.session_state.run = client.beta.threads.runs.create(
+            thread_id=st.session_state.thread.id,
+            assistant_id=st.session_state.assistant.id
+        )
+        update_run_status() 
             
     # Handle run status
     # Check and handle the run status
