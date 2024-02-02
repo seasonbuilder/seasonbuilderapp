@@ -169,29 +169,29 @@ if st.session_state.prompt:
         )
         update_run_status() 
             
-    # Handle run status
-    # Check and handle the run status
-    while st.session_state.run.status not in ["completed", "max_retries"]:
-        if st.session_state.run.status == "in_progress":
-            with st.spinner("Thinking ......give me a minute"):
-               time.sleep(15)  # Simulate delay
-            update_run_status()  # Update the status after delay
+        # Handle run status
+        # Check and handle the run status
+        while st.session_state.run.status not in ["completed", "max_retries"]:
+            if st.session_state.run.status == "in_progress":
+                with st.spinner("Thinking ......give me a minute"):
+                   time.sleep(15)  # Simulate delay
+                update_run_status()  # Update the status after delay
            
-        elif st.session_state.run.status == "failed":
-            st.session_state.retry_error += 1
-            if st.session_state.retry_error < 3:
-                status_message.write("Run failed, retrying ......")
-                if retry_button.button('Retry'):
-                    update_run_status()
+            elif st.session_state.run.status == "failed":
+                st.session_state.retry_error += 1
+                if st.session_state.retry_error < 3:
+                    status_message.write("Run failed, retrying ......")
+                    if retry_button.button('Retry'):
+                        update_run_status()
                      
-            else:
-                status_message.error("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
+                else:
+                    status_message.error("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
 
-        elif st.session_state.run.status != "completed":
-            # Simulate updating the run status
-            update_run_status()
-            if st.session_state.retry_error < 3:
-                time.sleep(2)  # Simulate delay
+            elif st.session_state.run.status != "completed":
+                # Simulate updating the run status
+                update_run_status()
+                if st.session_state.retry_error < 3:
+                    time.sleep(2)  # Simulate delay
              
     # Find the next empty row
     next_row = find_next_empty_row(sheet)
