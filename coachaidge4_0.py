@@ -122,47 +122,39 @@ button_prompt7 = 'What are limiting beliefs and how might they be impacting my l
 
 def disable(disable_button):
     st.session_state['disabled'] = disable_button
+    st.session_state.input_count = 0
 
 # Create Predefine prompt buttons
 if st.button(button_prompt1, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt1
-     st.session_state.input_count += 1
 
 if st.button(button_prompt2, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt2
-     st.session_state.input_count += 1
 
 if st.button(button_prompt3, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt3
-     st.session_state.input_count += 1
 
 if st.button(button_prompt4, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt4
-     st.session_state.input_count += 1
 
 if st.button(button_prompt5, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt5
-     st.session_state.input_count += 1
 
 if st.button(button_prompt6, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt6
-     st.session_state.input_count += 1
 
 if st.button(button_prompt7, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt7
-     st.session_state.input_count += 1
  
 typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(True,)) 
 
 # Check if there is typed input
 if typed_input:
-    st.write(st.session_state.input_count)
+    st.session_state.prompt = typed_input 
     st.session_state.input_count += 1
-    if st.session_state.input_count == 1:
-        st.session_state.prompt = typed_input 
  
 #Chat input and message creation
-if st.session_state.prompt:
+if st.session_state.prompt and (st.session_state.input_count == 1):
     with st.spinner("Thinking ......give me a minute"):
          time.sleep(3)  # Simulate immediate delay
  
