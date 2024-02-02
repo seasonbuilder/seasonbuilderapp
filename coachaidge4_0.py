@@ -117,7 +117,7 @@ button_prompt3 = 'How do I stop/redirect the negative voice in my head?'
 button_prompt4 = 'How do I reduce stress and anxiety from sports / school?'
 button_prompt5 = 'How do I stay positive while recovering from an injury?'
 button_prompt6 = 'Give me 10 common insecurities athletes have that may be keeping me from playing my best.'
-button_prompt7 = 'What are limiting beliefs and how might they be impacting my life right now?4'
+button_prompt7 = 'What are limiting beliefs and how might they be impacting my life right now?'
 
 def disable(disable_button):
     st.session_state['disabled'] = disable_button
