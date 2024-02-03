@@ -121,6 +121,8 @@ button_prompt7 = 'What are limiting beliefs and how might they be impacting my l
 def disable(disable_button):
     st.session_state['disabled'] = disable_button
     st.session_state.input_count += 1
+    if st.session_state.input_count >= 2:
+        st.write("I'm sorry, could you please re-type your question?")
 
 # Create Predefine prompt buttons
 if st.button(button_prompt1, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
