@@ -122,7 +122,9 @@ def disable(disable_button):
     st.session_state['disabled'] = disable_button
     st.session_state.input_count += 1
     if st.session_state.input_count >= 2:
-        st.write("I'm sorry, could you please re-type your question?")
+        with st.spinner("Thinking ......give me a minute"):
+            time.sleep(3)
+            st.write("I'm sorry, could you please re-type your question?")
 
 # Create Predefine prompt buttons
 if st.button(button_prompt1, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
@@ -153,7 +155,7 @@ if typed_input:
     st.session_state.prompt = typed_input 
 
 #Chat input and message creation
-if st.session_state.prompt:
+if st.session_state.prompt and (st.session_state.input_count < 2):
     with st.spinner("Thinking ......give me a minute"):
          time.sleep(3)  # Simulate immediate delay
     if st.session_state.input_count == 1:
