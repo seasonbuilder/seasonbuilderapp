@@ -155,6 +155,7 @@ if st.session_state.input_count >= 2:
         with st.spinner("Thinking ......give me a minute"):
             time.sleep(3)
             st.write("I'm sorry, could you please re-type your question?")
+            st.session_state.input_count = 0
 elif st.session_state.prompt and (st.session_state.input_count < 2):
     with st.spinner("Thinking ......give me a minute"):
          time.sleep(3)  # Simulate immediate delay
