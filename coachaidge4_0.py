@@ -154,7 +154,7 @@ if typed_input:
 if st.session_state.input_count >= 2:
         with st.spinner("Thinking ......give me a minute"):
             time.sleep(3)
-        with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png')
+        with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
             st.write("I'm sorry, I can only handle one submission at a time. Could you please re-enter your question?")
         st.session_state.input_count = 0
 elif st.session_state.prompt and (st.session_state.input_count < 2):
