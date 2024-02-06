@@ -115,7 +115,7 @@ button_prompt2 = 'How do I better align with my Christian identity'
 button_prompt3 = 'What are 5 scriptures that help me stay positive and resilient'
 button_prompt4 = 'How do I find more purpose in my sport?'
 button_prompt5 = 'How can I be a servant leader?'
-button_prompt6 = 'Ask me some questions about my personal faith journey and discuss it with me.'
+button_prompt6 = 'What does Ephesians 2:10 mean and how does that apply to me?'
 button_prompt7 = 'Help me determine what insecurities I may have and then how to overcome them?'
 
 def disable(disable_button):
@@ -123,25 +123,25 @@ def disable(disable_button):
     st.session_state.input_count += 1
 
 # Create Predefine prompt buttons
-if st.button(button_prompt1, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+if st.button(button_prompt1, on_click=disable, args=(False,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt1
 
-if st.button(button_prompt2, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+if st.button(button_prompt2, on_click=disable, args=(False,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt2
 
-if st.button(button_prompt3, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+if st.button(button_prompt3, on_click=disable, args=(False,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt3
 
-if st.button(button_prompt4, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+if st.button(button_prompt4, on_click=disable, args=(False,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt4
 
-if st.button(button_prompt5, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+if st.button(button_prompt5, on_click=disable, args=(False,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt5
 
-if st.button(button_prompt6, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+if st.button(button_prompt6, on_click=disable, args=(False,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt6
 
-if st.button(button_prompt7, on_click=disable, args=(True,), disabled=st.session_state.get("disabled", False)):
+if st.button(button_prompt7, on_click=disable, args=(False,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt7
 
 typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(True,))
@@ -151,7 +151,13 @@ if typed_input:
     st.session_state.prompt = typed_input 
 
 #Chat input and message creation
-if st.session_state.prompt:
+if st.session_state.input_count >= 2:
+        with st.spinner("Thinking ......give me a minute"):
+            time.sleep(3)
+        with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
+            st.write("I'm sorry, I can only support one submission at a time. Could you please re-enter your question?")
+        st.session_state.input_count = 0
+elif st.session_state.prompt and (st.session_state.input_count < 2):
     with st.spinner("Thinking ......give me a minute"):
          time.sleep(3)  # Simulate immediate delay
     if st.session_state.input_count == 1:
@@ -179,12 +185,12 @@ if st.session_state.prompt:
             elif st.session_state.run.status == "failed":
                 st.session_state.retry_error += 1
                 if st.session_state.retry_error < 3:
-                    status_message.write("Run failed, retrying ......")
+                    st.write("Run failed, retrying ......")
                     if retry_button.button('Retry'):
                         update_run_status()
                      
                 else:
-                    status_message.error("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
+                    st.error("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
 
             elif st.session_state.run.status != "completed":
                 # Simulate updating the run status
