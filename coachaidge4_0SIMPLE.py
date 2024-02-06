@@ -110,7 +110,7 @@ formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as
 
 st.markdown("**Tell me what's on your mind and let's see if I can help!**")    
 
-typed_input = st.chat_input("How can I help you elevate your life?")
+typed_input = st.chat_input("How can I help you elevate your life?", disabled=True)
 
 # Check if there is typed input
 if typed_input:
