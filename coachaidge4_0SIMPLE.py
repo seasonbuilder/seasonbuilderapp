@@ -167,8 +167,8 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
                     time.sleep(2)  # Simulate delay
         display_results()
         if st.button('Copy'):
-            clipboard.copy(message_text)
-            
+            clipboard.copy("this is a test")
+
     # Find the next empty row
     next_row = find_next_empty_row(sheet)
     # Write data to the next row
