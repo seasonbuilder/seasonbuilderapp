@@ -53,7 +53,7 @@ def display_results():
             with st.chat_message('assistant',avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
                 for content_part in message.content:
                     message_text = content_part.text.value
-                    st.text_area("Assistant", message_text)
+                    st.markdown(message_text)
                  
 # Function to find next empty Google Sheets row
 def find_next_empty_row(sheet):
