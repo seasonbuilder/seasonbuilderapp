@@ -54,9 +54,9 @@ def display_results():
                 for content_part in message.content:
                     message_text = content_part.text.value
                     st.markdown(message_text)
-            if st.button('Copy'):
+            #if st.button('Copy'):
             #    clipboard.copy(message_text)
-                st.success('Text copied successfully!')
+            #    st.success('Text copied successfully!')
                  
 # Function to find next empty Google Sheets row
 def find_next_empty_row(sheet):
