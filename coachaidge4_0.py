@@ -1,11 +1,11 @@
 import openai
+import clipboard
 import time
 import datetime
 import uuid
 import streamlit as st
 from openai import OpenAI
 import gspread
-import clipboard
 from oauth2client.service_account import ServiceAccountCredentials
 
 st.set_page_config(page_title="Coach Aidge - Virtual Life Coach")
