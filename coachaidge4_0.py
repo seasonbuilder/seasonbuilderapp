@@ -5,7 +5,7 @@ import uuid
 import streamlit as st
 from openai import OpenAI
 import gspread
-import pyperclip
+import clipboard
 from oauth2client.service_account import ServiceAccountCredentials
 
 st.set_page_config(page_title="Coach Aidge - Virtual Life Coach")
@@ -55,7 +55,7 @@ def display_results():
                     message_text = content_part.text.value
                     st.markdown(message_text)
             if st.button('Copy'):
-                pyperclip.copy(message_text)
+                clipboard.copy(message_text)
                 st.success('Text copied successfully!')
                  
 # Function to find next empty Google Sheets row
