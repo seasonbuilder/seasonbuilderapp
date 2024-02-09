@@ -151,7 +151,7 @@ if st.button(button_prompt7, on_click=disable, args=(False,), disabled=st.sessio
  
 if st.button('Copy', key='copyButton'):
      st.write('Text copied successfully2!')
-     clipboard.copy(message_text)
+     clipboard.copy(button_prompt7)
 
 typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(True,))
 
