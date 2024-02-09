@@ -1,4 +1,5 @@
 import openai
+import clipboard
 import time
 import datetime
 import uuid
