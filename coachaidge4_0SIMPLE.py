@@ -1,6 +1,7 @@
 import openai
 import time
 import datetime
+import clipboard
 import uuid
 import streamlit as st
 from openai import OpenAI
@@ -53,7 +54,7 @@ def display_results():
                 for content_part in message.content:
                     message_text = content_part.text.value
                     st.markdown(message_text)
-                 
+
 # Function to find next empty Google Sheets row
 def find_next_empty_row(sheet):
     all_values = sheet.get_all_values()
@@ -165,7 +166,9 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
                 if st.session_state.retry_error < 3:
                     time.sleep(2)  # Simulate delay
         display_results()
-             
+        if st.button('Copy'):
+            clipboard.copy(message_text)
+            
     # Find the next empty row
     next_row = find_next_empty_row(sheet)
     # Write data to the next row
