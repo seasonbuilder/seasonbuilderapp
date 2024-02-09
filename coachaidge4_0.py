@@ -53,11 +53,7 @@ def display_results():
             with st.chat_message('assistant',avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
                 for content_part in message.content:
                     message_text = content_part.text.value
-                    st.markdown(message_text)
-                    if st.button('Copy', key='copyButton'):
-                        st.write('Text copied successfully2!')
-                        #clipboard.copy(message_text)
-                        #st.write('Text copied successfully3!')
+                    st.text_area(message_text)
                  
 # Function to find next empty Google Sheets row
 def find_next_empty_row(sheet):
@@ -148,10 +144,6 @@ if st.button(button_prompt6, on_click=disable, args=(False,), disabled=st.sessio
 
 if st.button(button_prompt7, on_click=disable, args=(False,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt7
- 
-if st.button('Copy', key='copyButton'):
-     st.write('Text copied successfully2!')
-     clipboard.copy(button_prompt7)
 
 typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(True,))
 
