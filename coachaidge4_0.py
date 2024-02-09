@@ -55,7 +55,7 @@ def display_results():
                     message_text = content_part.text.value
                     st.markdown(message_text)
                     st.write('Text copied successfully1!')
-                    if st.button('Copy', key=1500):
+                    if st.button('Copy', key='copyButton'):
                         clipboard.copy(message_text)
                         st.write('Text copied successfully2!')
                  
