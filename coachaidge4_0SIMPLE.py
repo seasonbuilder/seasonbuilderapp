@@ -1,7 +1,6 @@
 import openai
 import time
 import datetime
-import clipboard
 import uuid
 import streamlit as st
 from openai import OpenAI
@@ -154,8 +153,7 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
                 st.session_state.retry_error += 1
                 if st.session_state.retry_error < 3:
                     st.write("Run failed, retrying ......")
-                    if retry_button.button('Retry'):
-                        update_run_status()
+                    update_run_status()
                      
                 else:
                     st.error("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
@@ -166,8 +164,6 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
                 if st.session_state.retry_error < 3:
                     time.sleep(2)  # Simulate delay
         display_results()
-        if st.button('Copy'):
-            clipboard.copy("this is a test")
 
     # Find the next empty row
     next_row = find_next_empty_row(sheet)
