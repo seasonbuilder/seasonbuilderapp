@@ -113,7 +113,7 @@ st.markdown("**Pick a question or type your own at the bottom!**")
 button_prompt1 = 'How can I be a better Christian example to my team?'
 button_prompt2 = 'How do I better align with my Christian identity'
 button_prompt3 = 'What are 5 scriptures that help me stay positive and resilient'
-button_prompt4 = 'How do I find more purpose in my sport?'
+button_prompt4 = 'What do I do if I don’t know God’s purpose for my life?'
 button_prompt5 = 'How can I be a servant leader?'
 button_prompt6 = 'What does Ephesians 2:10 mean and how does that apply to me?'
 button_prompt7 = 'Help me determine what insecurities I may have and then how to overcome them?'
