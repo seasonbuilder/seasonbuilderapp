@@ -158,10 +158,6 @@ if st.session_state.input_count >= 2:
             st.write("I'm sorry, I can only support one submission at a time. Could you please re-enter your question?")
         st.session_state.input_count = 0
 elif st.session_state.prompt and (st.session_state.input_count < 2):
-    # Find the next empty row
-    next_row = find_next_empty_row(sheet)
-    # Write data to the next row
-    sheet.update(f"A{next_row}:B{next_row}", [[formatted_datetime, st.session_state.prompt]])
     with st.spinner("Thinking ......give me a minute"):
          time.sleep(3)  # Simulate immediate delay
     if st.session_state.input_count == 1:
@@ -202,5 +198,10 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
                 if st.session_state.retry_error < 3:
                     time.sleep(2)  # Simulate delay
         display_results()
+
+    # Find the next empty row
+    next_row = find_next_empty_row(sheet)
+    # Write data to the next row
+    sheet.update(f"A{next_row}:B{next_row}", [[formatted_datetime, st.session_state.prompt]])
      
     st.session_state.input_count = 0
