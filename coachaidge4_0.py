@@ -158,7 +158,7 @@ if st.session_state.input_count >= 2:
             st.write("I'm sorry, I can only support one submission at a time. Could you please re-enter your question?")
         st.session_state.input_count = 0
 elif st.session_state.prompt and (st.session_state.input_count < 2):
-    with st.spinner("Thinking ......give me a minute"):
+    with st.spinner("Thinking ...... please give me 30 seconds"):
          time.sleep(3)  # Simulate immediate delay
     if st.session_state.input_count == 1:
         st.session_state.message = client.beta.threads.messages.create(
