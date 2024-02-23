@@ -145,7 +145,9 @@ with st.expander("Conversation Starters"):
     if st.button(button_prompt7, on_click=disable, args=(False,), disabled=st.session_state.get("disabled", False)):
          st.session_state.prompt = button_prompt7
 
-typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(True,))
+spinner_container = st.container()
+with spinner_container:
+    typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(True,))
 
 # Check if there is typed input
 if typed_input:
@@ -159,8 +161,9 @@ if st.session_state.input_count >= 2:
             st.write("I'm sorry, I can only support one submission at a time. Could you please re-enter your question?")
         st.session_state.input_count = 0
 elif st.session_state.prompt and (st.session_state.input_count < 2):
-    with st.spinner("Thinking ......give me a minute"):
-         time.sleep(3)  # Simulate immediate delay
+    with spinner_container:
+        with st.spinner("Thinking ......give me a minute"):
+             time.sleep(3)  # Simulate immediate delay
     if st.session_state.input_count == 1:
         st.session_state.message = client.beta.threads.messages.create(
             thread_id=st.session_state.thread.id,
