@@ -148,7 +148,7 @@ with st.expander("Conversation Starters"):
 response_container = st.container()
 spinner_container = st.container()
 
-typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(True,))
+typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(False,))
 
 # Check if there is typed input
 if typed_input:
@@ -163,7 +163,7 @@ if st.session_state.input_count >= 2:
         st.session_state.input_count = 0
 elif st.session_state.prompt and (st.session_state.input_count < 2):
     with spinner_container:
-        with st.spinner("Thinking ......give me a minute"):
+        with st.spinner("Thinking ...... please give me 30 seconds"):
              time.sleep(3)  # Simulate immediate delay
     if st.session_state.input_count == 1:
         st.session_state.message = client.beta.threads.messages.create(
