@@ -149,7 +149,7 @@ if typed_input:
 
 #Chat input and message creation
 if st.session_state.input_count >= 2:
-        with st.spinner("Thinking ......give me a minute"):
+        with st.spinner("Thinking ...... please give me 30 seconds"):
             time.sleep(3)
         with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
             st.write("I'm sorry, I can only support one submission at a time. Could you please re-enter your question?")
