@@ -145,9 +145,10 @@ with st.expander("Conversation Starters"):
     if st.button(button_prompt7, on_click=disable, args=(False,), disabled=st.session_state.get("disabled", False)):
          st.session_state.prompt = button_prompt7
 
+response_container = st.container()
 spinner_container = st.container()
-with spinner_container:
-    typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(True,))
+
+typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(True,))
 
 # Check if there is typed input
 if typed_input:
@@ -201,7 +202,8 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
                 update_run_status()
                 if st.session_state.retry_error < 3:
                     time.sleep(2)  # Simulate delay
-        display_results()
+        with response_container:
+            display_results()
 
     # Find the next empty row
     next_row = find_next_empty_row(sheet)
