@@ -108,15 +108,15 @@ if "assistant" not in st.session_state:
 current_datetime = datetime.datetime.now()
 formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as desired
 
-st.markdown("**Pick a question or type your own at the bottom!**")    
+st.markdown("**Pick a conversation starter or type your own question below**")    
 
 button_prompt1 = 'How do I create deep friendships with my teammates?'
 button_prompt2 = 'Give me some time management and productivity tips.'
-button_prompt3 = 'How do I stop/redirect the negative voice in my head?'
+button_prompt3 = 'How do I keep from listening to the negative voice in my head?'
 button_prompt4 = 'How do I reduce stress and anxiety from sports / school?'
 button_prompt5 = 'How do I stay positive while recovering from an injury?'
-button_prompt6 = 'Give me 10 common insecurities athletes have that may be keeping me from playing my best.'
-button_prompt7 = 'What are limiting beliefs and how might they be impacting my life right now?'
+button_prompt6 = 'Give me 10 common insecurities athletes have.'
+button_prompt7 = 'How do I regain my love for my sport?'
 
 def disable(disable_button):
     st.session_state['disabled'] = disable_button
@@ -148,7 +148,7 @@ with st.expander("Conversation Starters"):
 response_container = st.container()
 spinner_container = st.container()
 
-typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(False,))
+typed_input = st.chat_input("What's on your mind?", on_submit=disable, args=(False,))
 
 # Check if there is typed input
 if typed_input:
