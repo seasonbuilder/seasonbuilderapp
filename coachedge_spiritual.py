@@ -108,7 +108,7 @@ if "assistant" not in st.session_state:
 current_datetime = datetime.datetime.now()
 formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as desired
 
-st.markdown("**Pick a question or type your own at the bottom!**")    
+st.markdown("**Select a converation starter or type your question at the bottom!**")    
 
 button_prompt1 = 'How can I be a better Christian example to my team?'
 button_prompt2 = 'How do I better align with my Christian identity'
@@ -116,7 +116,6 @@ button_prompt3 = 'What are 5 scriptures that help me stay positive and resilient
 button_prompt4 = 'What do I do if I don’t know God’s purpose for my life?'
 button_prompt5 = 'How can I be a servant leader?'
 button_prompt6 = 'What does Ephesians 2:10 mean and how does that apply to me?'
-button_prompt7 = 'Help me determine what insecurities I may have and then how to overcome them?'
 
 def disable(disable_button):
     st.session_state['disabled'] = disable_button
@@ -142,13 +141,11 @@ with st.expander("Conversation Starters"):
     if st.button(button_prompt6, on_click=disable, args=(False,), disabled=st.session_state.get("disabled", False)):
          st.session_state.prompt = button_prompt6
 
-    if st.button(button_prompt7, on_click=disable, args=(False,), disabled=st.session_state.get("disabled", False)):
-         st.session_state.prompt = button_prompt7
 
 response_container = st.container()
 spinner_container = st.container()
 
-typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(False,))
+typed_input = st.chat_input("What questions or thoughts are on your mind?", on_submit=disable, args=(False,))
 
 # Check if there is typed input
 if typed_input:
