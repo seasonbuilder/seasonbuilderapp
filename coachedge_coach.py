@@ -141,6 +141,9 @@ if st.button(button_prompt5, on_click=disable, args=(False,), disabled=st.sessio
 if st.button(button_prompt6, on_click=disable, args=(False,), disabled=st.session_state.get("disabled", False)):
      st.session_state.prompt = button_prompt6
 
+response_container = st.container()
+spinner_container = st.container()
+
 typed_input = st.chat_input("How can I help you elevate your life?", on_submit=disable, args=(False,))
 
 # Check if there is typed input
@@ -149,14 +152,16 @@ if typed_input:
 
 #Chat input and message creation
 if st.session_state.input_count >= 2:
+    with spinner_container: 
         with st.spinner("Thinking ...... please give me 30 seconds"):
             time.sleep(3)
         with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
             st.write("I'm sorry, I can only support one submission at a time. Could you please re-enter your question?")
         st.session_state.input_count = 0
 elif st.session_state.prompt and (st.session_state.input_count < 2):
-    with st.spinner("Thinking ...... please give me 30 seconds"):
-         time.sleep(3)  # Simulate immediate delay
+    with spinner_container:
+        with st.spinner("Thinking ...... please give me 30 seconds"):
+             time.sleep(3)  # Simulate immediate delay
     if st.session_state.input_count == 1:
         st.session_state.message = client.beta.threads.messages.create(
             thread_id=st.session_state.thread.id,
@@ -175,8 +180,9 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
         # Check and handle the run status
         while st.session_state.run.status not in ["completed", "max_retries"]:
             if st.session_state.run.status == "in_progress":
-                with st.spinner("Thinking ...... please give me 30 seconds"):
-                   time.sleep(15)  # Simulate delay
+                with spinner_container:
+                    with st.spinner("Thinking ...... please give me 30 seconds"):
+                       time.sleep(15)  # Simulate delay
                 update_run_status()  # Update the status after delay
            
             elif st.session_state.run.status == "failed":
@@ -194,11 +200,12 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
                 update_run_status()
                 if st.session_state.retry_error < 3:
                     time.sleep(2)  # Simulate delay
-        display_results()
-             
+        with response_container:
+            display_results()
+
     # Find the next empty row
     next_row = find_next_empty_row(sheet)
     # Write data to the next row
     sheet.update(f"A{next_row}:B{next_row}", [[formatted_datetime, st.session_state.prompt]])
-
+     
     st.session_state.input_count = 0
