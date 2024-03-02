@@ -184,7 +184,6 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
                 st.session_state.retry_error += 1
                 if st.session_state.retry_error < 3:
                     st.write('Run failed, retrying')
-                    st.session_state.retry_error = 0
                     update_run_status()
                 #with spinner_container:
                 #    with st.spinner("Thinking ...... please give me 30 seconds"):
