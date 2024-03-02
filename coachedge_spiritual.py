@@ -199,6 +199,7 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
                 # Simulate updating the run status
                 update_run_status()
                 if st.session_state.retry_error < 3:
+                    st.session_state.retry_error += 1
                     time.sleep(2)  # Simulate delay
                 else:
                     st.error("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
