@@ -179,32 +179,30 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
             
         # Handle run status
         # Check and handle the run status
-        while st.session_state.run.status not in ["completed"]:
+        while st.session_state.run.status != "completed":
             if st.session_state.run.status == "in_progress":
-                st.session_state.retry_error += 1
-                if st.session_state.retry_error < 3:
-                    st.write('Run failed, retrying')
-                    update_run_status()
-                #with spinner_container:
-                #    with st.spinner("Thinking ...... please give me 30 seconds"):
-                #       time.sleep(15)  # Simulate delay
-                #update_run_status()  # Update the status after delay
+                with spinner_container:
+                    with st.spinner("Thinking ...... please give me 30 seconds"):
+                       time.sleep(15)  # Simulate delay
+                update_run_status()  # Update the status after delay
            
-            elif st.session_state.run.status == "failed":
+            elif st.session_state.run.status == "failed" or "error":
                 st.session_state.retry_error += 1
                 if st.session_state.retry_error < 3:
                     st.write("Run failed, retrying ......")
-                    if retry_button.button('Retry'):
-                        update_run_status()
+                    update_run_status()
                      
                 else:
                     st.error("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
 
-            elif st.session_state.run.status != "completed":
+            else:
                 # Simulate updating the run status
                 update_run_status()
                 if st.session_state.retry_error < 3:
                     time.sleep(2)  # Simulate delay
+                else:
+                    st.error("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
+        st.write(st.session_state.run.status)
         with response_container:
             display_results()
 
