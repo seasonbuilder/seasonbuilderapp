@@ -183,9 +183,9 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
             if st.session_state.run.status == "in_progress":
                 st.session_state.retry_error += 1
                 if st.session_state.retry_error < 3:
-                    st.write("Run failed, retrying ......")
-                    if retry_button.button('Retry'):
-                        update_run_status()
+                    st.write('Run failed, retrying'):
+                    st.session_state.retry_error = 0
+                    update_run_status()
                 #with spinner_container:
                 #    with st.spinner("Thinking ...... please give me 30 seconds"):
                 #       time.sleep(15)  # Simulate delay
