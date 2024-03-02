@@ -179,22 +179,22 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
             
         # Handle run status
         # Check and handle the run status
-        while st.session_state.run.status != "completed":
+        while st.session_state.run.status != "completed" and st.session_state.retry_error < 3:
             #if st.session_state.run.status == "in_progress":
             #    with spinner_container:
             #        with st.spinner("Thinking ...... please give me 30 seconds"):
             #           time.sleep(15)  # Simulate delay
             #    update_run_status()  # Update the status after delay
             #else:
-                if st.session_state.retry_error < 3:
-                    time.sleep(2)  # Simulate delay
-                    st.write("Run failed, retrying ......")
-                    st.session_state.retry_error += 1
-                    update_run_status()
-                else:
-                    st.exception("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
-        with response_container:
-            display_results()
+                 time.sleep(3)  # Simulate delay
+                 st.write("Run failed, retrying ......")
+                 st.session_state.retry_error += 1
+                 update_run_status()
+        if st.session_state.retry_error >= 3:
+            st.error("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
+        else:
+            with response_container:
+                display_results()
 
     # Find the next empty row
     next_row = find_next_empty_row(sheet)
