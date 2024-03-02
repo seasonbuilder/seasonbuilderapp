@@ -192,7 +192,7 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
                     st.session_state.retry_error += 1
                     update_run_status()
                 else:
-                    st.error("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
+                    st.exception("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
         with response_container:
             display_results()
 
