@@ -180,6 +180,7 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
         # Handle run status
         # Check and handle the run status
         while st.session_state.run.status not in ["completed"]:
+            st.write("Testing")
             st.write(st.session_state.run.status)
             if st.session_state.run.status == "in_progress":
                 with spinner_container:
