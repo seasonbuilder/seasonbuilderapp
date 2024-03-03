@@ -37,7 +37,11 @@ def update_run_status():
     )
    
 def display_results():
-                        
+    # Find the next empty Google shet row
+    next_row = find_next_empty_row(sheet)
+    # Write data to the next row
+    sheet.update(f"A{next_row}:B{next_row}", [[formatted_datetime, st.session_state.prompt]])
+
     # If run is completed, get messages
     st.session_state.messages = client.beta.threads.messages.list(
         thread_id=st.session_state.thread.id
@@ -191,14 +195,9 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
                  st.session_state.retry_error += 1
                  update_run_status()
         if st.session_state.retry_error >= 3:
-            st.error("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
+            st.error("FAILED: The system is currently processing too many requests. Please try again later ......")
         else:
             with response_container:
                 display_results()
-
-    # Find the next empty row
-    next_row = find_next_empty_row(sheet)
-    # Write data to the next row
-    sheet.update(f"A{next_row}:B{next_row}", [[formatted_datetime, st.session_state.prompt]])
      
     st.session_state.input_count = 0
