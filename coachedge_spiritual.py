@@ -191,11 +191,11 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
                 update_run_status()  # Update the status after delay
             else:
                  time.sleep(3)  # Simulate delay
-                 st.write("Run failed, retrying ......")
+                 spinner_container.write("Run failed, retrying ......")
                  st.session_state.retry_error += 1
                  update_run_status()
         if st.session_state.retry_error >= 3:
-            st.error("FAILED: The system is currently processing too many requests. Please try again later ......")
+            spinner_container.error("FAILED: The system is currently processing too many requests. Please try again later ......")
         else:
             with response_container:
                 display_results()
