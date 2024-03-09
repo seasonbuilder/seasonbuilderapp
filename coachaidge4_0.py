@@ -108,7 +108,7 @@ if "assistant" not in st.session_state:
 current_datetime = datetime.datetime.now()
 formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as desired
 
-st.markdown("**Pick a conversation starter or type your own question below**")    
+st.markdown("**Type your own question or pick a conversation starter below**")    
 
 button_prompt1 = 'How do I create deep friendships with my teammates?'
 button_prompt2 = 'Give me some time management and productivity tips.'
