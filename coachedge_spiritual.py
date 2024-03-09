@@ -112,7 +112,7 @@ if "assistant" not in st.session_state:
 current_datetime = datetime.datetime.now()
 formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as desired
 
-st.markdown("**Select a converation starter or type your question at the bottom!**")    
+st.markdown("**Ask a question below or select a converation starter**")    
 
 button_prompt1 = 'How can I be a better Christian example to my team?'
 button_prompt2 = 'How do I better align with my Christian identity'
