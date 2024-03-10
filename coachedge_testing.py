@@ -58,10 +58,10 @@ if 'input_count' not in st.session_state:
     st.session_state.input_count = 0
 
 #Retrieve URL Parameters
-Fname=st.query_params.get_all(fname)
-School=st.query_params.get_all(school)
-Team=st.query_params.get_all(team)
-role=st.query_params.get_all(role)
+Fname=st.query_params.get_all("fname")
+School=st.query_params.get_all("school)
+Team=st.query_params.get_all("team")
+role=st.query_params.get_all("role")
 
 additional_instructions = f"The users name is {Fname}. They are a {role} on the {Team} team at the {School})."
 st.write(additional_instructions)
