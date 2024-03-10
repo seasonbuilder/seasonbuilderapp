@@ -191,7 +191,7 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
                 update_run_status()  # Update the status after delay
             else:
                  time.sleep(3)  # Simulate delay
-                 with spinner_container.write("Run failed, retrying ......"):
+                 with spinner_container.spinner("Run failed, retrying ......"):
                     time.sleep(2) # Simulate delay
                  st.session_state.retry_error += 1
                  update_run_status()
