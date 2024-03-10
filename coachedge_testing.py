@@ -63,7 +63,7 @@ School=st.query_params["school"]
 Team=st.query_params["team"]
 role=st.query_params["role"]
 
-additional_instructions = "The users name is " fname ". They are a " role " on the " team " team at the " school
+additional_instructions = f"The users name is (fname). They are a (role) on the (team) team at the (schoo)."
 st.write(additional_instructions)
 
 # Step 1:  Retrieve an Assistant if not already created
