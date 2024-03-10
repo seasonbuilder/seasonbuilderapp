@@ -59,7 +59,7 @@ if 'input_count' not in st.session_state:
 
 #Retrieve URL Parameters
 Fname=st.query_params.get_all("fname")
-School=st.query_params.get_all("school)
+School=st.query_params.get_all("school")
 Team=st.query_params.get_all("team")
 role=st.query_params.get_all("role")
 
