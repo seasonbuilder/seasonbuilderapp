@@ -74,8 +74,15 @@ gclient = gspread.authorize(creds)
 client = OpenAI()
 sheet = gclient.open(st.secrets["spreadsheet"]).sheet1
     
-# Your chosen model
-MODEL = "gpt-4-1106-preview"
+#Retrieve URL Parameters
+Fname = st.query_params.get("fname", "Unknown")
+School = st.query_params.get("school", "Unknown")
+Team = st.query_params.get("team", "Unknown")
+Role = st.query_params.get("role", "Unknown")
+Language=st.query_params.get("language","Unknown")
+
+additional_instructions = f"The users name is {Fname}. They are a {Role} on the {Team} team at the {School}. Provide each response in 2 languages... 1)the language that it was asked in and 2) in {Language} if that was not the langauge the question was asked in."
+# st.write(additional_instructions)
 
 
 # Initialize session state variables
@@ -177,7 +184,8 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
         # Step 4: Run the Assistant
         st.session_state.run = client.beta.threads.runs.create(
             thread_id=st.session_state.thread.id,
-            assistant_id=st.session_state.assistant.id
+            assistant_id=st.session_state.assistant.id,
+            additional_instructions=additional_instructions
         )
         update_run_status() 
             
