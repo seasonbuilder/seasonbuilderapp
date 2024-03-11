@@ -160,7 +160,7 @@ with st.expander("Conversation Starters"):
 response_container = st.container()
 spinner_container = st.container()
 
-typed_input = st.chat_input("What questions or thoughts are on your mind?", on_submit=disable, args=(False,))
+typed_input = st.chat_input("What's on your mind?", on_submit=disable, args=(False,))
 
 # Check if there is typed input
 if typed_input:
