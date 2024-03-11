@@ -73,16 +73,6 @@ gclient = gspread.authorize(creds)
 # Initialize the client
 client = OpenAI()
 sheet = gclient.open(st.secrets["spreadsheet"]).sheet1
-    
-#Retrieve URL Parameters
-Fname = st.query_params.get("fname", "Unknown")
-School = st.query_params.get("school", "Unknown")
-Team = st.query_params.get("team", "Unknown")
-Role = st.query_params.get("role", "Unknown")
-Language=st.query_params.get("language","Unknown")
-
-additional_instructions = f"The users name is {Fname}. They are a {Role} on the {Team} team at the {School}. Provide each response in 2 languages... 1)the language that it was asked in and 2) in {Language} if that was not the language the question was asked in."
-# st.write(additional_instructions)
 
 
 # Initialize session state variables
@@ -105,6 +95,31 @@ if 'prompt' not in st.session_state:
 if 'input_count' not in st.session_state:
     st.session_state.input_count = 0
 
+if 'fname' not in st.session_state:
+    st.session_state.fname = ''  
+
+if 'school' not in st.session_state:
+    st.session_state.school = ''  
+
+if 'team' not in st.session_state:
+    st.session_state.team = ''  
+
+if 'role' not in st.session_state:
+    st.session_state.role = ''  
+
+if 'language' not in st.session_state:
+    st.session_state.language = ''  
+
+
+#Retrieve URL Parameters
+st.session_state.fname = st.query_params.get("fname", "Unknown")
+st.session_state.school = st.query_params.get("school", "Unknown")
+st.session_state.team = st.query_params.get("team", "Unknown")
+st.session_state.role = st.query_params.get("role", "Unknown")
+st.session_state.language=st.query_params.get("language","Unknown")
+
+additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} on the {st.session_state.team} team at the {st.session_state.school} and their native language is {st.session_state.language}. If the response is not given to them in their native language, give a response in their native language too."
+#st.write(additional_instructions)
 
 # Step 1:  Retrieve an Assistant if not already created
 # Initialize OpenAI assistant
