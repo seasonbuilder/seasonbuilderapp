@@ -64,7 +64,7 @@ Team = st.query_params.get("team", "Unknown")
 Role = st.query_params.get("role", "Unknown")
 Language=st.query_params.get("language","Unknown")
 
-additional_instructions = f"The users name is {Fname}. They are a {Role} on the {Team} team at the {School}. Provide each response in 2 labguages... 1)the language that it was asked in and 2) in {Language} if that was not the langauge the question was asked in."
+additional_instructions = f"The users name is {Fname}. They are a {Role} on the {Team} team at the {School}. Provide each response in 2 languages... 1)the language that it was asked in and 2) in {Language} if that was not the langauge the question was asked in."
 st.write(additional_instructions)
 
 # Step 1:  Retrieve an Assistant if not already created
@@ -156,12 +156,14 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
                 update_run_status()  # Update the status after delay
             else:
                  time.sleep(3)  # Simulate delay
-                 with spinner_container.spinner("Run failed, retrying ......"):
-                    time.sleep(2) # Simulate delay
+                 with spinner_container:
+                    st.spinner("Run failed, retrying ......"):
+                        time.sleep(2) # Simulate delay
                  st.session_state.retry_error += 1
                  update_run_status()
         if st.session_state.retry_error >= 3:
-            spinner_container.error("FAILED: The system is currently processing too many requests. Please try again later ......")
+            with spinner_container:
+                st.error("FAILED: The system is currently processing too many requests. Please try again later ......")
         else:
             with response_container:
                 display_results()
