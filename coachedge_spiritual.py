@@ -74,12 +74,7 @@ gclient = gspread.authorize(creds)
 client = OpenAI()
 sheet = gclient.open(st.secrets["spreadsheet"]).sheet1
     
-#Retrieve URL Parameters
-#Fname = st.query_params.get("fname", "Unknown")
-School = st.query_params.get("school", "Unknown")
-Team = st.query_params.get("team", "Unknown")
-Role = st.query_params.get("role", "Unknown")
-Language=st.query_params.get("language","Unknown")
+
 
 
 
@@ -104,8 +99,14 @@ if 'input_count' not in st.session_state:
     st.session_state.input_count = 0
 
 if 'Fname' not in st.session_state:
-    st.session_state.fname = st.query_params.get("fname", "Unknown")    
+    st.session_state.Fname = ''  
 
+#Retrieve URL Parameters
+st.session_state.Fname = st.query_params.get("fname", "Unknown")
+School = st.query_params.get("school", "Unknown")
+Team = st.query_params.get("team", "Unknown")
+Role = st.query_params.get("role", "Unknown")
+Language=st.query_params.get("language","Unknown")
 
 additional_instructions = f"The users name is {st.session_state.Fname}. They are a {Role} on the {Team} team at the {School}. Provide each response in 2 languages... 1)the language that it was asked in and 2) in {Language} if that was not the language the question was asked in."
 st.write(additional_instructions)
