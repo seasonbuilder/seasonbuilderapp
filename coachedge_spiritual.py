@@ -98,17 +98,30 @@ if 'prompt' not in st.session_state:
 if 'input_count' not in st.session_state:
     st.session_state.input_count = 0
 
-if 'Fname' not in st.session_state:
+if 'fname' not in st.session_state:
     st.session_state.Fname = ''  
 
-#Retrieve URL Parameters
-st.session_state.Fname = st.query_params.get("fname", "Unknown")
-School = st.query_params.get("school", "Unknown")
-Team = st.query_params.get("team", "Unknown")
-Role = st.query_params.get("role", "Unknown")
-Language=st.query_params.get("language","Unknown")
+if 'school' not in st.session_state:
+    st.session_state.Fname = ''  
 
-additional_instructions = f"The users name is {st.session_state.Fname}. They are a {Role} on the {Team} team at the {School}. Provide each response in 2 languages... 1)the language that it was asked in and 2) in {Language} if that was not the language the question was asked in."
+if 'team' not in st.session_state:
+    st.session_state.Fname = ''  
+
+if 'role' not in st.session_state:
+    st.session_state.Fname = ''  
+
+if 'language' not in st.session_state:
+    st.session_state.Fname = ''  
+
+
+#Retrieve URL Parameters
+st.session_state.fname = st.query_params.get("fname", "Unknown")
+st.session_state.School = st.query_params.get("school", "Unknown")
+st.session_state.Team = st.query_params.get("team", "Unknown")
+st.session_state.Role = st.query_params.get("role", "Unknown")
+st.session_state.Language=st.query_params.get("language","Unknown")
+
+additional_instructions = f"The users name is {st.session_state.fname}. They are a {st.session_state.role} on the {st.session_state.team} team at the {st.session_state.school}. Provide each response in 2 languages... 1)the language that it was asked in and 2) in {st.session_state.language} if that was not the language the question was asked in."
 st.write(additional_instructions)
 
 # Step 1:  Retrieve an Assistant if not already created
