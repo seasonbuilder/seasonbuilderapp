@@ -58,12 +58,13 @@ if 'input_count' not in st.session_state:
     st.session_state.input_count = 0
 
 #Retrieve URL Parameters
-Fname=st.query_params.get("fname")
-School=st.query_params.get("school")
-Team=st.query_params.get("team")
-role=st.query_params.get("role")
+Fname = st.query_params.get("fname", "Unknown")
+School = st.query_params.get("school", "Unknown")
+Team = st.query_params.get("team", "Unknown")
+Role = st.query_params.get("role", "Unknown")
+Language=st.query_params.get("language","Unknown")
 
-additional_instructions = f"The users name is {Fname}. They are a {role} on the {Team} team at the {School}."
+additional_instructions = f"The users name is {Fname}. They are a {Role} on the {Team} team at the {School}. After you provide the response, ask the user if you would like the response in {Language}."
 st.write(additional_instructions)
 
 # Step 1:  Retrieve an Assistant if not already created
