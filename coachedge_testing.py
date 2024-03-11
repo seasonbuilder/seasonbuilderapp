@@ -63,7 +63,7 @@ School=st.query_params.get("school")
 Team=st.query_params.get("team")
 role=st.query_params.get("role")
 
-additional_instructions = f"The users name is {Fname}. They are a {role} on the {Team} team at the {School})."
+additional_instructions = f"The users name is {Fname}. They are a {role} on the {Team} team at the {School}."
 st.write(additional_instructions)
 
 # Step 1:  Retrieve an Assistant if not already created
@@ -140,7 +140,8 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
         # Step 4: Run the Assistant
         st.session_state.run = client.beta.threads.runs.create(
             thread_id=st.session_state.thread.id,
-            assistant_id=st.session_state.assistant.id
+            assistant_id=st.session_state.assistant.id,
+            additional_instructions=additional_instructions
         )
         update_run_status() 
             
