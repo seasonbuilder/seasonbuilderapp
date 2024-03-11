@@ -146,7 +146,7 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
         )
         update_run_status() 
             
-        # Handle run status
+       # Handle run status
         # Check and handle the run status
         while st.session_state.run.status != "completed" and st.session_state.retry_error < 3:
             if st.session_state.run.status == "in_progress":
@@ -157,7 +157,7 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
             else:
                  time.sleep(3)  # Simulate delay
                  with spinner_container:
-                    st.spinner("Run failed, retrying ......"):
+                    with st.spinner("Run failed, retrying ......"):
                         time.sleep(2) # Simulate delay
                  st.session_state.retry_error += 1
                  update_run_status()
