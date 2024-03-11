@@ -7,8 +7,8 @@ from openai import OpenAI
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-st.set_page_config(page_title="Coach Aidge - Virtual Life Coach")
-
+st.set_page_config(page_title="Coach Edge - Virtual Life Coach")
+ 
 hide_st_style = """
             <style>
             #MainMenu {visibility: hidden;} 
@@ -37,7 +37,11 @@ def update_run_status():
     )
    
 def display_results():
-                        
+    # Find the next empty Google shet row
+    next_row = find_next_empty_row(sheet)
+    # Write data to the next row
+    sheet.update(f"A{next_row}:B{next_row}", [[formatted_datetime, st.session_state.prompt]])
+
     # If run is completed, get messages
     st.session_state.messages = client.beta.threads.messages.list(
         thread_id=st.session_state.thread.id
@@ -70,8 +74,15 @@ gclient = gspread.authorize(creds)
 client = OpenAI()
 sheet = gclient.open(st.secrets["spreadsheet"]).sheet1
     
-# Your chosen model
-MODEL = "gpt-4-1106-preview"
+#Retrieve URL Parameters
+Fname = st.query_params.get("fname", "Unknown")
+School = st.query_params.get("school", "Unknown")
+Team = st.query_params.get("team", "Unknown")
+Role = st.query_params.get("role", "Unknown")
+Language=st.query_params.get("language","Unknown")
+
+additional_instructions = f"The users name is {Fname}. They are a {Role} on the {Team} team at the {School}. Provide each response in 2 languages... 1)the language that it was asked in and 2) in {Language} if that was not the language the question was asked in."
+# st.write(additional_instructions)
 
 
 # Initialize session state variables
@@ -108,7 +119,7 @@ if "assistant" not in st.session_state:
 current_datetime = datetime.datetime.now()
 formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")  # Format as desired
 
-st.markdown("**Type a question below or pick a conversation starter from the list**")    
+st.markdown("**Ask a question below or select a converation starter**")    
 
 button_prompt1 = 'How can I manage my coaching and personal responsibilities in a healthy way?'
 button_prompt2 = 'Give me 5 specific ways that enable my staff and I to better connect with our players.'
@@ -116,7 +127,6 @@ button_prompt3 = 'What are 5 ways to weave our core values into our practice, fi
 button_prompt4 = 'Suggest 4 activities we can do as a coaching staff to build our relationship.'
 button_prompt5 = 'How can I lead coaches and athletes through questions rather than commands?'
 button_prompt6 = 'How do I coach/handle a selfish player?'
-
 
 def disable(disable_button):
     st.session_state['disabled'] = disable_button
@@ -142,10 +152,11 @@ with st.expander("Conversation Starters"):
     if st.button(button_prompt6, on_click=disable, args=(False,), disabled=st.session_state.get("disabled", False)):
          st.session_state.prompt = button_prompt6
 
+
 response_container = st.container()
 spinner_container = st.container()
 
-typed_input = st.chat_input("What's on your mind?", on_submit=disable, args=(False,))
+typed_input = st.chat_input("What questions or thoughts are on your mind?", on_submit=disable, args=(False,))
 
 # Check if there is typed input
 if typed_input:
@@ -173,40 +184,31 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
         # Step 4: Run the Assistant
         st.session_state.run = client.beta.threads.runs.create(
             thread_id=st.session_state.thread.id,
-            assistant_id=st.session_state.assistant.id
+            assistant_id=st.session_state.assistant.id,
+            additional_instructions=additional_instructions
         )
         update_run_status() 
             
         # Handle run status
         # Check and handle the run status
-        while st.session_state.run.status not in ["completed", "max_retries"]:
+        while st.session_state.run.status != "completed" and st.session_state.retry_error < 3:
             if st.session_state.run.status == "in_progress":
                 with spinner_container:
                     with st.spinner("Thinking ...... please give me 30 seconds"):
                        time.sleep(5)  # Simulate delay
                 update_run_status()  # Update the status after delay
-           
-            elif st.session_state.run.status == "failed":
-                st.session_state.retry_error += 1
-                if st.session_state.retry_error < 3:
-                    st.write("Run failed, retrying ......")
-                    if retry_button.button('Retry'):
-                        update_run_status()
-                     
-                else:
-                    st.error("FAILED: The OpenAI API is currently processing too many requests. Please try again later ......")
-
-            elif st.session_state.run.status != "completed":
-                # Simulate updating the run status
-                update_run_status()
-                if st.session_state.retry_error < 3:
-                    time.sleep(2)  # Simulate delay
-        with response_container:
-            display_results()
-
-    # Find the next empty row
-    next_row = find_next_empty_row(sheet)
-    # Write data to the next row
-    sheet.update(f"A{next_row}:B{next_row}", [[formatted_datetime, st.session_state.prompt]])
+            else:
+                 time.sleep(3)  # Simulate delay
+                 with spinner_container:
+                    with st.spinner("Run failed, retrying ......"):
+                        time.sleep(2) # Simulate delay
+                 st.session_state.retry_error += 1
+                 update_run_status()
+        if st.session_state.retry_error >= 3:
+            with spinner_container:
+                st.error("FAILED: The system is currently processing too many requests. Please try again later ......")
+        else:
+            with response_container:
+                display_results()
      
     st.session_state.input_count = 0
