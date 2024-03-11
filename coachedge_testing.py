@@ -64,7 +64,7 @@ Team = st.query_params.get("team", "Unknown")
 Role = st.query_params.get("role", "Unknown")
 Language=st.query_params.get("language","Unknown")
 
-additional_instructions = f"The users name is {Fname}. They are a {Role} on the {Team} team at the {School}. After you provide the response, ask the user if you would like the response in {Language}."
+additional_instructions = f"The users name is {Fname}. They are a {Role} on the {Team} team at the {School}. Provide the response in {Language}."
 st.write(additional_instructions)
 
 # Step 1:  Retrieve an Assistant if not already created
