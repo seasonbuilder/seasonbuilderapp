@@ -81,7 +81,7 @@ Team = st.query_params.get("team", "Unknown")
 Role = st.query_params.get("role", "Unknown")
 Language=st.query_params.get("language","Unknown")
 
-additional_instructions = f"The users name is {Fname}. They are a {Role} on the {Team} team at the {School}. {Fname}'s native language is {Language}"
+additional_instructions = f"The users name is {Fname}. They are a {Role} on the {Team} team at the {School}. The user's native language is {Language}"
 # st.write(additional_instructions)
 
 
