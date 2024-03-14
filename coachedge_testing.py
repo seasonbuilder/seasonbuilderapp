@@ -4,8 +4,22 @@ import datetime
 import uuid
 import streamlit as st
 from openai import OpenAI
+from typing_extensions import override
+from openai import AssistantEventHandler
 
 st.set_page_config(page_title="Coach Edge - Virtual Life Coach")
+
+class EventHandler(AssistantEventHandler):    
+  @override
+  def on_text_created(self, text) -> None:
+    print(f"\nassistant > ", end="", flush=True)
+      
+  @override
+  def on_text_delta(self, delta, snapshot):
+    print(delta.value, end="", flush=True)
+      
+  def on_tool_call_created(self, tool_call):
+    print(f"\nassistant > {tool_call.type}\n", flush=True)
 
 # Function to update the run status (simulating the retrieval process)
 def update_run_status():
@@ -143,6 +157,7 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
          thread_id=st.session_state.thread.id,
          assistant_id=st.session_state.assistant.id,
          additional_instructions=additional_instructions
+         event_handler=EventHandler(),
      ) as stream:
          stream.until_done()
         #update_run_status() 
