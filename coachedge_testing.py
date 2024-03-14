@@ -190,13 +190,12 @@ if typed_input:
        role="user",
        content=typed_input
    )
-  with client.beta.threads.runs.create_and_stream(
+   with client.beta.threads.runs.create_and_stream(
      thread_id=thread.id,
      assistant_id=assistant.id,
      event_handler=EventHandler(),
-  ) as stream:
+   ) as stream:
      stream.until_done()
-
 
 class EventHandler(AssistantEventHandler):    
   @override
