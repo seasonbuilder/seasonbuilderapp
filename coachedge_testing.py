@@ -181,6 +181,7 @@ typed_input = st.chat_input("What questions or thoughts are on your mind?")
 
 assistant = client.beta.assistants.create(
   name="Assistant",
+  model="gpt-4-turbo-preview",
 )
 thread = client.beta.threads.create()
 message = client.beta.threads.messages.create(
