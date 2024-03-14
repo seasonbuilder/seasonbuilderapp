@@ -110,8 +110,8 @@ with st.expander("Conversation Starters"):
          st.session_state.prompt = button_prompt6
 
 
-response_container = st.container()
-spinner_container = st.container()
+#response_container = st.container()
+#spinner_container = st.container()
 
 typed_input = st.chat_input("What questions or thoughts are on your mind?", on_submit=disable, args=(False,))
 
@@ -128,23 +128,23 @@ if st.session_state.input_count >= 2:
             st.write("I'm sorry, I can only support one submission at a time. Could you please re-enter your question?")
         st.session_state.input_count = 0
 elif st.session_state.prompt and (st.session_state.input_count < 2):
-    with spinner_container:
-        with st.spinner("Thinking ...... please give me 30 seconds"):
-             time.sleep(3)  # Simulate immediate delay
-    if st.session_state.input_count == 1:
-        st.session_state.message = client.beta.threads.messages.create(
-            thread_id=st.session_state.thread.id,
-            role="user",
-            content=st.session_state.prompt
-        )
+    #with spinner_container:
+    #    with st.spinner("Thinking ...... please give me 30 seconds"):
+    #         time.sleep(3)  # Simulate immediate delay
+    #if st.session_state.input_count == 1:
+    st.session_state.message = client.beta.threads.messages.create(
+         thread_id=st.session_state.thread.id,
+         role="user",
+         content=st.session_state.prompt
+     )
 
-        # Step 4: Run the Assistant
-        with client.beta.threads.runs.create_and_stream(
-            thread_id=st.session_state.thread.id,
-            assistant_id=st.session_state.assistant.id,
-            additional_instructions=additional_instructions
-        ) as stream:
-            stream.until_done()
+     # Step 4: Run the Assistant
+    with client.beta.threads.runs.create_and_stream(
+         thread_id=st.session_state.thread.id,
+         assistant_id=st.session_state.assistant.id,
+         additional_instructions=additional_instructions
+     ) as stream:
+         stream.until_done()
         #update_run_status() 
             
        # Handle run status
