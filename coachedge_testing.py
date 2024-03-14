@@ -179,16 +179,24 @@ client = OpenAI()
 
 typed_input = st.chat_input("What questions or thoughts are on your mind?")
 
-assistant = client.beta.assistants.create(
-  name="Assistant",
-  model="gpt-4-turbo-preview",
-)
-thread = client.beta.threads.create()
-message = client.beta.threads.messages.create(
-    thread_id=thread.id,
-    role="user",
-    content=typed_input
-)
+if typed_input:
+   assistant = client.beta.assistants.create(
+     name="Assistant",
+     model="gpt-4-turbo-preview",
+   )
+   thread = client.beta.threads.create()
+   message = client.beta.threads.messages.create(
+       thread_id=thread.id,
+       role="user",
+       content=typed_input
+   )
+  with client.beta.threads.runs.create_and_stream(
+  thread_id=thread.id,
+  assistant_id=assistant.id,
+  event_handler=EventHandler(),
+  ) as stream:
+     stream.until_done()
+
 
 class EventHandler(AssistantEventHandler):    
   @override
@@ -201,10 +209,3 @@ class EventHandler(AssistantEventHandler):
       
   def on_tool_call_created(self, tool_call):
     print(f"\nassistant > {tool_call.type}\n", flush=True)
-
-with client.beta.threads.runs.create_and_stream(
-  thread_id=thread.id,
-  assistant_id=assistant.id,
-  event_handler=EventHandler(),
-) as stream:
-  stream.until_done()
