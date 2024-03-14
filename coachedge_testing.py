@@ -177,6 +177,18 @@ import streamlit as st
 
 client = OpenAI()
 
+class EventHandler(AssistantEventHandler):    
+  @override
+  def on_text_created(self, text) -> None:
+    print(f"\nassistant > ", end="", flush=True)
+      
+  @override
+  def on_text_delta(self, delta, snapshot):
+    print(delta.value, end="", flush=True)
+      
+  def on_tool_call_created(self, tool_call):
+    print(f"\nassistant > {tool_call.type}\n", flush=True)
+
 typed_input = st.chat_input("What questions or thoughts are on your mind?")
 
 if typed_input:
@@ -196,15 +208,3 @@ if typed_input:
      event_handler=EventHandler(),
    ) as stream:
      stream.until_done()
-
-class EventHandler(AssistantEventHandler):    
-  @override
-  def on_text_created(self, text) -> None:
-    print(f"\nassistant > ", end="", flush=True)
-      
-  @override
-  def on_text_delta(self, delta, snapshot):
-    print(delta.value, end="", flush=True)
-      
-  def on_tool_call_created(self, tool_call):
-    print(f"\nassistant > {tool_call.type}\n", flush=True)
