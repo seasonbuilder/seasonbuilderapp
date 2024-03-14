@@ -139,12 +139,12 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
         )
 
         # Step 4: Run the Assistant
-        st.session_state.run = client.beta.threads.runs.create_and_stream(
+        with client.beta.threads.runs.create_and_stream(
             thread_id=st.session_state.thread.id,
             assistant_id=st.session_state.assistant.id,
             additional_instructions=additional_instructions
         ) as stream:
-          stream.until_done()
+            stream.until_done()
         #update_run_status() 
             
        # Handle run status
