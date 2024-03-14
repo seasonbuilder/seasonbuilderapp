@@ -4,22 +4,8 @@ import datetime
 import uuid
 import streamlit as st
 from openai import OpenAI
-from typing_extensions import override
-from openai import AssistantEventHandler
 
 st.set_page_config(page_title="Coach Edge - Virtual Life Coach")
-
-class EventHandler(AssistantEventHandler):    
-  @override
-  def on_text_created(self, text) -> None:
-    print(f"\nassistant > ", end="", flush=True)
-      
-  @override
-  def on_text_delta(self, delta, snapshot):
-    print(delta.value, end="", flush=True)
-      
-  def on_tool_call_created(self, tool_call):
-    print(f"\nassistant > {tool_call.type}\n", flush=True)
 
 # Function to update the run status (simulating the retrieval process)
 def update_run_status():
@@ -124,8 +110,8 @@ with st.expander("Conversation Starters"):
          st.session_state.prompt = button_prompt6
 
 
-#response_container = st.container()
-#spinner_container = st.container()
+response_container = st.container()
+spinner_container = st.container()
 
 typed_input = st.chat_input("What questions or thoughts are on your mind?", on_submit=disable, args=(False,))
 
@@ -142,46 +128,44 @@ if st.session_state.input_count >= 2:
             st.write("I'm sorry, I can only support one submission at a time. Could you please re-enter your question?")
         st.session_state.input_count = 0
 elif st.session_state.prompt and (st.session_state.input_count < 2):
-    #with spinner_container:
-    #    with st.spinner("Thinking ...... please give me 30 seconds"):
-    #         time.sleep(3)  # Simulate immediate delay
-    #if st.session_state.input_count == 1:
-    st.session_state.message = client.beta.threads.messages.create(
-         thread_id=st.session_state.thread.id,
-         role="user",
-         content=st.session_state.prompt
-     )
+    with spinner_container:
+        with st.spinner("Thinking ...... please give me 30 seconds"):
+             time.sleep(3)  # Simulate immediate delay
+    if st.session_state.input_count == 1:
+        st.session_state.message = client.beta.threads.messages.create(
+            thread_id=st.session_state.thread.id,
+            role="user",
+            content=st.session_state.prompt
+        )
 
-     # Step 4: Run the Assistant
-    with client.beta.threads.runs.create_and_stream(
-         thread_id=st.session_state.thread.id,
-         assistant_id=st.session_state.assistant.id,
-         additional_instructions=additional_instructions,
-         event_handler=EventHandler(),
-     ) as stream:
-         stream.until_done()
-        #update_run_status() 
+        # Step 4: Run the Assistant
+        st.session_state.run = client.beta.threads.runs.create(
+            thread_id=st.session_state.thread.id,
+            assistant_id=st.session_state.assistant.id,
+            additional_instructions=additional_instructions
+        )
+        update_run_status() 
             
        # Handle run status
         # Check and handle the run status
-       # while st.session_state.run.status != "completed" and st.session_state.retry_error < 3:
-       #     if st.session_state.run.status == "in_progress":
-       #         with spinner_container:
-       #             with st.spinner("Thinking ...... please give me 30 seconds"):
-       #                time.sleep(5)  # Simulate delay
-       #         update_run_status()  # Update the status after delay
-       #     else:
-       #          time.sleep(3)  # Simulate delay
-       #          with spinner_container:
-       #             with st.spinner("Run failed, retrying ......"):
-       #                 time.sleep(2) # Simulate delay
-       #          st.session_state.retry_error += 1
-       #          update_run_status()
-       # if st.session_state.retry_error >= 3:
-       #     with spinner_container:
-       #         st.error("FAILED: The system is currently processing too many requests. Please try again later ......")
-       # else:
-       #     with response_container:
-       #         display_results()
+        while st.session_state.run.status != "completed" and st.session_state.retry_error < 3:
+            if st.session_state.run.status == "in_progress":
+                with spinner_container:
+                    with st.spinner("Thinking ...... please give me 30 seconds"):
+                       time.sleep(5)  # Simulate delay
+                update_run_status()  # Update the status after delay
+            else:
+                 time.sleep(3)  # Simulate delay
+                 with spinner_container:
+                    with st.spinner("Run failed, retrying ......"):
+                        time.sleep(2) # Simulate delay
+                 st.session_state.retry_error += 1
+                 update_run_status()
+        if st.session_state.retry_error >= 3:
+            with spinner_container:
+                st.error("FAILED: The system is currently processing too many requests. Please try again later ......")
+        else:
+            with response_container:
+                display_results()
      
-    #st.session_state.input_count = 0
+    st.session_state.input_count = 0
