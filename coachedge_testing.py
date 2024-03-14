@@ -156,7 +156,7 @@ elif st.session_state.prompt and (st.session_state.input_count < 2):
     with client.beta.threads.runs.create_and_stream(
          thread_id=st.session_state.thread.id,
          assistant_id=st.session_state.assistant.id,
-         additional_instructions=additional_instructions
+         additional_instructions=additional_instructions,
          event_handler=EventHandler(),
      ) as stream:
          stream.until_done()
