@@ -244,6 +244,9 @@ if st.session_state.prompt:
         stream=True
     )
 
+    with st.chat_message('user',avatar='https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png'):
+        st.markdown(st.session_state.prompt)
+
     for event in stream:
         if event.data.object == "thread.message.delta":
             for content in event.data.delta.content:
