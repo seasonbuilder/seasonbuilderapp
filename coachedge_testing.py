@@ -175,6 +175,7 @@ import streamlit as st
 from openai import OpenAI
 from typing_extensions import override
 from openai import AssistantEventHandler
+import uuid
 
 client = OpenAI()
 
