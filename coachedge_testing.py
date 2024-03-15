@@ -228,13 +228,15 @@ with st.expander("Conversation Starters"):
 
 typed_input = st.chat_input("What questions or thoughts are on your mind?")
 
+prompt_container = st.container()
+response_container = st.container()
+
 if typed_input:
     st.session_state.prompt = typed_input
 
 # Check if there is typed input
 if st.session_state.prompt:
     report = []
-    container = st.empty()
     stream = client.beta.threads.create_and_run(
         assistant_id=st.session_state.assistant.id,
         thread = {
@@ -245,7 +247,7 @@ if st.session_state.prompt:
     )
 
     with st.chat_message('user',avatar='https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png'):
-        st.markdown(st.session_state.prompt)
+        prompt_container.markdown(st.session_state.prompt)
 
     for event in stream:
         if event.data.object == "thread.message.delta":
@@ -254,4 +256,4 @@ if st.session_state.prompt:
                     report.append(content.text.value)
                     result = "".join(report).strip()
                     #with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
-                    container.markdown(result)
+                    response_container.markdown(result)
