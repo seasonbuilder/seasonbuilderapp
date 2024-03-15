@@ -241,4 +241,4 @@ if typed_input:
                 if content.type == 'text':
                     report.append(content.text.value)
                     result = "".join(report).strip()
-                    box.markdown(f'*{result}*')
+                    box.markdown(f'{result}')
