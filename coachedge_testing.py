@@ -193,37 +193,46 @@ if 'prompt' not in st.session_state:
 if 'input_count' not in st.session_state:
    st.session_state.input_count = 0
 
-class EventHandler(AssistantEventHandler):    
-  @override
-  def on_text_created(self, text) -> None:
-    print(f"\nassistant > ", end="", flush=True)
-      
-  @override
-  def on_text_delta(self, delta, snapshot):
-    print(delta.value, end="", flush=True)
-      
-  def on_tool_call_created(self, tool_call):
-    print(f"\nassistant > {tool_call.type}\n", flush=True)
-  
-  def on_tool_call_delta(self, delta, snapshot):
-    if delta.type == 'code_interpreter':
-      if delta.code_interpreter.input:
-        print(delta.code_interpreter.input, end="", flush=True)
-      if delta.code_interpreter.outputs:
-        print(f"\n\noutput >", flush=True)
-        for output in delta.code_interpreter.outputs:
-          if output.type == "logs":
-            print(f"\n{output.logs}", flush=True)
-
 if "assistant" not in st.session_state:
    openai.api_key = st.secrets["OPENAI_API_KEY"]
    st.session_state.assistant = openai.beta.assistants.retrieve(st.secrets["OPENAI_ASSISTANT"])
 
+st.markdown("**Ask a question below or select a converation starter**")    
+
+button_prompt1 = 'How can I be a better Christian example to my team?'
+button_prompt2 = 'How do I better align with my Christian identity'
+button_prompt3 = 'What are 5 scriptures that help me stay positive and resilient'
+button_prompt4 = 'What do I do if I don’t know God’s purpose for my life?'
+button_prompt5 = 'How can I be a servant leader?'
+button_prompt6 = 'What does Ephesians 2:10 mean and how does that apply to me?'
+
+with st.expander("Conversation Starters"):
+   # Create Predefine prompt buttons
+   if st.button(button_prompt1):
+        st.session_state.prompt = button_prompt1
+
+   if st.button(button_prompt2):
+        st.session_state.prompt = button_prompt2
+
+   if st.button(button_prompt3):
+        st.session_state.prompt = button_prompt3
+
+   if st.button(button_prompt4):
+        st.session_state.prompt = button_prompt4
+
+   if st.button(button_prompt5):
+        st.session_state.prompt = button_prompt5
+
+   if st.button(button_prompt6):
+        st.session_state.prompt = button_prompt6
+
 typed_input = st.chat_input("What questions or thoughts are on your mind?")
 
-# Check if there is typed input
 if typed_input:
-    st.session_state.prompt = typed_input 
+    st.session_state.prompt = typed_input
+
+# Check if there is typed input
+if st.session_state.prompt:
     report = []
     box = st.empty()
     stream = client.beta.threads.create_and_run(
@@ -241,4 +250,5 @@ if typed_input:
                 if content.type == 'text':
                     report.append(content.text.value)
                     result = "".join(report).strip()
-                    box.markdown(f'{result}')
+                    with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
+                        box.markdown(f'{result}')
