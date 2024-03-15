@@ -225,7 +225,7 @@ typed_input = st.chat_input("What questions or thoughts are on your mind?")
 if typed_input:
     st.session_state.prompt = typed_input 
     report = []
-   
+    box = st.empty()
     stream = client.beta.threads.create_and_run(
         assistant_id=st.session_state.assistant.id,
         thread = {
@@ -241,4 +241,4 @@ if typed_input:
                 if content.type == 'text':
                     report.append(content.text.value)
                     result = "".join(report).strip()
-                    st.markdown(result)
+                    box.markdown(f'*{result}*')
