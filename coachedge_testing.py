@@ -228,9 +228,7 @@ if typed_input:
    
     stream = client.beta.threads.create_and_run(
         assistant_id=st.session_state.assistant.id,
-        thread = client.beta.threads.create(
-           metadata={'session_id': st.session_state.session_id}
-        )
+        thread = {"messages": ["role":"user","content":typed_input]},
         stream=True
     )
 
