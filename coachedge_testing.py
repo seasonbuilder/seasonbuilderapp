@@ -234,7 +234,6 @@ if typed_input:
 # Check if there is typed input
 if st.session_state.prompt:
     report = []
-    box = st.empty()
     stream = client.beta.threads.create_and_run(
         assistant_id=st.session_state.assistant.id,
         thread = {
@@ -251,4 +250,4 @@ if st.session_state.prompt:
                     report.append(content.text.value)
                     result = "".join(report).strip()
                     with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
-                        box.markdown(f'{result}')
+                        markdown(f'{result}')
