@@ -224,6 +224,7 @@ typed_input = st.chat_input("What questions or thoughts are on your mind?")
 # Check if there is typed input
 if typed_input:
     st.session_state.prompt = typed_input 
+    report = []
 
     st.session_state.thread = client.beta.threads.create(
        metadata={'session_id': st.session_state.session_id}
@@ -235,23 +236,16 @@ if typed_input:
         content=typed_input
     )
 
-    with client.beta.threads.runs.create_and_stream(
-        thread_id=st.session_state.thread.id,
+    stream = client.beta.threads.runs.create_and_run(
         assistant_id=st.session_state.assistant.id,
-        event_handler=EventHandler(),
-    ) as stream:
-        st.write(stream.until_done())
-        #st.session_state.messages = client.beta.threads.messages.list(
-        #thread_id=st.session_state.thread.id
-        #)
-        #for message in reversed(st.session_state.messages.data):
-            #if message.role in ["user"]: 
-            #    with st.chat_message('user',avatar='https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png'):
-            #        for content_part in message.content:
-            #            message_text = content_part.text.value
-            #            st.markdown(message_text)
-            #elif message.role in ["assistant"]: 
-            #    with st.chat_message('assistant',avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
-            #        for content_part in message.content:
-            #            message_text = content_part.text.value
-            #           st.markdown(message_text)
+        thread_id = st.session_state.thread.id,
+        stream=True
+    )
+
+    for event in stream:
+        if event.data.object == "thread.message.delta":
+            for content in event.data.delta.content:
+                if content.type == 'text':
+                    report.append(content.text.value)
+                    result = "".join(report).strip()
+                    st.markdown(result)
