@@ -178,6 +178,20 @@ from openai import AssistantEventHandler
 
 client = OpenAI()
 
+# Initialize session state variables
+if "session_id" not in st.session_state:
+   st.session_state.session_id = str(uuid.uuid4())
+if "run" not in st.session_state:
+   st.session_state.run = {"status": None}
+if "messages" not in st.session_state:
+   st.session_state.messages = []
+if "retry_error" not in st.session_state:
+   st.session_state.retry_error = 0
+if 'prompt' not in st.session_state:
+   st.session_state.prompt = ''
+if 'input_count' not in st.session_state:
+   st.session_state.input_count = 0
+
 class EventHandler(AssistantEventHandler):    
   @override
   def on_text_created(self, text) -> None:
