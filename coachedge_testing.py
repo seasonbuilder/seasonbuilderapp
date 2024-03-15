@@ -170,6 +170,7 @@
     
 #        st.session_state.input_count = 0
 
+import openai
 import streamlit as st
 from openai import OpenAI
 from typing_extensions import override
