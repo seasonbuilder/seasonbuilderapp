@@ -250,6 +250,5 @@ if st.session_state.prompt:
                 if content.type == 'text':
                     report.append(content.text.value)
                     result = "".join(report).strip()
-                    with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
-                        container.markdown(result)
-                container.empty()
+                    #with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
+                    container.markdown(result)
