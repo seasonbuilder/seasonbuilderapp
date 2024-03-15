@@ -236,7 +236,7 @@ if typed_input:
         content=typed_input
     )
 
-    stream = client.beta.threads.runs.create_and_run(
+    stream = client.beta.threads.create_and_run(
         assistant_id=st.session_state.assistant.id,
         thread_id = st.session_state.thread.id,
         stream=True
