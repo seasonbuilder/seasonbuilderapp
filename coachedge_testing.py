@@ -225,20 +225,12 @@ typed_input = st.chat_input("What questions or thoughts are on your mind?")
 if typed_input:
     st.session_state.prompt = typed_input 
     report = []
-
-    st.session_state.thread = client.beta.threads.create(
-       metadata={'session_id': st.session_state.session_id}
-    )
-
-    message = client.beta.threads.messages.create(
-        thread_id=st.session_state.thread.id,
-        role="user",
-        content=typed_input
-    )
-
+   
     stream = client.beta.threads.create_and_run(
         assistant_id=st.session_state.assistant.id,
-        thread_id = st.session_state.thread.id,
+        thread = client.beta.threads.create(
+           metadata={'session_id': st.session_state.session_id}
+        )
         stream=True
     )
 
