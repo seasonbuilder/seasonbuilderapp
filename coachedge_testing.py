@@ -196,10 +196,6 @@ if 'prompt' not in st.session_state:
 if 'input_count' not in st.session_state:
    st.session_state.input_count = 0
 
-#if "assistant" not in st.session_state:
-#   openai.api_key = st.secrets["OPENAI_API_KEY"]
-#   st.session_state.assistant = openai.beta.assistants.retrieve(st.secrets["OPENAI_ASSISTANT"])
-
 st.markdown("**Ask a question below or select a converation starter**")    
 
 button_prompt1 = 'How can I be a better Christian example to my team?'
@@ -244,7 +240,6 @@ for message in st.session_state.messages:
 
 # Check if there is typed input
 if st.session_state.prompt:
-    #report = []
     st.session_state.messages.append({"role": "user", "content": st.session_state.prompt})
     with st.chat_message('user',avatar='https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png'):
         st.markdown(st.session_state.prompt)
@@ -259,20 +254,3 @@ if st.session_state.prompt:
         )
         response = st.write_stream(stream)
     st.session_state.messages.append({"role": "assistant", "content": response})
-   
-    #response_container = st.empty()
-    #stream = client.beta.threads.create_and_run(
-    #    assistant_id=st.session_state.assistant.id,
-    #    thread = {
-    #       "messages": [
-    #          {"role": "user", "content": st.session_state.prompt}
-    #       ]},
-    #    stream=True
-    #)
-    #for event in stream:
-    #   if event.data.object == "thread.message.delta":
-    #      for content in event.data.delta.content:
-    #            if content.type == 'text':
-    #               report.append(content.text.value)
-    #               result = "".join(report).strip()
-    #               response_container.markdown(result)
