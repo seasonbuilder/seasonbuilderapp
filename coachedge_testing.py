@@ -234,6 +234,8 @@ if typed_input:
 # Check if there is typed input
 if st.session_state.prompt:
     report = []
+    with st.chat_message('user',avatar='https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png'):
+        st.markdown(st.session_state.prompt)
     response_container = st.empty()
     stream = client.beta.threads.create_and_run(
         assistant_id=st.session_state.assistant.id,
@@ -243,13 +245,10 @@ if st.session_state.prompt:
            ]},
         stream=True
     )
-
-    with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
-
-       for event in stream:
-           if event.data.object == "thread.message.delta":
-               for content in event.data.delta.content:
-                   if content.type == 'text':
-                       report.append(content.text.value)
-                       result = "".join(report).strip()
-                       response_container.markdown(result)
+    for event in stream:
+       if event.data.object == "thread.message.delta":
+          for content in event.data.delta.content:
+                if content.type == 'text':
+                   report.append(content.text.value)
+                   result = "".join(report).strip()
+                   response_container.markdown(result)
