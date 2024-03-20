@@ -235,13 +235,19 @@ if typed_input:
 if st.session_state.prompt:
     report = []
     response_container = st.empty()
-    stream = client.beta.threads.create_and_run(
-        assistant_id=st.session_state.assistant.id,
-        thread = {
-           "messages": [
-              {"role": "user", "content": st.session_state.prompt}
-           ]},
-        stream=True
+    #stream = client.beta.threads.create_and_run(
+    #    assistant_id=st.session_state.assistant.id,
+    #    thread = {
+    #       "messages": [
+    #          {"role": "user", "content": st.session_state.prompt}
+    #       ]},
+    #    stream=True
+    #)
+
+   stream = self.client.chat.completions.create(
+      model=self.model,
+      messages=messages,
+      stream=True,
     )
 
     with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
