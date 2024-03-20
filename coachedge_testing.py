@@ -231,6 +231,10 @@ with st.expander("Conversation Starters"):
 
 typed_input = st.chat_input("What questions or thoughts are on your mind?")
 
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
 if typed_input:
     st.session_state.prompt = typed_input
 
