@@ -233,22 +233,35 @@ if typed_input:
 
 # Check if there is typed input
 if st.session_state.prompt:
-    report = []
+    #report = []
+    st.session_state.messages.append({"role": "user", "content": st.session_state.prompt})
     with st.chat_message('user',avatar='https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png'):
         st.markdown(st.session_state.prompt)
-    response_container = st.empty()
-    stream = client.beta.threads.create_and_run(
-        assistant_id=st.session_state.assistant.id,
-        thread = {
-           "messages": [
-              {"role": "user", "content": st.session_state.prompt}
-           ]},
-        stream=True
-    )
-    for event in stream:
-       if event.data.object == "thread.message.delta":
-          for content in event.data.delta.content:
-                if content.type == 'text':
-                   report.append(content.text.value)
-                   result = "".join(report).strip()
-                   response_container.markdown(result)
+    with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
+        stream = client.chat.completions.create(
+            model=st.session_state["gpt-3.5-turbo"],
+            messages=[
+                {"role": m["role"], "content": m["content"]}
+                for m in st.session_state.messages
+            ],
+            stream=True,
+        )
+        response = st.write_stream(stream)
+    st.session_state.messages.append({"role": "assistant", "content": response})
+   
+    #response_container = st.empty()
+    #stream = client.beta.threads.create_and_run(
+    #    assistant_id=st.session_state.assistant.id,
+    #    thread = {
+    #       "messages": [
+    #          {"role": "user", "content": st.session_state.prompt}
+    #       ]},
+    #    stream=True
+    #)
+    #for event in stream:
+    #   if event.data.object == "thread.message.delta":
+    #      for content in event.data.delta.content:
+    #            if content.type == 'text':
+    #               report.append(content.text.value)
+    #               result = "".join(report).strip()
+    #               response_container.markdown(result)
