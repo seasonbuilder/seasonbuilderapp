@@ -231,12 +231,16 @@ with st.expander("Conversation Starters"):
 
 typed_input = st.chat_input("What questions or thoughts are on your mind?")
 
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
-
 if typed_input:
     st.session_state.prompt = typed_input
+
+for message in st.session_state.messages:
+    if message["role"] == "user":
+       with st.chat_message('user', avatar='https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png'):
+          st.markdown(message["content"])
+    else:
+       with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
+          st.markdown(message["content"])
 
 # Check if there is typed input
 if st.session_state.prompt:
