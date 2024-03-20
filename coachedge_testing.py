@@ -177,7 +177,7 @@ from typing_extensions import override
 from openai import AssistantEventHandler
 import uuid
 
-client = OpenAI()
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # Initialize session state variables
 if "session_id" not in st.session_state:
@@ -193,9 +193,9 @@ if 'prompt' not in st.session_state:
 if 'input_count' not in st.session_state:
    st.session_state.input_count = 0
 
-if "assistant" not in st.session_state:
-   openai.api_key = st.secrets["OPENAI_API_KEY"]
-   st.session_state.assistant = openai.beta.assistants.retrieve(st.secrets["OPENAI_ASSISTANT"])
+#if "assistant" not in st.session_state:
+#   openai.api_key = st.secrets["OPENAI_API_KEY"]
+#   st.session_state.assistant = openai.beta.assistants.retrieve(st.secrets["OPENAI_ASSISTANT"])
 
 st.markdown("**Ask a question below or select a converation starter**")    
 
