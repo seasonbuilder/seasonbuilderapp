@@ -244,11 +244,13 @@ if st.session_state.prompt:
         stream=True
     )
 
-    for event in stream:
-        if event.data.object == "thread.message.delta":
-            for content in event.data.delta.content:
-                if content.type == 'text':
-                    report.append(content.text.value)
-                    result = "".join(report).strip()
-                    #with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
-                    response_container.markdown(result)
+    with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
+        response = st.write_stream(stream)
+
+    #for event in stream:
+    #    if event.data.object == "thread.message.delta":
+    #        for content in event.data.delta.content:
+    #            if content.type == 'text':
+    #                report.append(content.text.value)
+    #                result = "".join(report).strip()
+    #                response_container.markdown(result)
