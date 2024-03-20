@@ -179,6 +179,9 @@ import uuid
 
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
+if "openai_model" not in st.session_state:
+    st.session_state["openai_model"] = "gpt-3.5-turbo"
+
 # Initialize session state variables
 if "session_id" not in st.session_state:
    st.session_state.session_id = str(uuid.uuid4())
@@ -239,7 +242,7 @@ if st.session_state.prompt:
         st.markdown(st.session_state.prompt)
     with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
         stream = client.chat.completions.create(
-            model=st.session_state["gpt-3.5-turbo"],
+            model=st.session_state["openai_model"],
             messages=[
                 {"role": m["role"], "content": m["content"]}
                 for m in st.session_state.messages
