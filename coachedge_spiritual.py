@@ -39,9 +39,11 @@ def update_run_status():
 def display_results():
     # Find the next empty Google shet row
     next_row = find_next_empty_row(sheet)
+    range_name = f"A{next_row}:B{next_row}"
+    values = [[formatted_datetime, st.session_state.prompt]]
     # Write data to the next row
    # sheet.update(f"A{next_row}:B{next_row}", [[formatted_datetime, st.session_state.prompt]])
-    sheet.update(values=[[{formatted_datetime}, {st.session_state.prompt}]],range_name=f"A{next_row}:B{next_row}")
+    sheet.update(values=[[{formatted_datetime}, {st.session_state.prompt}]],range_name=f"'A{next_row}:B{next_row}'")
     # If run is completed, get messages
     st.session_state.messages = client.beta.threads.messages.list(
         thread_id=st.session_state.thread.id
