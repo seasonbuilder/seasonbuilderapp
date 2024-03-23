@@ -252,6 +252,7 @@ for message in st.session_state.messages:
 
 # Check if there is typed input
 if st.session_state.prompt:
+    delta = [] 
     st.session_state.messages.append({"role": "user", "content": st.session_state.prompt})
     with st.chat_message('user',avatar='https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png'):
         st.markdown(st.session_state.prompt)
@@ -266,5 +267,10 @@ if st.session_state.prompt:
             },
             stream=True,
         )
-        response = st.write_stream(stream)
+        for event in stream:
+           if event.data.object == "thread.message.delta":
+              for content in event.data.delta.content:
+                 if content.type == 'text':
+                    delta.append(content.text.value)
+                    response = "".join(delta).strip()
     st.session_state.messages.append({"role": "assistant", "content": response})
