@@ -262,7 +262,7 @@ if st.session_state.prompt:
             assistant_id=st.session_state.assistant.id,
             thread = {
                "messages": [
-                {"role": user, "content": st.session_state.prompt}
+                {"role": "user", "content": st.session_state.prompt}
                ]
             },
             stream=True,
