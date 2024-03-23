@@ -257,6 +257,7 @@ if st.session_state.prompt:
     with st.chat_message('user',avatar='https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png'):
         st.markdown(st.session_state.prompt)
     with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
+        container = st.empty()
         stream = client.beta.threads.create_and_run(
             assistant_id=st.session_state.assistant.id,
             thread = {
@@ -273,6 +274,5 @@ if st.session_state.prompt:
                  if content.type == 'text':
                     delta.append(content.text.value)
                     response = "".join(delta).strip()
-                    st.write(response)
-                    st.empty()
+                    container.markdown(response)
     st.session_state.messages.append({"role": "assistant", "content": response})
