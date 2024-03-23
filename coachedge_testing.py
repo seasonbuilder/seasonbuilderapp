@@ -257,7 +257,6 @@ if st.session_state.prompt:
         st.markdown(st.session_state.prompt)
     with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
         stream = client.beta.threads.create_and_run(
-            thread_id=st.session_state.thread.id,
             assistant_id=st.session_state.assistant.id,
             additional_instructions=additional_instructions,
             messages=[
