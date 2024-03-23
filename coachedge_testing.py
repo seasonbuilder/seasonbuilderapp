@@ -178,6 +178,8 @@ import uuid
 
 client = OpenAI()
 
+st.set_page_config(page_title="Coach Edge - Virtual Life Coach")
+
 # Initialize session state variables
 if "assistant" not in st.session_state:
    openai.api_key = st.secrets["OPENAI_API_KEY"]
@@ -198,7 +200,10 @@ if 'prompt' not in st.session_state:
 if 'input_count' not in st.session_state:
    st.session_state.input_count = 0
 
-st.markdown("**Ask a question below or select a converation starter**")    
+additional_instructions = f"The users name is {Fname}. They are a {Role} on the {Team} team at the {School}. Provide each response in 2 languages... 1)the language that it was asked in and 2) in {Language} if that was not the language the question was asked in."
+
+
+st.markdown("**Ask a question below or select a conversation starter**")    
 
 button_prompt1 = 'How can I be a better Christian example to my team?'
 button_prompt2 = 'How do I better align with my Christian identity'
@@ -249,6 +254,7 @@ if st.session_state.prompt:
         stream = client.beta.threads.create_and_run(
             thread_id=st.session_state.thread.id,
             assistant_id=st.session_state.assistant.id,
+            additional_instructions=additional_instructions
             messages=[
                 {"role": m["role"], "content": m["content"]}
                 for m in st.session_state.messages
