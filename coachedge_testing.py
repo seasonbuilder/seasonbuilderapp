@@ -173,16 +173,18 @@
 import openai
 import streamlit as st
 from openai import OpenAI
-from typing_extensions import override
 from openai import AssistantEventHandler
 import uuid
 
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-
-if "openai_model" not in st.session_state:
-    st.session_state["openai_model"] = "gpt-3.5-turbo"
+client = OpenAI()
 
 # Initialize session state variables
+if "assistant" not in st.session_state:
+   openai.api_key = st.secrets["OPENAI_API_KEY"]
+   st.session_state.assistant = openai.beta.assistants.retrieve(st.secrets["OPENAI_ASSISTANT"])
+   st.session_state.thread = client.beta.threads.create(
+       metadata={'session_id': st.session_state.session_id}
+   )
 if "session_id" not in st.session_state:
    st.session_state.session_id = str(uuid.uuid4())
 if "run" not in st.session_state:
@@ -244,8 +246,9 @@ if st.session_state.prompt:
     with st.chat_message('user',avatar='https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png'):
         st.markdown(st.session_state.prompt)
     with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
-        stream = client.chat.completions.create(
-            model=st.session_state["openai_model"],
+        stream = client.beta.threads.create_and_run(
+            thread_id=st.session_state.thread.id,
+            assistant_id=st.session_state.assistant.id,
             messages=[
                 {"role": m["role"], "content": m["content"]}
                 for m in st.session_state.messages
