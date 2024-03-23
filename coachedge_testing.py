@@ -181,12 +181,6 @@ client = OpenAI()
 st.set_page_config(page_title="Coach Edge - Virtual Life Coach")
 
 # Initialize session state variables
-if "assistant" not in st.session_state:
-   openai.api_key = st.secrets["OPENAI_API_KEY"]
-   st.session_state.assistant = openai.beta.assistants.retrieve(st.secrets["OPENAI_ASSISTANT"])
-   st.session_state.thread = client.beta.threads.create(
-       metadata={'session_id': st.session_state.session_id}
-   )
 if "session_id" not in st.session_state:
    st.session_state.session_id = str(uuid.uuid4())
 if "run" not in st.session_state:
@@ -199,6 +193,12 @@ if 'prompt' not in st.session_state:
    st.session_state.prompt = ''
 if 'input_count' not in st.session_state:
    st.session_state.input_count = 0
+if "assistant" not in st.session_state:
+   openai.api_key = st.secrets["OPENAI_API_KEY"]
+   st.session_state.assistant = openai.beta.assistants.retrieve(st.secrets["OPENAI_ASSISTANT"])
+   st.session_state.thread = client.beta.threads.create(
+       metadata={'session_id': st.session_state.session_id}
+   )
 
 additional_instructions = f"The users name is {Fname}. They are a {Role} on the {Team} team at the {School}. Provide each response in 2 languages... 1)the language that it was asked in and 2) in {Language} if that was not the language the question was asked in."
 
