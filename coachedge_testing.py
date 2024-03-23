@@ -259,7 +259,7 @@ if st.session_state.prompt:
         stream = client.beta.threads.create_and_run(
             assistant_id=st.session_state.assistant.id,
             thread = {
-               messages=[
+               "messages": [
                 {"role": m["role"], "content": m["content"]}
                 for m in st.session_state.messages
                ]
