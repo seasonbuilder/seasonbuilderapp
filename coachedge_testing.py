@@ -274,4 +274,5 @@ if st.session_state.prompt:
                     delta.append(content.text.value)
                     response = "".join(delta).strip()
                     st.write(response)
+                    st.empty()
     st.session_state.messages.append({"role": "assistant", "content": response})
