@@ -272,6 +272,7 @@ if st.session_state.prompt:
               for content in event.data.delta.content:
                  if content.type == 'text':
                     delta.append(content.text.value)
-                    response = "".join(delta).strip()
-                    container.markdown(response)
+                    if delta is not None:
+                       response = "".join(delta).strip()
+                       container.markdown(response)
     st.session_state.messages.append({"role": "assistant", "content": response})
