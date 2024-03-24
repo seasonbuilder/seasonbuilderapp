@@ -4,7 +4,7 @@
 # import uuid
 # import streamlit as st
 # from openai import OpenAI
-
+ 
 # st.set_page_config(page_title="Coach Edge - Virtual Life Coach")
 
 # # Function to update the run status (simulating the retrieval process)
