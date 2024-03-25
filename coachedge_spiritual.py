@@ -323,6 +323,7 @@ if st.session_state.prompt:
                 {"role": "user","content": st.session_state.prompt}
               ]
         )
+        st.write(message_thread)
         stream = client.beta.threads.runs.create(
             assistant_id=st.session_state.assistant.id,
             thread_id = message_thread,
