@@ -259,24 +259,17 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # Initialize session state variables
-# if "session_id" not in st.session_state:
-#    st.session_state.session_id = str(uuid.uuid4())
-# if "run" not in st.session_state:
-#    st.session_state.run = {"status": None}
+
 if "messages" not in st.session_state:
    st.session_state.messages = []
-# if "retry_error" not in st.session_state:
-#    st.session_state.retry_error = 0
+
 if 'prompt' not in st.session_state:
    st.session_state.prompt = ''
-# if 'input_count' not in st.session_state:
-#    st.session_state.input_count = 0
+   
 if "assistant" not in st.session_state:
    openai.api_key = st.secrets["OPENAI_API_KEY"]
    st.session_state.assistant = openai.beta.assistants.retrieve(st.secrets["OPENAI_ASSISTANT"])
-   #st.session_state.thread = client.beta.threads.create(
-  #     metadata={'session_id': st.session_state.session_id}
-  # )
+
 if 'fname' not in st.session_state:
     st.session_state.fname = ''  
 
