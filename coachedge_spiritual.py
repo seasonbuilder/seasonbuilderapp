@@ -233,7 +233,6 @@
 import openai
 import streamlit as st
 from openai import OpenAI
-from openai import AssistantEventHandler
 import uuid
 
 client = OpenAI()
@@ -275,17 +274,33 @@ if 'input_count' not in st.session_state:
 if "assistant" not in st.session_state:
    openai.api_key = st.secrets["OPENAI_API_KEY"]
    st.session_state.assistant = openai.beta.assistants.retrieve(st.secrets["OPENAI_ASSISTANT"])
-   st.session_state.thread = client.beta.threads.create(
-       metadata={'session_id': st.session_state.session_id}
-   )
+   #st.session_state.thread = client.beta.threads.create(
+  #     metadata={'session_id': st.session_state.session_id}
+  # )
+if 'fname' not in st.session_state:
+    st.session_state.fname = ''  
+
+if 'school' not in st.session_state:
+    st.session_state.school = ''  
+
+if 'team' not in st.session_state:
+    st.session_state.team = ''  
+
+if 'role' not in st.session_state:
+    st.session_state.role = ''  
+
+if 'language' not in st.session_state:
+    st.session_state.language = ''  
+
 
 #Retrieve URL Parameters
-Fname = st.query_params.get("fname", "Unknown")
-School = st.query_params.get("school", "Unknown")
-Team = st.query_params.get("team", "Unknown")
-Role = st.query_params.get("role", "Unknown")
-Language=st.query_params.get("language","Unknown")
-additional_instructions = f"The user's name is {Fname}. They are a {Role} on the {Team} team at the {School}. The user's native language is {Language}."
+st.session_state.fname = st.query_params.get("fname", "Unknown")
+st.session_state.school = st.query_params.get("school", "Unknown")
+st.session_state.team = st.query_params.get("team", "Unknown")
+st.session_state.role = st.query_params.get("role", "Unknown")
+st.session_state.language=st.query_params.get("language","Unknown")
+
+additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} on the {st.session_state.team} team at the {st.session_state.school} and their native language is {st.session_state.language}. If the response is not given to them in their native language, give a response in their native language too."
 
 st.markdown("**Ask a question below or select a conversation starter**")    
 
@@ -337,7 +352,7 @@ if st.session_state.prompt:
         st.markdown(st.session_state.prompt)
     with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
         container = st.empty()
-        message_thread = client.beta.threads.create(
+        st.session_state.message_thread = client.beta.threads.create(
               messages=[
                 {"role": "user","content": st.session_state.prompt}
               ]
@@ -345,7 +360,7 @@ if st.session_state.prompt:
 
         stream = client.beta.threads.runs.create(
             assistant_id=st.session_state.assistant.id,
-            thread_id = message_thread.id,
+            thread_id = st.session_state.message_thread.id,
             additional_instructions = additional_instructions,
             stream = True
         )
