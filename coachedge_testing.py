@@ -258,14 +258,14 @@ if st.session_state.prompt:
         st.markdown(st.session_state.prompt)
     with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
         container = st.empty()
-        stream = client.beta.threads.create_and_run(
+        st.session_state.message_thread = client.beta.threads.create(
+              messages=[{"role": "user","content": st.session_state.prompt}]
+        )
+        stream = client.beta.threads.runs.create(
             assistant_id=st.session_state.assistant.id,
-            thread = {
-               "messages": [
-                {"role": "user", "content": st.session_state.prompt}
-               ]
-            },
-            stream=True,
+            thread_id = st.session_state.message_thread.id,
+            additional_instructions = additional_instructions,
+            stream = True
         )
         for event in stream:
            if event.data.object == "thread.message.delta":
