@@ -210,12 +210,12 @@ additional_instructions = f"The users name is {Fname}. They are a {Role} on the 
 
 st.markdown("**Ask a question below or select a conversation starter**")    
 
-button_prompt1 = 'How can I be a better Christian example to my team?'
-button_prompt2 = 'How do I better align with my Christian identity'
-button_prompt3 = 'What are 5 scriptures that help me stay positive and resilient'
-button_prompt4 = 'What do I do if I don’t know God’s purpose for my life?'
-button_prompt5 = 'How can I be a servant leader?'
-button_prompt6 = 'What does Ephesians 2:10 mean and how does that apply to me?'
+button_prompt1 = 'How do I overcome phone anxiety when I get an unsolicited call from a dreaded customer?'
+button_prompt2 = 'How do I keep money and success from becoming an idol?'
+button_prompt3 = 'How to align passions with professional goals for fulfillment?'
+button_prompt4 = 'How can I promote positive mental health and prevent burnout?'
+button_prompt5 = 'How can I stay patient during the tough process of building my client base?'
+button_prompt6 = 'How can I overcome the insecurity I feel by being younger than all of my clients?'
 
 with st.expander("Conversation Starters"):
    # Create Predefine prompt buttons
