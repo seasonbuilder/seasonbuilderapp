@@ -180,6 +180,25 @@ client = OpenAI()
 
 st.set_page_config(page_title="Coach Edge - Virtual Life Coach")
 
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;} 
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
+
+st.markdown("""
+    <style>
+           .block-container {
+                padding-top: 1rem;
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+    </style>
+    """, unsafe_allow_html=True)
+
 # Initialize session state variables
 if "session_id" not in st.session_state:
    st.session_state.session_id = str(uuid.uuid4())
