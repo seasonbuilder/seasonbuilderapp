@@ -294,4 +294,4 @@ if st.session_state.prompt:
                     delta.append(content.text.value)
                     response = "".join(item for item in delta if item).strip()
                     container.markdown(response)
-    st.session_state.messages.append({"role": "assistant", "content": response})
+    #st.session_state.messages.append({"role": "assistant", "content": response})
