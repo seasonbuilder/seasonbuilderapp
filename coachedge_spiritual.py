@@ -269,6 +269,7 @@ if 'prompt' not in st.session_state:
 if "assistant" not in st.session_state:
    openai.api_key = st.secrets["OPENAI_API_KEY"]
    st.session_state.assistant = openai.beta.assistants.retrieve(st.secrets["OPENAI_ASSISTANT"])
+   st.session_state.thread = client.beta.threads.create()
 
 if 'fname' not in st.session_state:
     st.session_state.fname = ''  
@@ -346,15 +347,13 @@ if st.session_state.prompt:
         st.markdown(st.session_state.prompt)
     with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
         container = st.empty()
-        st.session_state.message_thread = client.beta.threads.create(
-              messages=[
-                {"role": "user","content": st.session_state.prompt}
-              ]
+        st.session_state.thread_messages= client.beta.threads.messages.create(
+              st.session_state.thread.id, role="user",content=st.session_state.prompt
         )
 
         stream = client.beta.threads.runs.create(
             assistant_id=st.session_state.assistant.id,
-            thread_id = st.session_state.message_thread.id,
+            thread_id = st.session_state.thread.id,
             additional_instructions = additional_instructions,
             stream = True
         )
