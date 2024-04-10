@@ -263,7 +263,7 @@ st.html(hide_st_style)
 st.html("""
             <style>
            .block-container {
-                padding-top: 0rem;
+                padding-top: 1rem;
                 padding-left: 0rem;
                 padding-right: 0rem;
             }
