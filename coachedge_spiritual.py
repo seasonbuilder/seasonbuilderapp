@@ -254,7 +254,7 @@ st.markdown("""
            .block-container {
                 padding-top: 1rem;
                 padding-left: 0rem;
-                padding-right: 1rem;
+                padding-right: 0rem;
             }
     </style>
     """, unsafe_allow_html=True)
