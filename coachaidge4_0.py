@@ -238,7 +238,7 @@ import uuid
 
 client = OpenAI()
 
-st.set_page_config(page_title="Coach Edge - Virtual Life Coach")
+st.set_page_config(page_title="Coach Edge - Virtual Life Coach",layout="wide")
 
 hide_st_style = """
             <style>
@@ -247,9 +247,9 @@ hide_st_style = """
             header {visibility: hidden;}
             </style>
             """
-st.markdown(hide_st_style, unsafe_allow_html=True)
+st.html(hide_st_style)
 
-st.markdown("""
+st.html("""
     <style>
            .block-container {
                 padding-top: 1rem;
@@ -257,7 +257,7 @@ st.markdown("""
                 padding-right: 1rem;
             }
     </style>
-    """, unsafe_allow_html=True)
+    """)
 
 # Initialize session state variables
 
