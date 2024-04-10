@@ -246,6 +246,7 @@ hide_st_style = """
             header {visibility: hidden;}
             </style>
             """
+            
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
 st.markdown("""
