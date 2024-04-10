@@ -237,7 +237,7 @@ import uuid
 
 client = OpenAI()
 
-st.set_page_config(page_title="Coach Edge - Virtual Life Coach")
+st.set_page_config(page_title="Coach Edge - Virtual Life Coach",layout="wide")
 
 hide_st_style = """
             <style>
