@@ -337,7 +337,7 @@ with st.expander("Conversation Starters"):
    if st.button(button_prompt6):
         st.session_state.prompt = button_prompt6
 
-typed_input = st.chat_input("What questions or thoughts are on your mind?")
+typed_input = st.chat_input("What's on your mind?")
 
 if typed_input:
     st.session_state.prompt = typed_input
