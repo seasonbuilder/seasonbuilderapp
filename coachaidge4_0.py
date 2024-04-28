@@ -240,24 +240,24 @@ client = OpenAI()
 
 st.set_page_config(page_title="Coach Edge - Virtual Life Coach",layout="wide")
 
-hide_st_style = """
-            <style>
-            #MainMenu {visibility: hidden;} 
-            footer {visibility: hidden;}
-            header {visibility: hidden;}
-            </style>
-            """
-st.html(hide_st_style)
+# hide_st_style = """
+#             <style>
+#             #MainMenu {visibility: hidden;} 
+#             footer {visibility: hidden;}
+#             header {visibility: hidden;}
+#             </style>
+#             """
+# st.html(hide_st_style)
 
-st.html("""
-    <style>
-           .block-container {
-                padding-top: 1rem;
-                padding-left: 1rem;
-                padding-right: 1rem;
-            }
-    </style>
-    """)
+# st.html("""
+#     <style>
+#            .block-container {
+#                 padding-top: 1rem;
+#                 padding-left: 1rem;
+#                 padding-right: 1rem;
+#             }
+#     </style>
+#     """)
 
 # Initialize session state variables
 
