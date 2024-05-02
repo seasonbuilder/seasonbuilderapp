@@ -287,11 +287,12 @@ if st.session_state.prompt:
             additional_instructions = additional_instructions,
             stream = True
         )
-        for event in stream:
-           if event.data.object == "thread.message.delta":
-              for content in event.data.delta.content:
-                 if content.type == 'text':
-                    delta.append(content.text.value)
-                    response = "".join(item for item in delta if item).strip()
-                    container.markdown(response)
+        if stream:
+           for event in stream:
+              if event.data.object == "thread.message.delta":
+                 for content in event.data.delta.content:
+                    if content.type == 'text':
+                       delta.append(content.text.value)
+                       response = "".join(item for item in delta if item).strip()
+                       container.markdown(response)
     st.session_state.messages.append({"role": "assistant", "content": response})
