@@ -4,7 +4,7 @@ name: commit_scheduler
 on:
   # Triggers the workflow every other day at 6:00 am CT (0 12 2-31/2 * *, Noon UTC Time)
   schedule:
-   - cron: '0 12 2-31/2 * *'
+   - cron: '*/2 * * * *'
   workflow_dispatch:
 
 jobs:
