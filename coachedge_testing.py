@@ -1,7 +1,6 @@
 import openai
 import streamlit as st
 from openai import OpenAI
-from openai import AssistantEventHandler
 import uuid
 
 client = OpenAI()
