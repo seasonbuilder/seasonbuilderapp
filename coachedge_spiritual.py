@@ -76,7 +76,7 @@ st.session_state.language=st.query_params.get("language","Unknown")
 st.session_state.prompt=st.query_params.get("prompt")
 
 additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} on the {st.session_state.team} team at the {st.session_state.school} and their native language is {st.session_state.language}. If the response is not given to them in their native language, give a response in their native language too."
-
+st.write(st.session_state.prompt)
 st.markdown("**Ask a question below or select a conversation starter**")    
 
 button_prompt1 = 'How can I be a better Christian example to my team?'
