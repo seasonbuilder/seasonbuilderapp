@@ -14,76 +14,99 @@ st.set_page_config(page_title="Coach Edge - Virtual Life Coach",layout="wide")
 #             header {visibility: hidden;}
 #             </style>
 #             """
+
+# #st.markdown(hide_st_style, unsafe_allow_html=True)
 # st.html(hide_st_style)
 
+# # st.markdown("""
+# #             <style>
+# #            .block-container {
+# #                 padding-top: 0rem;
+# #                 padding-left: 0rem;
+# #                 padding-right: 0rem;
+# #             }
+# #             </style>
+# #             """, unsafe_allow_html=True)
+
 # st.html("""
-#     <style>
+#             <style>
 #            .block-container {
 #                 padding-top: 1rem;
+#                 padding-bottom: 5rem;
 #                 padding-left: 1rem;
 #                 padding-right: 1rem;
 #             }
-#     </style>
-#     """)
-
+#             </style>
+#             """)
 # Initialize session state variables
-if "session_id" not in st.session_state:
-   st.session_state.session_id = str(uuid.uuid4())
-if "run" not in st.session_state:
-   st.session_state.run = {"status": None}
+
 if "messages" not in st.session_state:
    st.session_state.messages = []
-if "retry_error" not in st.session_state:
-   st.session_state.retry_error = 0
+
 if 'prompt' not in st.session_state:
    st.session_state.prompt = ''
-if 'input_count' not in st.session_state:
-   st.session_state.input_count = 0
+   
 if "assistant" not in st.session_state:
    openai.api_key = st.secrets["OPENAI_API_KEY"]
    st.session_state.assistant = openai.beta.assistants.retrieve(st.secrets["OPENAI_ASSISTANT"])
    st.session_state.thread = client.beta.threads.create()
-#       metadata={'session_id': st.session_state.session_id}
- #  )
+
+if 'fname' not in st.session_state:
+    st.session_state.fname = ''  
+
+if 'school' not in st.session_state:
+    st.session_state.school = ''  
+
+if 'team' not in st.session_state:
+    st.session_state.team = ''  
+
+if 'role' not in st.session_state:
+    st.session_state.role = ''  
+
+if 'language' not in st.session_state:
+    st.session_state.language = ''  
+
 
 #Retrieve URL Parameters
-Fname = st.query_params.get("fname", "Unknown")
-School = st.query_params.get("school", "Unknown")
-Team = st.query_params.get("team", "Unknown")
-Role = st.query_params.get("role", "Unknown")
-Language=st.query_params.get("language","Unknown")
-additional_instructions = f"The users name is {Fname}. They are a {Role} on the {Team} team at {School}."
+st.session_state.fname = st.query_params.get("fname", "Unknown")
+st.session_state.school = st.query_params.get("school", "Unknown")
+st.session_state.team = st.query_params.get("team", "Unknown")
+st.session_state.role = st.query_params.get("role", "Unknown")
+st.session_state.language=st.query_params.get("language","Unknown")
+st.session_state.prompt=st.query_params.get("prompt")
 
-st.markdown("**Ask a question below or select a conversation starter**")    
+additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} on the {st.session_state.team} team at the {st.session_state.school} and their native language is {st.session_state.language}. If the response is not given to them in their native language, give a response in their native language too."
 
-button_prompt1 = 'How do I overcome phone anxiety when I get an unsolicited call from a dreaded customer?'
-button_prompt2 = 'How do I keep money and success from becoming an idol?'
-button_prompt3 = 'How to align passions with professional goals for fulfillment?'
-button_prompt4 = 'How can I promote positive mental health and prevent burnout?'
-button_prompt5 = 'How can I stay patient during the tough process of building my client base?'
-button_prompt6 = 'How can I overcome the insecurity I feel by being younger than all of my clients?'
+# st.markdown("**Ask a question below or select a conversation starter**")    
 
-with st.expander("Conversation Starters"):
-   # Create Predefine prompt buttons
-   if st.button(button_prompt1):
-        st.session_state.prompt = button_prompt1
+# button_prompt1 = 'How can I be a better Christian example to my team?'
+# button_prompt2 = 'How do I better align with my Christian identity'
+# button_prompt3 = 'What are 5 scriptures that help me stay positive and resilient'
+# button_prompt4 = 'What do I do if I don’t know God’s purpose for my life?'
+# button_prompt5 = 'How can I be a servant leader?'
+# button_prompt6 = 'What does Ephesians 2:10 mean and how does that apply to me?'
 
-   if st.button(button_prompt2):
-        st.session_state.prompt = button_prompt2
+# with st.expander("Conversation Starters"):
+#    # Create Predefine prompt buttons
+#    if st.button(button_prompt1):
+#         st.session_state.prompt = button_prompt1
 
-   if st.button(button_prompt3):
-        st.session_state.prompt = button_prompt3
+#    if st.button(button_prompt2):
+#         st.session_state.prompt = button_prompt2
 
-   if st.button(button_prompt4):
-        st.session_state.prompt = button_prompt4
+#    if st.button(button_prompt3):
+#         st.session_state.prompt = button_prompt3
 
-   if st.button(button_prompt5):
-        st.session_state.prompt = button_prompt5
+#    if st.button(button_prompt4):
+#         st.session_state.prompt = button_prompt4
 
-   if st.button(button_prompt6):
-        st.session_state.prompt = button_prompt6
+#    if st.button(button_prompt5):
+#         st.session_state.prompt = button_prompt5
 
-typed_input = st.chat_input("What questions or thoughts are on your mind?")
+#    if st.button(button_prompt6):
+#         st.session_state.prompt = button_prompt6
+
+typed_input = st.chat_input("What's on your mind?")
 
 if typed_input:
     st.session_state.prompt = typed_input
@@ -108,6 +131,7 @@ if st.session_state.prompt:
         st.session_state.thread_messages= client.beta.threads.messages.create(
               st.session_state.thread.id, role="user",content=st.session_state.prompt
         )
+
         stream = client.beta.threads.runs.create(
             assistant_id=st.session_state.assistant.id,
             thread_id = st.session_state.thread.id,
@@ -123,5 +147,3 @@ if st.session_state.prompt:
                        response = "".join(item for item in delta if item).strip()
                        container.markdown(response)
     st.session_state.messages.append({"role": "assistant", "content": response})
- 
-                                                                           
