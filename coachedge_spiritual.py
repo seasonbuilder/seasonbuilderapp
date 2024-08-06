@@ -5,7 +5,7 @@ import uuid
 
 client = OpenAI()
 
-st.set_page_config(page_title="Coach Edge - Virtual Life Coach",layout="wide")
+st.set_page_config(page_title="Coach Edge - Virtual Life Coach",page_icon="https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png",layout="wide")
 
 # hide_st_style = """
 #             <style>
