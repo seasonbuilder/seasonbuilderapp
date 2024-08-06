@@ -5,40 +5,7 @@ import uuid
 
 client = OpenAI()
 
-st.set_page_config(page_title="Coach Edge - Virtual Life Coach",layout="wide")
-
-# hide_st_style = """
-#             <style>
-#             #MainMenu {visibility: hidden;} 
-#             footer {visibility: hidden;}
-#             header {visibility: hidden;}
-#             </style>
-#             """
-
-# #st.markdown(hide_st_style, unsafe_allow_html=True)
-# st.html(hide_st_style)
-
-# # st.markdown("""
-# #             <style>
-# #            .block-container {
-# #                 padding-top: 0rem;
-# #                 padding-left: 0rem;
-# #                 padding-right: 0rem;
-# #             }
-# #             </style>
-# #             """, unsafe_allow_html=True)
-
-# st.html("""
-#             <style>
-#            .block-container {
-#                 padding-top: 1rem;
-#                 padding-bottom: 5rem;
-#                 padding-left: 1rem;
-#                 padding-right: 1rem;
-#             }
-#             </style>
-#             """)
-# Initialize session state variables
+st.set_page_config(page_title="Coach Edge - Virtual Life Coach",page_icon='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png', layout="wide")
 
 if "messages" not in st.session_state:
    st.session_state.messages = []
