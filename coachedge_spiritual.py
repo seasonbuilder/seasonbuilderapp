@@ -7,37 +7,6 @@ client = OpenAI()
 
 st.set_page_config(page_title="Coach Edge - Virtual Life Coach",page_icon="https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png",layout="wide")
 
-# hide_st_style = """
-#             <style>
-#             #MainMenu {visibility: hidden;} 
-#             footer {visibility: hidden;}
-#             header {visibility: hidden;}
-#             </style>
-#             """
-
-# #st.markdown(hide_st_style, unsafe_allow_html=True)
-# st.html(hide_st_style)
-
-# # st.markdown("""
-# #             <style>
-# #            .block-container {
-# #                 padding-top: 0rem;
-# #                 padding-left: 0rem;
-# #                 padding-right: 0rem;
-# #             }
-# #             </style>
-# #             """, unsafe_allow_html=True)
-
-# st.html("""
-#             <style>
-#            .block-container {
-#                 padding-top: 1rem;
-#                 padding-bottom: 5rem;
-#                 padding-left: 1rem;
-#                 padding-right: 1rem;
-#             }
-#             </style>
-#             """)
 # Initialize session state variables
 
 if "messages" not in st.session_state:
@@ -75,7 +44,7 @@ st.session_state.role = st.query_params.get("role", "Unknown")
 st.session_state.language=st.query_params.get("language","Unknown")
 st.session_state.prompt=st.query_params.get("prompt")
 
-additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} on the {st.session_state.team} team at the {st.session_state.school} and their native language is {st.session_state.language}. If the response is not given to them in their native language, give a response in their native language too."
+additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of {st.session_state.team} at the {st.session_state.school} and their native language is {st.session_state.language}. If the response is not given to them in their native language, give a response in their native language too."
 
 st.markdown("**Ask a question below or select a conversation starter**")    
 
