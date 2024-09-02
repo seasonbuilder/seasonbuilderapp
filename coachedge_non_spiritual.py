@@ -44,34 +44,34 @@ st.session_state.prompt=st.query_params.get("prompt")
 
 additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of {st.session_state.team} at the {st.session_state.school} and their native language is {st.session_state.language}. If the response is not given to them in their native language, give a response in their native language too."
 
-# st.markdown("**Ask a question below or select a conversation starter**")    
+st.markdown("**Ask a question below or select a conversation starter**")    
 
-# button_prompt1 = 'How can I be a better Christian example to my team?'
-# button_prompt2 = 'How do I better align with my Christian identity'
-# button_prompt3 = 'What are 5 scriptures that help me stay positive and resilient'
-# button_prompt4 = 'What do I do if I don’t know God’s purpose for my life?'
-# button_prompt5 = 'How can I be a servant leader?'
-# button_prompt6 = 'What does Ephesians 2:10 mean and how does that apply to me?'
+button_prompt1 = 'What are some healthy ways to cope with stress?'
+button_prompt2 = 'Give me 10 time management and productivity tips.'
+button_prompt3 = 'I tend to do things on my own and not ask for help.  Is there a better way?  If so, why and how.'
+button_prompt4 = 'I do not have a sense of purpose in what I am doing right now.  How do I find my purpose?'
+button_prompt5 = 'I want to be a better leader.  How can I grow in my leadership?'
+button_prompt6 = 'Can you role play with me and help me identify my insecurities so I can not allow them to hold me back?'
 
-# with st.expander("Conversation Starters"):
-#    # Create Predefine prompt buttons
-#    if st.button(button_prompt1):
-#         st.session_state.prompt = button_prompt1
+with st.expander("Conversation Starters"):
+   # Create Predefine prompt buttons
+   if st.button(button_prompt1):
+        st.session_state.prompt = button_prompt1
 
-#    if st.button(button_prompt2):
-#         st.session_state.prompt = button_prompt2
+   if st.button(button_prompt2):
+        st.session_state.prompt = button_prompt2
 
-#    if st.button(button_prompt3):
-#         st.session_state.prompt = button_prompt3
+   if st.button(button_prompt3):
+        st.session_state.prompt = button_prompt3
 
-#    if st.button(button_prompt4):
-#         st.session_state.prompt = button_prompt4
+   if st.button(button_prompt4):
+        st.session_state.prompt = button_prompt4
 
-#    if st.button(button_prompt5):
-#         st.session_state.prompt = button_prompt5
+   if st.button(button_prompt5):
+        st.session_state.prompt = button_prompt5
 
-#    if st.button(button_prompt6):
-#         st.session_state.prompt = button_prompt6
+   if st.button(button_prompt6):
+        st.session_state.prompt = button_prompt6
 
 typed_input = st.chat_input("What's on your mind?")
 
