@@ -62,11 +62,11 @@ st.session_state.team = st.query_params.get("team", "Unknown")
 st.session_state.role = st.query_params.get("role", "Unknown")
 st.session_state.language=st.query_params.get("language","Unknown")
 
-additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} on the {st.session_state.team} team at the {st.session_state.school} and their native language is {st.session_state.language}. If the response is not given to them in their native language, give a response in their native language too."
+additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of {st.session_state.team} at the {st.session_state.school} and their native language is {st.session_state.language}. If the response is not given to them in their native language, give a response in their native language too."
 
 st.markdown("**Ask a question below or select a conversation starter**")    
 
-button_prompt1 = 'How do I regain my love for my sport?'
+button_prompt1 = 'Help me identify what is making me feel down and get me out of it.'
 button_prompt2 = 'Give me some time management and productivity tips.'
 button_prompt3 = 'How do I keep from listening to the negative voice in my head?'
 button_prompt4 = 'How do I reduce stress and anxiety from sports / school?'
@@ -76,7 +76,7 @@ button_prompt6 = 'Give me 10 common insecurities athletes have.'
 with st.expander("Conversation Starters"):
    # Create Predefine prompt buttons
    if st.button(button_prompt1):
-        st.session_state.prompt = button_prompt1
+        st.session_state.prompt = 'I want you to help me walk through some questions one at a time via role play to help me identify my challenges and then come up with a strategy to attack them. Can you do that?'
 
    if st.button(button_prompt2):
         st.session_state.prompt = button_prompt2
