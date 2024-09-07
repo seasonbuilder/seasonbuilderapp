@@ -71,7 +71,7 @@ button_prompt2 = 'Relationships'
 button_prompt3 = 'Leadership'
 button_prompt4 = 'Reducing Impact of Stress'
 button_prompt5 = 'Time Management'
-button_prompt6 = 'I Just Need Some Encouragement'
+button_prompt6 = 'I just feel off! Do not know exactly what is going on with me'
 
 with st.expander("Topics To Get Your Started"):
    # Create Predefine prompt buttons
@@ -91,7 +91,7 @@ with st.expander("Topics To Get Your Started"):
         st.session_state.prompt = 'I need help with my time management.  Ask me one questions at a time via roe play to help me identify where I may be mismanaging my time or getting distracted and give me some tips to get better.'
 
     if st.button(button_prompt6):
-        st.session_state.prompt = 'I am just down. I need some encouragement. Remind me of some principles from the Principle Bank to encourage me.'
+        st.session_state.prompt = 'I feel off but do not know what is really going on. Ask me one question one at a time via role play to help me identify my challenges and then come up with a strategy to attack them.'
 
 typed_input = st.chat_input("What's on your mind?")
 
