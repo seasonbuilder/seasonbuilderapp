@@ -71,7 +71,7 @@ button_prompt2 = 'Relationships'
 button_prompt3 = 'Leadership'
 button_prompt4 = 'Reducing Impact of Stress'
 button_prompt5 = 'Time Management'
-button_prompt6 = 'I just feel off! Do not know exactly what is going on with me'
+button_prompt6 = 'I just feel off! Not exactly sure what is going on with me'
 
 with st.expander("Topics To Get Your Started"):
    # Create Predefine prompt buttons
