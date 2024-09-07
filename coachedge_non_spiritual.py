@@ -44,34 +44,34 @@ st.session_state.prompt=st.query_params.get("prompt")
 
 additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of {st.session_state.team} at the {st.session_state.school} and their native language is {st.session_state.language}. If the response is not given to them in their native language, give a response in their native language too."
 
-st.markdown("**Ask a question below or select a conversation starter**")    
+st.markdown("### **Ask a Question or Select a Topic**")    
 
-button_prompt1 = 'What are some healthy ways to cope with stress?'
-button_prompt2 = 'Give me 10 time management and productivity tips.'
-button_prompt3 = 'I tend to do things on my own and not ask for help.  Is there a better way?  If so, why and how.'
-button_prompt4 = 'I do not have a sense of purpose in what I am doing right now.  How do I find my purpose?'
-button_prompt5 = 'I want to be a better leader.  How can I grow in my leadership?'
-button_prompt6 = 'Can you role play with me and help me identify my insecurities so I can not allow them to hold me back?'
+button_prompt1 = 'Mental Health Struggles'
+button_prompt2 = 'Relationships'
+button_prompt3 = 'Leadership'
+button_prompt4 = 'Reducing Impact of Stress'
+button_prompt5 = 'Time Management'
+button_prompt6 = 'I just feel off! Not sure what is going on'
 
-with st.expander("Conversation Starters"):
+with st.expander("Topics To Get Your Started"):
    # Create Predefine prompt buttons
-   if st.button(button_prompt1):
-        st.session_state.prompt = button_prompt1
+    if st.button(button_prompt1):
+        st.session_state.prompt = 'I am struggling with my mental health. Ask me one question at a time via role play to help me identify my challenges and then develop a practical specific strategy to get better.'
 
-   if st.button(button_prompt2):
-        st.session_state.prompt = button_prompt2
+    if st.button(button_prompt2):
+        st.session_state.prompt = 'I am struggling with a relationship. Ask me one question at a time via role play to help me identify my relational challenge and then give me practical advice to improve that relationship.'
 
-   if st.button(button_prompt3):
-        st.session_state.prompt = button_prompt3
+    if st.button(button_prompt3):
+        st.session_state.prompt = 'I want to grow my leadership skills. Ask me one question at a time via role play to help me identify what areas of leadership I need to work on and then help me develop a plan to grow that area.'
 
-   if st.button(button_prompt4):
-        st.session_state.prompt = button_prompt4
+    if st.button(button_prompt4):
+        st.session_state.prompt = 'I am so stressed out. Ask me one question at a time via role play to help me identify what may be causing my stress (I am open to the possibility that I may be causing it) and then help me develop a plan to cope with it in healthy ways and hopefully reduce the impact stress has on me so I can be happier.'
 
-   if st.button(button_prompt5):
-        st.session_state.prompt = button_prompt5
+    if st.button(button_prompt5):
+        st.session_state.prompt = 'I need help with my time management.  Ask me one questions at a time via roe play to help me identify where I may be mismanaging my time or getting distracted and give me some tips to get better.'
 
-   if st.button(button_prompt6):
-        st.session_state.prompt = button_prompt6
+    if st.button(button_prompt6):
+        st.session_state.prompt = 'I feel off but do not know what is really going on. Ask me one question one at a time via role play to help me identify my challenges and then come up with a strategy to attack them.'
 
 typed_input = st.chat_input("What's on your mind?")
 
