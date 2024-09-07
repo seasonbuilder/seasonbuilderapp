@@ -46,34 +46,35 @@ st.session_state.prompt=st.query_params.get("prompt")
 
 additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of {st.session_state.team} at the {st.session_state.school} and their native language is {st.session_state.language}. If the response is not given to them in their native language, give a response in their native language too."
 
-st.markdown("**Ask a question below or select a conversation starter**")    
+st.markdown("### **Ask a Question or Select a Topic**")    
 
-button_prompt1 = 'How can I be a better Christian example to my team?'
-button_prompt2 = 'How do I better align with my Christian identity'
-button_prompt3 = 'What are 5 scriptures that help me stay positive and resilient'
-button_prompt4 = 'What do I do if I don’t know God’s purpose for my life?'
-button_prompt5 = 'How can I be a servant leader?'
-button_prompt6 = 'What does Ephesians 2:10 mean and how does that apply to me?'
+button_prompt1 = 'Mental Health Struggles'
+button_prompt2 = 'Relationships'
+button_prompt3 = 'Leadership'
+button_prompt4 = 'Understanding Certain Verses in Bible'
+button_prompt5 = 'Time Management'
+button_prompt6 = 'Grow My Faith'
 
-with st.expander("Conversation Starters"):
+with st.expander("Topics To Get Your Started"):
    # Create Predefine prompt buttons
-   if st.button(button_prompt1):
-        st.session_state.prompt = button_prompt1
+    if st.button(button_prompt1):
+        st.session_state.prompt = 'I am struggling with my mental health. Ask me one question at a time via role play to help me identify my challenges and then develop a practical specific strategy to get better.'
 
-   if st.button(button_prompt2):
-        st.session_state.prompt = button_prompt2
+    if st.button(button_prompt2):
+        st.session_state.prompt = 'I am struggling with a relationship. Ask me one question at a time via role play to help me identify my relational challenge and then give me practical advice to improve that relationship.'
 
-   if st.button(button_prompt3):
-        st.session_state.prompt = button_prompt3
+    if st.button(button_prompt3):
+        st.session_state.prompt = 'I want to grow my leadership skills. Ask me one question at a time via role play to help me identify what areas of leadership I need to work on and then help me develop a plan to grow that area.'
 
-   if st.button(button_prompt4):
-        st.session_state.prompt = button_prompt4
+    if st.button(button_prompt4):
+        st.session_state.prompt = 'I do not understand this verse. Ask me which verse or verses I do not understand and then break down that verse for me to help me understand the contxt and how that could apply to my life.'
 
-   if st.button(button_prompt5):
-        st.session_state.prompt = button_prompt5
+    if st.button(button_prompt5):
+        st.session_state.prompt = 'I need help with my time management.  Ask me one questions at a time via roe play to help me identify where I may be mismanaging my time or getting distracted and give me some tips to get better.'
 
-   if st.button(button_prompt6):
-        st.session_state.prompt = button_prompt6
+    if st.button(button_prompt6):
+        st.session_state.prompt = 'I want to grow my relationship with God. Ask me a question one at a time via role play to help me determine where I need help doing that and then come up with a strategy to implement spiritual disciplines to grow.'
+
 
 typed_input = st.chat_input("What's on your mind?")
 
