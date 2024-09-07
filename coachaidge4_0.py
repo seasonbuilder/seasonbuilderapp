@@ -64,7 +64,7 @@ st.session_state.language=st.query_params.get("language","Unknown")
 
 additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of {st.session_state.team} at the {st.session_state.school} and their native language is {st.session_state.language}. If the response is not given to them in their native language, give a response in their native language too."
 
-st.markdown("### **Ask a question (bottom) or select a topic**")    
+st.markdown("### **Ask a question (bottom) or Select a topic**")    
 
 button_prompt1 = 'Mental Health Struggles'
 button_prompt2 = 'Relationships'
