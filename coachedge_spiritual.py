@@ -61,7 +61,7 @@ with st.expander("Topics To Get Your Started"):
         st.session_state.prompt = 'I am struggling with my mental health. Ask me one question at a time via role play to help me identify my challenges and then develop a practical specific strategy to get better.'
 
     if st.button(button_prompt2):
-        st.session_state.prompt = 'I am struggling with a relationship. Ask me one question at a time via role play to help me identify my relational challenge and then give me practical advice to improve that relationship.'
+        st.session_state.prompt = 'I need help with relationships. Ask me one question at a time via role play to help me identify my relationship challenges and then give me practical advice to improve that relationship.'
 
     if st.button(button_prompt3):
         st.session_state.prompt = 'I want to grow my leadership skills. Ask me one question at a time via role play to help me identify what areas of leadership I need to work on and then help me develop a plan to grow that area.'
