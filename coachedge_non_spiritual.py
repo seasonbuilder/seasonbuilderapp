@@ -169,7 +169,7 @@ if len(parts) > 1:
 else:
     lang = "Unknown"
 
-additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of {st.session_state.team} at the {st.session_state.school} and their native language is {st.session_state.language}. If the response is not given to them in their native language, give a response in their native language too."
+additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of {st.session_state.team} at the {st.session_state.school} and their native language is {st.session_state.language}. If, and only if, the response is not given to them in their native language, give a response in their native language too."
 
 
 # Define translations for each supported language
