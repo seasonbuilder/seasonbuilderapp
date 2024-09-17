@@ -53,7 +53,7 @@ button_prompt4 = 'Reducing Impact of Stress'
 button_prompt5 = 'Time Management'
 button_prompt6 = 'I just feel off! Not sure what is going on'
 
-with st.expander("Topics To Get Your Started"):
+with st.expander("Topics To Get You Started"):
    # Create Predefine prompt buttons
     if st.button(button_prompt1):
         st.session_state.prompt = 'I am struggling with my mental health. Ask me one question at a time via role play to help me identify my challenges and then develop a practical specific strategy to get better.'
