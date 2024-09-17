@@ -19,6 +19,6 @@ jobs:
           python ./.github/workflows/file_editor.py
           git config --global user.email "jacktwoods01@gmail.com"
           git config --global user.name "jtw0086"
-          git add coachedge_testing.py
+          git add coachedge_non_spiritual.py
           git commit -m "Scheduled-Commit"
           git push
