@@ -64,16 +64,16 @@ with st.expander("Topics To Get You Started"):
         st.session_state.prompt = 'I need help with relationships. Ask me one question at a time via role play to help me identify my relationship challenges and then give me practical advice to improve that relationship.'
 
     if st.button(button_prompt3):
-        st.session_state.prompt = 'I want to grow my leadership skills. Ask me one question at a time via role play to help me identify what areas of leadership I need to work on and then help me develop a plan to grow that area.'
+        st.session_state.prompt = 'I want to grow my leadership skills. Ask me one question at a time via role play to help me identify what areas of leadership I need to work on and then help me develop a plan to grow in that area.'
 
     if st.button(button_prompt4):
-        st.session_state.prompt = 'I do not understand this verse. Ask me which verse or verses I do not understand and then break down that verse for me to help me understand the contxt and how that could apply to my life.'
+        st.session_state.prompt = 'I do not understand this verse. Ask me which verse or verses I do not understand and then break down that verse for me to help me understand the context and how that could apply to my life.'
 
     if st.button(button_prompt5):
-        st.session_state.prompt = 'I need help with my time management.  Ask me one questions at a time via roe play to help me identify where I may be mismanaging my time or getting distracted and give me some tips to get better.'
+        st.session_state.prompt = 'I need help with my time management.  Ask me one question at a time via role play to help me identify where I may be mismanaging my time or getting distracted and give me some tips to get better.'
 
     if st.button(button_prompt6):
-        st.session_state.prompt = 'I want to grow my relationship with God. Ask me a question one at a time via role play to help me determine where I need help doing that and then come up with a strategy to implement spiritual disciplines to grow.'
+        st.session_state.prompt = 'I want to grow my relationship with God. Ask me one question at a time via role play to help me determine where I need help doing that and then come up with a strategy to implement spiritual disciplines to grow.'
 
 
 typed_input = st.chat_input("What's on your mind?")
