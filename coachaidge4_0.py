@@ -7,11 +7,28 @@ client = OpenAI()
 
 st.set_page_config(page_title="Coach Edge - Virtual Life Coach",layout="wide")
 
-# Initialize session state variables
-session_vars = ["messages", "prompt", "assistant", "thread", "fname", "school", "team", "role", "language"]
-for var in session_vars:
-    if var not in st.session_state:
-        st.session_state[var] = ''
+#Initialize session state variables
+
+if "messages" not in st.session_state:
+   st.session_state.messages = []
+
+if 'prompt' not in st.session_state:
+   st.session_state.prompt = ''
+
+if 'fname' not in st.session_state:
+    st.session_state.fname = ''  
+
+if 'school' not in st.session_state:
+    st.session_state.school = ''  
+
+if 'team' not in st.session_state:
+    st.session_state.team = ''  
+
+if 'role' not in st.session_state:
+    st.session_state.role = ''  
+
+if 'language' not in st.session_state:
+    st.session_state.language = ''  
 
 # Initialize OpenAI assistant and thread
 if "assistant" not in st.session_state or "thread" not in st.session_state:
