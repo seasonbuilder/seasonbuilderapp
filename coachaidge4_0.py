@@ -69,7 +69,7 @@ translations = {
         ],
         "prompts": [
             'Estoy luchando con mi salud mental. Hazme una pregunta a la vez a través de un juego de roles para ayudarme a identificar mis desafíos y luego desarrollar una estrategia práctica y específica para mejorar.',
-            'Estoy luchando con una relación. Hazme una pregunta a la vez a través de un juego de roles para ayudarme a identificar mi desafío relacional y luego dame consejos prácticos para mejorar esa relación.',
+            'Necesito consejos sobre relaciones. Hazme una pregunta a la vez mediante un juego de roles para ayudarme a identificar mi desafío relacional y luego dame consejos prácticos para mejorar esa relación',
             'Quiero mejorar mis habilidades de liderazgo. Hazme una pregunta a la vez a través de un juego de roles para ayudarme a identificar en qué áreas de liderazgo necesito trabajar y luego ayúdame a desarrollar un plan para crecer en esa área.',
             'Estoy muy estresado. Hazme una pregunta a la vez a través de un juego de roles para ayudarme a identificar qué puede estar causando mi estrés (estoy abierto a la posibilidad de que pueda estar causándolo) y luego ayúdame a desarrollar un plan para afrontarlo de manera saludable y, con suerte, reducir el impacto que el estrés tiene en mí para que pueda ser más feliz.',
             'Necesito ayuda con la gestión de mi tiempo. Hazme una pregunta a la vez a través de un juego de roles para ayudarme a identificar dónde puedo estar mal gestionando mi tiempo o distrayéndome y dame algunos consejos para mejorar.',
@@ -90,7 +90,7 @@ translations = {
         ],
         "prompts": [
             'أعاني من صعوبات نفسية. اسألني سؤالاً واحداً في كل مرة عبر لعب الأدوار لمساعدتي في تحديد تحدياتي ومن ثم تطوير استراتيجية عملية محددة للتحسن.',
-            'أعاني من مشكلة في علاقة. اسألني سؤالاً واحداً في كل مرة عبر لعب الأدوار لمساعدتي في تحديد تحدي العلاقة ومن ثم تقديم نصائح عملية لتحسين تلك العلاقة.',
+            'أحتاج إلى نصيحة بشأن العلاقات. اسألني سؤالاً واحداً في كل مرة عبر لعب الأدوار لمساعدتي في تحديد تحدي علاقتي ثم أعطني نصائح عملية لتحسين تلك العلاقة.',
             'أريد تطوير مهاراتي القيادية. اسألني سؤالاً واحداً في كل مرة عبر لعب الأدوار لمساعدتي في تحديد مجالات القيادة التي أحتاج للعمل عليها ومن ثم مساعدتي في وضع خطة للنمو في هذا المجال.',
             'أنا متوتر للغاية. اسألني سؤالاً واحداً في كل مرة عبر لعب الأدوار لمساعدتي في تحديد ما قد يسبب توتري (وأنا منفتح لاحتمالية أن أكون أنا السبب) ومن ثم مساعدتي في وضع خطة للتعامل مع التوتر بطرق صحية وتقليل تأثيره علي حتى أتمكن من أن أكون أكثر سعادة.',
             'أحتاج مساعدة في إدارة وقتي. اسألني سؤالاً واحداً في كل مرة عبر لعب الأدوار لمساعدتي في تحديد أين يمكن أن أكون أسيء إدارة وقتي أو مشتت وأعطني بعض النصائح للتحسن.',
@@ -111,7 +111,7 @@ translations = {
         ],
         "prompts": [
             'メンタルヘルスで悩んでいます。ロールプレイを通じて1つずつ質問して、私の課題を特定し、それを改善するための実用的で具体的な戦略を立てるのを手伝ってください。',
-            '人間関係で悩んでいます。ロールプレイを通じて1つずつ質問して、私の人間関係の課題を特定し、その関係を改善するための実用的なアドバイスをしてください。',
+            '人間関係についてアドバイスが必要です。ロールプレイを通じて一度に一つの質問をして、私の人間関係の課題を特定するのを手伝い、その関係を改善するための実用的なアドバイスをください。',
             'リーダーシップスキルを伸ばしたいです。ロールプレイを通じて1つずつ質問して、リーダーシップのどの分野を改善する必要があるかを特定し、その分野を成長させる計画を立てるのを手伝ってください。',
             'とてもストレスを感じています。ロールプレイを通じて1つずつ質問して、私のストレスの原因となっているものを特定し（私が原因かもしれないことも考慮しています）、それに対処するための健康的な方法での計画を立てるのを手伝ってください。ストレスの影響を減らし、より幸せになることを目指します。',
             '時間管理が苦手です。ロールプレイを通じて1つずつ質問して、時間の管理が悪いところや集中できていないところを特定し、改善のためのアドバイスをください。',
@@ -132,7 +132,7 @@ translations = {
         ],
         "prompts": [
             'I am struggling with my mental health. Ask me one question at a time via role play to help me identify my challenges and then develop a practical specific strategy to get better.',
-            'I am struggling with a relationship. Ask me one question at a time via role play to help me identify my relational challenge and then give me practical advice to improve that relationship.',
+            'I need advice with relationships. Ask me one question at a time via role play to help me identify my relational challenge and then give me practical advice to improve that relationship.',
             'I want to grow my leadership skills. Ask me one question at a time via role play to help me identify what areas of leadership I need to work on and then help me develop a plan to grow that area.',
             'I am so stressed out. Ask me one question at a time via role play to help me identify what may be causing my stress (I am open to the possibility that I may be causing it) and then help me develop a plan to cope with it in healthy ways and hopefully reduce the impact stress has on me so I can be happier.',
             'I need help with my time management.  Ask me one question at a time via role play to help me identify where I may be mismanaging my time or getting distracted and give me some tips to get better.',
@@ -153,7 +153,7 @@ translations = {
         ],
         "prompts": [
             'Je lutte avec ma santé mentale. Posez-moi une question à la fois via un jeu de rôle pour m\'aider à identifier mes défis puis élaborer une stratégie pratique et spécifique pour aller mieux.',
-            'Je rencontre des difficultés dans une relation. Posez-moi une question à la fois via un jeu de rôle pour m\'aider à identifier mon défi relationnel puis donnez-moi des conseils pratiques pour améliorer cette relation.',
+            'J\'ai besoin de conseils sur les relations. Posez-moi une question à la fois via un jeu de rôle pour m’aider à identifier mon défi relationnel, puis donnez-moi des conseils pratiques pour améliorer cette relation.',
             'Je veux développer mes compétences en leadership. Posez-moi une question à la fois via un jeu de rôle pour m\'aider à identifier les domaines du leadership sur lesquels je dois travailler puis aidez-moi à élaborer un plan pour développer cette compétence.',
             'Je suis tellement stressé. Posez-moi une question à la fois via un jeu de rôle pour m\'aider à identifier ce qui peut causer mon stress (je suis ouvert à la possibilité que je puisse en être la cause) puis aidez-moi à élaborer un plan pour y faire face de manière saine et, espérons-le, réduire l\'impact du stress sur moi afin que je puisse être plus heureux.',
             'J\'ai besoin d\'aide pour gérer mon temps. Posez-moi une question à la fois via un jeu de rôle pour m\'aider à identifier où je pourrais mal gérer mon temps ou être distrait et donnez-moi quelques conseils pour m\'améliorer.',
@@ -174,7 +174,7 @@ translations = {
         ],
         "prompts": [
             'Estou enfrentando dificuldades com minha saúde mental. Faça-me uma pergunta de cada vez através de um jogo de papéis para me ajudar a identificar meus desafios e então desenvolver uma estratégia prática e específica para melhorar.',
-            'Estou tendo problemas em um relacionamento. Faça-me uma pergunta de cada vez através de um jogo de papéis para me ajudar a identificar meu desafio relacional e então me dê conselhos práticos para melhorar esse relacionamento.',
+            'Preciso de conselhos sobre relacionamentos. Faça-me uma pergunta de cada vez através de um jogo de papéis para me ajudar a identificar meu desafio relacional e depois me dê conselhos práticos para melhorar esse relacionamento.',
             'Quero desenvolver minhas habilidades de liderança. Faça-me uma pergunta de cada vez através de um jogo de papéis para me ajudar a identificar em quais áreas de liderança preciso trabalhar e então me ajude a desenvolver um plano para crescer nessa área.',
             'Estou muito estressado. Faça-me uma pergunta de cada vez através de um jogo de papéis para me ajudar a identificar o que pode estar causando meu estresse (estou aberto à possibilidade de que eu possa estar causando isso) e então me ajude a desenvolver um plano para lidar com isso de maneiras saudáveis e, com sorte, reduzir o impacto que o estresse tem sobre mim para que eu possa ser mais feliz.',
             'Preciso de ajuda com minha gestão de tempo. Faça-me uma pergunta de cada vez através de um jogo de papéis para me ajudar a identificar onde posso estar gerenciando mal meu tempo ou me distraindo e me dê algumas dicas para melhorar.',
@@ -195,7 +195,7 @@ translations = {
         ],
         "prompts": [
             'Αντιμετωπίζω δυσκολίες με την ψυχική μου υγεία. Κάντε μου μια ερώτηση τη φορά μέσω παιχνιδιού ρόλων για να με βοηθήσετε να εντοπίσω τις προκλήσεις μου και στη συνέχεια να αναπτύξω μια πρακτική και συγκεκριμένη στρατηγική για να βελτιωθώ.',
-            'Αντιμετωπίζω προβλήματα σε μια σχέση. Κάντε μου μια ερώτηση τη φορά μέσω παιχνιδιού ρόλων για να με βοηθήσετε να εντοπίσω την πρόκλησή μου στη σχέση και στη συνέχεια να μου δώσετε πρακτικές συμβουλές για να βελτιώσω αυτή τη σχέση.',
+            'Χρειάζομαι συμβουλές για τις σχέσεις. Κάντε μου μία ερώτηση τη φορά μέσω παιχνιδιού ρόλων για να με βοηθήσετε να εντοπίσω την πρόκλησή μου στη σχέση και στη συνέχεια δώστε μου πρακτικές συμβουλές για να βελτιώσω αυτήν τη σχέση.',
             'Θέλω να αναπτύξω τις ηγετικές μου ικανότητες. Κάντε μου μια ερώτηση τη φορά μέσω παιχνιδιού ρόλων για να με βοηθήσετε να εντοπίσω σε ποιους τομείς της ηγεσίας πρέπει να εργαστώ και στη συνέχεια να με βοηθήσετε να αναπτύξω ένα σχέδιο για να αναπτυχθώ σε αυτόν τον τομέα.',
             'Είμαι τόσο αγχωμένος. Κάντε μου μια ερώτηση τη φορά μέσω παιχνιδιού ρόλων για να με βοηθήσετε να εντοπίσω τι μπορεί να προκαλεί το άγχος μου (είμαι ανοιχτός στην πιθανότητα ότι μπορεί να το προκαλώ εγώ) και στη συνέχεια να με βοηθήσετε να αναπτύξω ένα σχέδιο για να το αντιμετωπίσω με υγιείς τρόπους και, ελπίζω, να μειώσω τον αντίκτυπο που έχει το άγχος πάνω μου ώστε να μπορώ να είμαι πιο ευτυχισμένος.',
             'Χρειάζομαι βοήθεια με τη διαχείριση του χρόνου μου. Κάντε μου μια ερώτηση τη φορά μέσω παιχνιδιού ρόλων για να με βοηθήσετε να εντοπίσω πού μπορεί να διαχειρίζομαι λάθος τον χρόνο μου ή να αποσπώμαι και να μου δώσετε μερικές συμβουλές για να βελτιωθώ.',
@@ -216,7 +216,7 @@ translations = {
         ],
         "prompts": [
             'Ik worstel met mijn mentale gezondheid. Stel me één vraag tegelijk via een rollenspel om me te helpen mijn uitdagingen te identificeren en vervolgens een praktische, specifieke strategie te ontwikkelen om beter te worden.',
-            'Ik heb moeite met een relatie. Stel me één vraag tegelijk via een rollenspel om me te helpen mijn relationele uitdaging te identificeren en geef me vervolgens praktisch advies om die relatie te verbeteren.',
+            'Ik heb advies nodig over relaties. Stel me één vraag tegelijk via een rollenspel om me te helpen mijn relationele uitdaging te identificeren en geef me vervolgens praktisch advies om die relatie te verbeteren.',
             'Ik wil mijn leiderschapsvaardigheden ontwikkelen. Stel me één vraag tegelijk via een rollenspel om me te helpen identificeren aan welke leiderschapsgebieden ik moet werken en help me vervolgens een plan te ontwikkelen om dat gebied te laten groeien.',
             'Ik ben zo gestrest. Stel me één vraag tegelijk via een rollenspel om me te helpen identificeren wat mijn stress kan veroorzaken (ik sta open voor de mogelijkheid dat ik het zelf veroorzaak) en help me vervolgens een plan te ontwikkelen om er op een gezonde manier mee om te gaan en hopelijk de impact van stress op mij te verminderen zodat ik gelukkiger kan zijn.',
             'Ik heb hulp nodig met mijn tijdmanagement. Stel me één vraag tegelijk via een rollenspel om me te helpen identificeren waar ik mijn tijd misschien verkeerd beheer of afgeleid raak en geef me enkele tips om beter te worden.',
