@@ -47,8 +47,17 @@ st.session_state.language=st.query_params.get("language","Unknown")
 additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of {st.session_state.team} at the {st.session_state.school} and their native language is {st.session_state.language}. If the response is not given to them in their native language, give a response in their native language too."
 
 st.write(st.session_state.language)
+# Split the string at the opening parenthesis
+parts = st.session_state.language.split('(')
 
-if st.session_state.language == "Español (Spanish)":  
+# Further split the second part at the closing parenthesis if it exists
+if len(parts) > 1:
+    lang = parts[1].split(')')[0]
+    print("Extracted word:", lang)
+else:
+    lang = "Unknown"
+
+if lang == "Spanish":  
     st.markdown("### **Haz una pregunta o selecciona un tema**")    
 
     button_prompt1 = 'Luchas con la Salud Mental'
@@ -80,7 +89,7 @@ if st.session_state.language == "Español (Spanish)":
 
     typed_input = st.chat_input("¿Qué tienes en mente?")
 
-elif st.session_state.language == "العربية (Arabic)":
+elif lang == "Arabic":
     st.markdown("### **اطرح سؤالاً أو اختر موضوعًا**")    
 
     button_prompt1 = 'الصعوبات النفسية'
