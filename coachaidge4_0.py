@@ -222,6 +222,27 @@ translations = {
             'Ik heb hulp nodig met mijn tijdmanagement. Stel me één vraag tegelijk via een rollenspel om me te helpen identificeren waar ik mijn tijd misschien verkeerd beheer of afgeleid raak en geef me enkele tips om beter te worden.',
             'Ik voel me niet lekker maar weet niet echt wat er aan de hand is. Stel me één vraag tegelijk via een rollenspel om me te helpen mijn uitdagingen te identificeren en vervolgens een strategie te bedenken om ze aan te pakken.'
         ]
+    },
+    "Swedish": {
+        "ask_question": "### **Ställ en fråga eller välj ett ämne**",
+        "expander_title": "Ämnen för att komma igång",
+        "typed_input_placeholder": "Vad har du på hjärtat?",
+        "button_prompts": [
+            'Mentala hälsoproblem',
+            'Relationer',
+            'Ledarskap',
+            'Minska stressens påverkan',
+            'Tidsplanering',
+            'Jag känner mig bara konstig! Osäker på vad som händer'
+        ],
+        "prompts": [
+            'Jag kämpar med min mentala hälsa. Ställ mig en fråga i taget via rollspel för att hjälpa mig identifiera mina utmaningar och sedan utveckla en praktisk, specifik strategi för att bli bättre.',
+            'Jag behöver råd om relationer. Ställ mig en fråga i taget via rollspel för att hjälpa mig identifiera min relationsutmaning och sedan ge mig praktiska råd för att förbättra den relationen.',
+            'Jag vill utveckla mina ledarskapsförmågor. Ställ mig en fråga i taget via rollspel för att hjälpa mig identifiera vilka områden inom ledarskap jag behöver arbeta på och sedan hjälpa mig att utveckla en plan för att växa inom det området.',
+            'Jag är så stressad. Ställ mig en fråga i taget via rollspel för att hjälpa mig identifiera vad som kan orsaka min stress (jag är öppen för möjligheten att jag själv kan orsaka den) och sedan hjälpa mig att utveckla en plan för att hantera den på ett hälsosamt sätt och förhoppningsvis minska stressens påverkan på mig så att jag kan bli lyckligare.',
+            'Jag behöver hjälp med min tidsplanering. Ställ mig en fråga i taget via rollspel för att hjälpa mig identifiera var jag kanske missköter min tid eller blir distraherad och ge mig några tips för att bli bättre.',
+            'Jag känner mig konstig men vet inte riktigt vad som pågår. Ställ mig en fråga i taget via rollspel för att hjälpa mig identifiera mina utmaningar och sedan komma på en strategi för att tackla dem.'
+        ]
     }
 }
 
