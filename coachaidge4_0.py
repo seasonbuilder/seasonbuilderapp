@@ -43,14 +43,15 @@ st.session_state.team = st.query_params.get("team", "Unknown")
 st.session_state.role = st.query_params.get("role", "Unknown")
 st.session_state.language = st.query_params.get("language", "Unknown")
 
-additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of {st.session_state.team} at the {st.session_state.school} and their native language is {st.session_state.language}. If the response is not given to them in their native language, give a response in their native language too."
-
 # Extract language from parentheses
 parts = st.session_state.language.split('(')
 if len(parts) > 1:
     lang = parts[1].split(')')[0]
 else:
     lang = "Unknown"
+
+additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of {st.session_state.team} at the {st.session_state.school} and their native language is {lang}. If the response is not given to them in their native language, give a response in their native language too."
+
 
 # Define translations for each supported language
 translations = {
