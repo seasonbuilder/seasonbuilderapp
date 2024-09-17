@@ -1,4 +1,4 @@
 #Testing writing to a file
 
-with open("././coachedge_testing.py", "a") as f:
+with open("././coachedge_non_spiritual.py", "a") as f:
     f.write(" ")
