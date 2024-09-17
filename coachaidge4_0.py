@@ -138,6 +138,90 @@ translations = {
             'I need help with my time management.  Ask me one question at a time via role play to help me identify where I may be mismanaging my time or getting distracted and give me some tips to get better.',
             'I feel off but do not know what is really going on. Ask me one question at a time via role play to help me identify my challenges and then come up with a strategy to attack them.'
         ]
+    },
+    "French": {
+        "ask_question": "### **Posez une question ou sélectionnez un sujet**",
+        "expander_title": "Sujets pour commencer",
+        "typed_input_placeholder": "Qu'avez-vous en tête ?",
+        "button_prompts": [
+            'Difficultés de santé mentale',
+            'Relations',
+            'Leadership',
+            'Réduire l\'impact du stress',
+            'Gestion du temps',
+            'Je me sens bizarre ! Je ne suis pas sûr de ce qui se passe'
+        ],
+        "prompts": [
+            'Je lutte avec ma santé mentale. Posez-moi une question à la fois via un jeu de rôle pour m\'aider à identifier mes défis puis élaborer une stratégie pratique et spécifique pour aller mieux.',
+            'Je rencontre des difficultés dans une relation. Posez-moi une question à la fois via un jeu de rôle pour m\'aider à identifier mon défi relationnel puis donnez-moi des conseils pratiques pour améliorer cette relation.',
+            'Je veux développer mes compétences en leadership. Posez-moi une question à la fois via un jeu de rôle pour m\'aider à identifier les domaines du leadership sur lesquels je dois travailler puis aidez-moi à élaborer un plan pour développer cette compétence.',
+            'Je suis tellement stressé. Posez-moi une question à la fois via un jeu de rôle pour m\'aider à identifier ce qui peut causer mon stress (je suis ouvert à la possibilité que je puisse en être la cause) puis aidez-moi à élaborer un plan pour y faire face de manière saine et, espérons-le, réduire l\'impact du stress sur moi afin que je puisse être plus heureux.',
+            'J\'ai besoin d\'aide pour gérer mon temps. Posez-moi une question à la fois via un jeu de rôle pour m\'aider à identifier où je pourrais mal gérer mon temps ou être distrait et donnez-moi quelques conseils pour m\'améliorer.',
+            'Je me sens bizarre mais je ne sais pas vraiment ce qui se passe. Posez-moi une question à la fois via un jeu de rôle pour m\'aider à identifier mes défis puis proposez une stratégie pour les attaquer.'
+        ]
+    },
+    "Portuguese": {
+        "ask_question": "### **Faça uma pergunta ou selecione um tópico**",
+        "expander_title": "Tópicos para começar",
+        "typed_input_placeholder": "O que está na sua mente?",
+        "button_prompts": [
+            'Dificuldades de saúde mental',
+            'Relacionamentos',
+            'Liderança',
+            'Reduzindo o impacto do estresse',
+            'Gestão de tempo',
+            'Eu simplesmente não me sinto bem! Não tenho certeza do que está acontecendo'
+        ],
+        "prompts": [
+            'Estou enfrentando dificuldades com minha saúde mental. Faça-me uma pergunta de cada vez através de um jogo de papéis para me ajudar a identificar meus desafios e então desenvolver uma estratégia prática e específica para melhorar.',
+            'Estou tendo problemas em um relacionamento. Faça-me uma pergunta de cada vez através de um jogo de papéis para me ajudar a identificar meu desafio relacional e então me dê conselhos práticos para melhorar esse relacionamento.',
+            'Quero desenvolver minhas habilidades de liderança. Faça-me uma pergunta de cada vez através de um jogo de papéis para me ajudar a identificar em quais áreas de liderança preciso trabalhar e então me ajude a desenvolver um plano para crescer nessa área.',
+            'Estou muito estressado. Faça-me uma pergunta de cada vez através de um jogo de papéis para me ajudar a identificar o que pode estar causando meu estresse (estou aberto à possibilidade de que eu possa estar causando isso) e então me ajude a desenvolver um plano para lidar com isso de maneiras saudáveis e, com sorte, reduzir o impacto que o estresse tem sobre mim para que eu possa ser mais feliz.',
+            'Preciso de ajuda com minha gestão de tempo. Faça-me uma pergunta de cada vez através de um jogo de papéis para me ajudar a identificar onde posso estar gerenciando mal meu tempo ou me distraindo e me dê algumas dicas para melhorar.',
+            'Eu me sinto estranho, mas não sei o que realmente está acontecendo. Faça-me uma pergunta de cada vez através de um jogo de papéis para me ajudar a identificar meus desafios e então elaborar uma estratégia para enfrentá-los.'
+        ]
+    },
+    "Greek": {
+        "ask_question": "### **Κάντε μια ερώτηση ή επιλέξτε ένα θέμα**",
+        "expander_title": "Θέματα για να ξεκινήσετε",
+        "typed_input_placeholder": "Τι έχετε στο μυαλό σας;",
+        "button_prompts": [
+            'Δυσκολίες ψυχικής υγείας',
+            'Σχέσεις',
+            'Ηγεσία',
+            'Μείωση του αντίκτυπου του στρες',
+            'Διαχείριση χρόνου',
+            'Απλά δεν αισθάνομαι καλά! Δεν είμαι σίγουρος τι συμβαίνει'
+        ],
+        "prompts": [
+            'Αντιμετωπίζω δυσκολίες με την ψυχική μου υγεία. Κάντε μου μια ερώτηση τη φορά μέσω παιχνιδιού ρόλων για να με βοηθήσετε να εντοπίσω τις προκλήσεις μου και στη συνέχεια να αναπτύξω μια πρακτική και συγκεκριμένη στρατηγική για να βελτιωθώ.',
+            'Αντιμετωπίζω προβλήματα σε μια σχέση. Κάντε μου μια ερώτηση τη φορά μέσω παιχνιδιού ρόλων για να με βοηθήσετε να εντοπίσω την πρόκλησή μου στη σχέση και στη συνέχεια να μου δώσετε πρακτικές συμβουλές για να βελτιώσω αυτή τη σχέση.',
+            'Θέλω να αναπτύξω τις ηγετικές μου ικανότητες. Κάντε μου μια ερώτηση τη φορά μέσω παιχνιδιού ρόλων για να με βοηθήσετε να εντοπίσω σε ποιους τομείς της ηγεσίας πρέπει να εργαστώ και στη συνέχεια να με βοηθήσετε να αναπτύξω ένα σχέδιο για να αναπτυχθώ σε αυτόν τον τομέα.',
+            'Είμαι τόσο αγχωμένος. Κάντε μου μια ερώτηση τη φορά μέσω παιχνιδιού ρόλων για να με βοηθήσετε να εντοπίσω τι μπορεί να προκαλεί το άγχος μου (είμαι ανοιχτός στην πιθανότητα ότι μπορεί να το προκαλώ εγώ) και στη συνέχεια να με βοηθήσετε να αναπτύξω ένα σχέδιο για να το αντιμετωπίσω με υγιείς τρόπους και, ελπίζω, να μειώσω τον αντίκτυπο που έχει το άγχος πάνω μου ώστε να μπορώ να είμαι πιο ευτυχισμένος.',
+            'Χρειάζομαι βοήθεια με τη διαχείριση του χρόνου μου. Κάντε μου μια ερώτηση τη φορά μέσω παιχνιδιού ρόλων για να με βοηθήσετε να εντοπίσω πού μπορεί να διαχειρίζομαι λάθος τον χρόνο μου ή να αποσπώμαι και να μου δώσετε μερικές συμβουλές για να βελτιωθώ.',
+            'Νιώθω παράξενα αλλά δεν ξέρω πραγματικά τι συμβαίνει. Κάντε μου μια ερώτηση τη φορά μέσω παιχνιδιού ρόλων για να με βοηθήσετε να εντοπίσω τις προκλήσεις μου και στη συνέχεια να βρείτε μια στρατηγική για να τις αντιμετωπίσω.'
+        ]
+    },
+    "Dutch": {
+        "ask_question": "### **Stel een vraag of selecteer een onderwerp**",
+        "expander_title": "Onderwerpen om mee te beginnen",
+        "typed_input_placeholder": "Wat houdt je bezig?",
+        "button_prompts": [
+            'Mentale gezondheidsproblemen',
+            'Relaties',
+            'Leiderschap',
+            'Impact van stress verminderen',
+            'Tijdmanagement',
+            'Ik voel me gewoon niet lekker! Niet zeker wat er aan de hand is'
+        ],
+        "prompts": [
+            'Ik worstel met mijn mentale gezondheid. Stel me één vraag tegelijk via een rollenspel om me te helpen mijn uitdagingen te identificeren en vervolgens een praktische, specifieke strategie te ontwikkelen om beter te worden.',
+            'Ik heb moeite met een relatie. Stel me één vraag tegelijk via een rollenspel om me te helpen mijn relationele uitdaging te identificeren en geef me vervolgens praktisch advies om die relatie te verbeteren.',
+            'Ik wil mijn leiderschapsvaardigheden ontwikkelen. Stel me één vraag tegelijk via een rollenspel om me te helpen identificeren aan welke leiderschapsgebieden ik moet werken en help me vervolgens een plan te ontwikkelen om dat gebied te laten groeien.',
+            'Ik ben zo gestrest. Stel me één vraag tegelijk via een rollenspel om me te helpen identificeren wat mijn stress kan veroorzaken (ik sta open voor de mogelijkheid dat ik het zelf veroorzaak) en help me vervolgens een plan te ontwikkelen om er op een gezonde manier mee om te gaan en hopelijk de impact van stress op mij te verminderen zodat ik gelukkiger kan zijn.',
+            'Ik heb hulp nodig met mijn tijdmanagement. Stel me één vraag tegelijk via een rollenspel om me te helpen identificeren waar ik mijn tijd misschien verkeerd beheer of afgeleid raak en geef me enkele tips om beter te worden.',
+            'Ik voel me niet lekker maar weet niet echt wat er aan de hand is. Stel me één vraag tegelijk via een rollenspel om me te helpen mijn uitdagingen te identificeren en vervolgens een strategie te bedenken om ze aan te pakken.'
+        ]
     }
 }
 
