@@ -80,7 +80,7 @@ if st.session_state.language == "Español (Spanish)":
 
     typed_input = st.chat_input("¿Qué tienes en mente?")
 
-elif st.session_state.language == " لعربية(Arabic)":
+elif st.session_state.language == "لعربية (Arabic)":
     st.markdown("### **اطرح سؤالاً أو اختر موضوعًا**")    
 
     button_prompt1 = 'الصعوبات النفسية'
