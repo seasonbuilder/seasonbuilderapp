@@ -46,7 +46,7 @@ st.session_state.language=st.query_params.get("language","Unknown")
 
 additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of {st.session_state.team} at the {st.session_state.school} and their native language is {st.session_state.language}. If the response is not given to them in their native language, give a response in their native language too."
 
-if st.session_state.language == "Espanol":  
+if st.session_state.language == "Español (Spanish)":  
     st.markdown("### **Haz una pregunta o selecciona un tema**")    
 
     button_prompt1 = 'Luchas con la Salud Mental'
@@ -77,7 +77,7 @@ if st.session_state.language == "Espanol":
             st.session_state.prompt = 'Me siento raro pero no sé realmente qué está pasando. Hazme una pregunta a la vez a través de un juego de roles para ayudarme a identificar mis desafíos y luego desarrollar una estrategia para enfrentarlos.'
 
     typed_input = st.chat_input("¿Qué tienes en mente?")
-    
+
 else:
     st.markdown("### **Ask a Question or Select a Topic**")    
 
