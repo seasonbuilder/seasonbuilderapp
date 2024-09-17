@@ -68,10 +68,10 @@ with st.expander("Topics To Get You Started"):
         st.session_state.prompt = 'I am so stressed out. Ask me one question at a time via role play to help me identify what may be causing my stress (I am open to the possibility that I may be causing it) and then help me develop a plan to cope with it in healthy ways and hopefully reduce the impact stress has on me so I can be happier.'
 
     if st.button(button_prompt5):
-        st.session_state.prompt = 'I need help with my time management.  Ask me one questions at a time via roe play to help me identify where I may be mismanaging my time or getting distracted and give me some tips to get better.'
+        st.session_state.prompt = 'I need help with my time management.  Ask me one question at a time via role play to help me identify where I may be mismanaging my time or getting distracted and give me some tips to get better.'
 
     if st.button(button_prompt6):
-        st.session_state.prompt = 'I feel off but do not know what is really going on. Ask me one question one at a time via role play to help me identify my challenges and then come up with a strategy to attack them.'
+        st.session_state.prompt = 'I feel off but do not know what is really going on. Ask me one question at a time via role play to help me identify my challenges and then come up with a strategy to attack them.'
 
 typed_input = st.chat_input("What's on your mind?")
 
