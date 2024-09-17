@@ -122,7 +122,7 @@ elif lang == "Arabic":
     typed_input = st.chat_input("ما الذي يدور في ذهنك؟")
 
 #Homepage in Japanese
-elif lang=="Japanese"
+elif lang=="Japanese":
 
     st.markdown("### **質問するかトピックを選んでください**")    
 
