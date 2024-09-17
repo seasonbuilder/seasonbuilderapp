@@ -48,15 +48,14 @@ additional_instructions = f"The user's name is {st.session_state.fname}. They ar
 
 st.write(st.session_state.language)
 
-# Split the string at the opening parenthesis
+# Find the english translation of the language in the parenthesis
 parts = st.session_state.language.split('(')
-
-# Further split the second part at the closing parenthesis if it exists
 if len(parts) > 1:
     lang = parts[1].split(')')[0]
 else:
     lang = "Unknown"
 
+# Homepage in Spanish
 if lang == "Spanish":  
     st.markdown("### **Haz una pregunta o selecciona un tema**")    
 
@@ -89,6 +88,7 @@ if lang == "Spanish":
 
     typed_input = st.chat_input("¿Qué tienes en mente?")
 
+#Homepage in Arabic
 elif lang == "Arabic":
     st.markdown("### **اطرح سؤالاً أو اختر موضوعًا**")    
 
@@ -121,7 +121,41 @@ elif lang == "Arabic":
 
     typed_input = st.chat_input("ما الذي يدور في ذهنك؟")
 
+#Homepage in Japanese
+elif lang=="Japanese"
 
+    st.markdown("### **質問するかトピックを選んでください**")    
+
+    button_prompt1 = 'メンタルヘルスの悩み'
+    button_prompt2 = '人間関係'
+    button_prompt3 = 'リーダーシップ'
+    button_prompt4 = 'ストレスの影響を減らす'
+    button_prompt5 = '時間管理'
+    button_prompt6 = 'なんだか調子が悪い！何が起きているのかよくわからない'
+
+    with st.expander("スタートするためのトピック"):
+       # 事前定義のプロンプトボタンを作成
+        if st.button(button_prompt1):
+            st.session_state.prompt = 'メンタルヘルスで悩んでいます。ロールプレイを通じて1つずつ質問して、私の課題を特定し、それを改善するための実用的で具体的な戦略を立てるのを手伝ってください。'
+
+        if st.button(button_prompt2):
+            st.session_state.prompt = '人間関係で悩んでいます。ロールプレイを通じて1つずつ質問して、私の人間関係の課題を特定し、その関係を改善するための実用的なアドバイスをしてください。'
+
+        if st.button(button_prompt3):
+            st.session_state.prompt = 'リーダーシップスキルを伸ばしたいです。ロールプレイを通じて1つずつ質問して、リーダーシップのどの分野を改善する必要があるかを特定し、その分野を成長させる計画を立てるのを手伝ってください。'
+
+        if st.button(button_prompt4):
+            st.session_state.prompt = 'とてもストレスを感じています。ロールプレイを通じて1つずつ質問して、私のストレスの原因となっているものを特定し（私が原因かもしれないことも考慮しています）、それに対処するための健康的な方法での計画を立てるのを手伝ってください。ストレスの影響を減らし、より幸せになることを目指します。'
+
+        if st.button(button_prompt5):
+            st.session_state.prompt = '時間管理が苦手です。ロールプレイを通じて1つずつ質問して、時間の管理が悪いところや集中できていないところを特定し、改善のためのアドバイスをください。'
+
+        if st.button(button_prompt6):
+            st.session_state.prompt = '調子が悪いのですが、何が起きているのかよくわかりません。ロールプレイを通じて1つずつ質問して、私の課題を特定し、それに対処するための戦略を考え出してください。'
+
+    typed_input = st.chat_input("何を考えていますか？")
+
+#Default homepage in English    
 else:
     st.markdown("### **Ask a Question or Select a Topic**")    
 
