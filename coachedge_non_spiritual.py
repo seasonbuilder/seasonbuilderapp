@@ -161,6 +161,7 @@ st.session_state.school = st.query_params.get("school", "Unknown")
 st.session_state.team = st.query_params.get("team", "Unknown")
 st.session_state.role = st.query_params.get("role", "Unknown")
 st.session_state.language = st.query_params.get("language", "Unknown")
+st.session_state.prompt=st.query_params.get("prompt")
 
 # Extract language from parentheses
 parts = st.session_state.language.split('(')
