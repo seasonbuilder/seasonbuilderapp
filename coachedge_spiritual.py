@@ -171,8 +171,24 @@ if len(parts) > 1:
 else:
     lang = "Unknown"
 
-additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of {st.session_state.team} at the {st.session_state.school} and their native language is {st.session_state.language}. When you respond, determine the language you responded in.  If your response was not given to them in the user's native language as they specified, give a response in their native language too."
+#additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of {st.session_state.team} at the {st.session_state.school}.  Please note that my native language is {st.session_state.language}. When I ask you a question, if I ask it in a language different from my native language, please respond first in the language of the question and then provide the same answer in my native language. If I ask the question in my native language, please respond only in that language."
+additional_instructions = f"""
+The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of {st.session_state.team} at the {st.session_state.school}.
 
+Please note that the user's native language is {st.session_state.language}.
+
+**Instructions:**
+
+1. **Detect the language** of any question the user asks.
+2. **If the question is in their native language ({st.session_state.language}):**
+   - Respond **only** in their native language.
+   - **Do not** provide a translation or duplicate the answer.
+3. **If the question is in a different language:**
+   - First, provide the answer in the **same language as the question**.
+   - Then, provide the **same answer translated into their native language** ({st.session_state.language}).
+4. **Ensure** that you **do not duplicate** the answer unnecessarily.
+5. **Follow these instructions precisely** for each response.
+"""
 
 # Define translations for each supported language
 translations = {
