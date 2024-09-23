@@ -179,12 +179,12 @@ Please note that the user's native language is {st.session_state.language}.
 
 **Instructions:**
 
-1. **Detect the language** of any response the user gives.
-2. **If the user's response is in their native language ({st.session_state.language}):**
+1. **Detect the language** of any question/response the user gives.
+2. **If the user's question/response is in their native language ({st.session_state.language}):**
    - Respond **only** in their native language.
    - **Do not** provide a translation or duplicate the answer.
-3. **If the user's response is in a different language:**
-   - First, provide your response in the **same language as the user's response**.
+3. **If the user's question/response is in a different language:**
+   - First, provide your response in the **same language as the user's question/response**.
    - Then, provide **your same response translated into the user's native language** ({st.session_state.language}).
 4. **Ensure** that you **do not duplicate** the answer unnecessarily.
 5. **Follow these instructions precisely** for each response.
