@@ -426,6 +426,27 @@ translations = {
             'Мені потрібна допомога з управлінням часом. Задавайте мені по одному запитанню через рольову гру, щоб допомогти мені визначити, де я можу неправильно керувати своїм часом або відволікатися, і дайте мені кілька порад для покращення.',
             'Я почуваюся не так, але не знаю, що насправді відбувається. Задавайте мені по одному запитанню через рольову гру, щоб допомогти мені визначити мої виклики, а потім розробити стратегію для їх подолання.'
         ]
+    },
+    "Indonesian": {
+        "ask_question": "### **Ajukan Pertanyaan atau Pilih Topik**",
+        "expander_title": "Topik untuk Memulai Anda",
+        "typed_input_placeholder": "Apa yang ada di pikiran Anda?",
+        "button_prompts": [
+            'Masalah Kesehatan Mental',
+            'Hubungan',
+            'Kepemimpinan',
+            'Mengurangi Dampak Stres',
+            'Manajemen Waktu',
+            'Saya merasa tidak enak! Tidak yakin apa yang terjadi'
+        ],
+        "prompts": [
+            'Saya sedang berjuang dengan kesehatan mental saya. Tanyakan kepada saya satu pertanyaan pada satu waktu melalui role play untuk membantu saya mengidentifikasi tantangan saya dan kemudian mengembangkan strategi spesifik yang praktis untuk menjadi lebih baik.',
+            'Saya membutuhkan bantuan dengan sebuah hubungan. Tanyakan kepada saya satu pertanyaan pada satu waktu melalui role play untuk membantu saya mengidentifikasi tantangan relasional saya dan kemudian berikan saya saran praktis untuk memperbaiki hubungan tersebut.',
+            'Saya ingin mengembangkan keterampilan kepemimpinan saya. Tanyakan kepada saya satu pertanyaan pada satu waktu melalui role play untuk membantu saya mengidentifikasi area kepemimpinan apa yang perlu saya kerjakan dan kemudian bantu saya mengembangkan rencana untuk mengembangkan area tersebut.',
+            'Saya sangat stres. Tanyakan kepada saya satu pertanyaan pada satu waktu melalui role play untuk membantu saya mengidentifikasi apa yang mungkin menyebabkan stres saya (saya terbuka pada kemungkinan bahwa saya mungkin menyebabkannya) dan kemudian bantu saya mengembangkan rencana untuk mengatasinya dengan cara yang sehat dan semoga mengurangi dampak stres terhadap saya sehingga saya bisa lebih bahagia.',
+            'Saya membutuhkan bantuan dengan manajemen waktu saya. Tanyakan kepada saya satu pertanyaan pada satu waktu melalui role play untuk membantu saya mengidentifikasi di mana saya mungkin salah mengatur waktu saya atau teralihkan dan berikan saya beberapa tips untuk menjadi lebih baik.',
+            'Saya merasa tidak enak tetapi tidak tahu apa yang sebenarnya terjadi. Tanyakan kepada saya satu pertanyaan pada satu waktu melalui role play untuk membantu saya mengidentifikasi tantangan saya dan kemudian buat strategi untuk mengatasinya.'
+        ]
     }
 }
 
