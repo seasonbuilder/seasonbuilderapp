@@ -422,7 +422,7 @@ translations = {
             'मुझे अपने समय प्रबंधन में मदद की आवश्यकता है। मुझे एक बार में एक प्रश्न पूछें रोल प्ले के माध्यम से ताकि मैं पहचान सकूं कि मैं कहाँ अपने समय का गलत प्रबंधन कर रहा हूँ या विचलित हो रहा हूँ और मुझे बेहतर होने के लिए कुछ टिप्स दें।',
             'मैं ईश्वर के साथ अपने संबंध को बढ़ाना चाहता हूँ। मुझे एक बार में एक प्रश्न पूछें रोल प्ले के माध्यम से ताकि मैं निर्धारित कर सकूं कि मुझे कहाँ मदद की आवश्यकता है और फिर बढ़ने के लिए आध्यात्मिक अनुशासन लागू करने की एक रणनीति लेकर आएं।'
         ]
-},
+    },
     "Ukrainian": {
         "ask_question": "### **Поставте запитання або виберіть тему**",
         "expander_title": "Теми для початку",
@@ -442,6 +442,27 @@ translations = {
             'Я не розумію цей вірш. Запитайте мене, який саме вірш або вірші я не розумію, а потім розберіть цей вірш для мене, щоб допомогти мені зрозуміти контекст і як це може застосовуватися до мого життя.',
             'Мені потрібна допомога з управлінням часом. Задавайте мені по одному запитанню через рольову гру, щоб допомогти мені визначити, де я можу неправильно керувати своїм часом або відволікатися, і дайте мені кілька порад для покращення.',
             'Я хочу зміцнити свої відносини з Богом. Задавайте мені по одному запитанню через рольову гру, щоб допомогти мені визначити, де мені потрібна допомога в цьому, а потім розробіть стратегію впровадження духовних дисциплін для зростання.'
+        ]
+    },
+    "Indonesian": {
+        "ask_question": "### **Ajukan Pertanyaan atau Pilih Topik**",
+        "expander_title": "Topik untuk Memulai Anda",
+        "typed_input_placeholder": "Apa yang ada di pikiran Anda?",
+        "button_prompts": [
+            'Masalah Kesehatan Mental',
+            'Hubungan',
+            'Kepemimpinan',
+            'Memahami Ayat-Ayat Tertentu dalam Alkitab',
+            'Manajemen Waktu',
+            'Kembangkan Iman Saya'
+        ],
+        "prompts": [
+            'Saya sedang berjuang dengan kesehatan mental saya. Tanyakan kepada saya satu pertanyaan pada satu waktu melalui role play untuk membantu saya mengidentifikasi tantangan saya dan kemudian mengembangkan strategi spesifik yang praktis untuk menjadi lebih baik.',
+            'Saya membutuhkan bantuan dengan hubungan. Tanyakan kepada saya satu pertanyaan pada satu waktu melalui role play untuk membantu saya mengidentifikasi tantangan relasional saya dan kemudian berikan saya saran praktis untuk memperbaiki hubungan tersebut.',
+            'Saya ingin mengembangkan keterampilan kepemimpinan saya. Tanyakan kepada saya satu pertanyaan pada satu waktu melalui role play untuk membantu saya mengidentifikasi area kepemimpinan apa yang perlu saya kerjakan dan kemudian bantu saya mengembangkan rencana untuk mengembangkan area tersebut.',
+            'Saya tidak memahami ayat ini. Tanyakan kepada saya ayat atau ayat-ayat mana yang tidak saya mengerti dan kemudian jelaskan ayat tersebut untuk membantu saya memahami konteksnya dan bagaimana itu dapat diterapkan dalam hidup saya.',
+            'Saya membutuhkan bantuan dengan manajemen waktu saya. Tanyakan kepada saya satu pertanyaan pada satu waktu melalui role play untuk membantu saya mengidentifikasi di mana saya mungkin salah mengatur waktu saya atau teralihkan dan berikan saya beberapa tips untuk menjadi lebih baik.',
+            'Saya ingin mengembangkan hubungan saya dengan Tuhan. Tanyakan kepada saya satu pertanyaan pada satu waktu melalui role play untuk membantu saya menentukan di mana saya perlu bantuan melakukannya dan kemudian buat strategi untuk menerapkan disiplin spiritual untuk bertumbuh.'
         ]
     }
     # Add more languages if needed
