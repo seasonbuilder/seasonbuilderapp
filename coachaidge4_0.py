@@ -518,18 +518,24 @@ if st.session_state.prompt:
                         if content.type == 'text':
                             response_text += content.text.value
                             # Update the response placeholder
-                            response_placeholder.markdown(response_text)
+                            # Process the text to remove annotations
+                            processed_text = re.sub(r'【.*?】', '', response_text)
+                            response_placeholder.markdown(processed_text)
                         elif content.type == 'annotation':
-                            # Append footnote marker to response text
-                            footnote_marker = f"[^{len(annotations)+1}]"
-                            response_text += footnote_marker
+                            # Extract the annotation text
+                            annotation_text = content.text.value
                             # Collect the annotation text
-                            annotations.append(content.text.value)
+                            annotations.append(annotation_text)
+                            # Replace the inline annotation marker with a footnote marker
+                            response_text = response_text.rstrip('【')  # Remove the opening marker
+                            footnote_marker = f"[^{len(annotations)}]"
+                            response_text += footnote_marker
                             # Update the response placeholder
-                            response_placeholder.markdown(response_text)
+                            processed_text = re.sub(r'【.*?】', '', response_text)
+                            response_placeholder.markdown(processed_text)
                             # Update footnotes placeholder
                             annotations_text = ""
                             for idx, note in enumerate(annotations, start=1):
                                 annotations_text += f"[^{idx}]: {note}\n"
                             footnotes_placeholder.markdown(annotations_text)
-        st.session_state.messages.append({"role": "assistant", "content": response_text})
+        st.session_state.messages.append({"role": "assistant", "content": response_text})            
