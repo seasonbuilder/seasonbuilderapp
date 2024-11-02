@@ -480,6 +480,7 @@ with st.expander(lang_translations["expander_title"]):
 
 typed_input = st.chat_input(lang_translations["typed_input_placeholder"])
 
+# Check if there is typed input
 if typed_input:
     st.session_state.prompt = typed_input
 
@@ -491,7 +492,6 @@ for message in st.session_state.messages:
        with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
           st.markdown(message["content"])
 
-# Check if there is typed input
 if st.session_state.prompt:
     delta = [] 
     response = ""
