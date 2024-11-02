@@ -511,42 +511,55 @@ if st.session_state.prompt:
             stream=True
         )
         response_text = ''
+        display_text = ''
         annotations = []
+        incomplete_annotation = ''
         if stream:
             for event in stream:
                 if event.data.object == "thread.message.delta":
                     for content in event.data.delta.content:
                         if content.type == 'text':
-                            # Append the new text to response_text
-                            response_text += content.text.value
-                            # Process the response_text to replace annotations with footnote markers
-                            # Find all annotations in the text
-                            annotations_in_text = re.findall(r'【(.*?)】', response_text)
-                            # For each annotation found
-                            for annotation in annotations_in_text:
-                                if annotation not in annotations:
-                                    # Add annotation to the annotations list
-                                    annotations.append(annotation)
-                                    # Replace the annotation in the text with a footnote marker
-                                    footnote_marker = f"[{len(annotations)}]"
-                                    response_text = response_text.replace(f"【{annotation}】", footnote_marker)
+                            new_text = content.text.value
+                            response_text += new_text
+                            # Check if we're inside an annotation
+                            if '【' in new_text or incomplete_annotation:
+                                incomplete_annotation += new_text
+                                # Check if the annotation is complete
+                                if '】' in incomplete_annotation:
+                                    # Extract the full annotation
+                                    match = re.search(r'【(.*?)】', incomplete_annotation)
+                                    if match:
+                                        annotation = match.group(1)
+                                        if annotation not in annotations:
+                                            annotations.append(annotation)
+                                        # Replace the annotation in the text with a footnote marker
+                                        footnote_marker = f"[^{len(annotations)}]"
+                                        incomplete_annotation = incomplete_annotation.replace(f"【{annotation}】", footnote_marker)
+                                        display_text += incomplete_annotation
+                                        incomplete_annotation = ''
+                                # If annotation is still incomplete, wait for more text
+                                else:
+                                    # Do not update display_text yet
+                                    continue
+                            else:
+                                display_text += new_text
                             # Update the response placeholder
-                            response_placeholder.markdown(response_text)
+                            response_placeholder.markdown(display_text)
                             # Update footnotes placeholder
                             annotations_text = ""
                             for idx, note in enumerate(annotations, start=1):
                                 annotations_text += f"[^{idx}]: {note}\n"
                             footnotes_placeholder.markdown(annotations_text)
                         elif content.type == 'annotation':
-                            # If annotations are sent separately, collect them
+                            # Handle separately sent annotations if any
                             annotation_text = content.text.value
                             if annotation_text not in annotations:
                                 annotations.append(annotation_text)
                                 footnote_marker = f"[^{len(annotations)}]"
-                                # Since the annotation might not be in the response_text yet, we don't replace it here
+                                # Since the annotation might not be in the display_text yet, we don't replace it here
                                 # Update footnotes placeholder
                                 annotations_text = ""
                                 for idx, note in enumerate(annotations, start=1):
                                     annotations_text += f"[^{idx}]: {note}\n"
                                 footnotes_placeholder.markdown(annotations_text)
-        st.session_state.messages.append({"role": "assistant", "content": response_text})
+        st.session_state.messages.append({"role": "assistant", "content": display_text})
