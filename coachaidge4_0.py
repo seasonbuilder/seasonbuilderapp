@@ -492,30 +492,70 @@ for message in st.session_state.messages:
           st.markdown(message["content"])
 
 # Check if there is typed input
+# if st.session_state.prompt:
+#     delta = [] 
+#     response = ""
+#     st.session_state.messages.append({"role": "user", "content": st.session_state.prompt})
+#     with st.chat_message('user',avatar='https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png'):
+#         st.markdown(st.session_state.prompt)
+#     with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
+#         container = st.empty()
+#         st.session_state.thread_messages= client.beta.threads.messages.create(
+#               st.session_state.thread.id, role="user",content=st.session_state.prompt
+#         )
+
+#         stream = client.beta.threads.runs.create(
+#             assistant_id=st.session_state.assistant.id,
+#             thread_id = st.session_state.thread.id,
+#             additional_instructions = additional_instructions,
+#             stream = True
+#         )
+#         if stream:
+#            for event in stream:
+#               if event.data.object == "thread.message.delta":
+#                  for content in event.data.delta.content:
+#                     if content.type == 'text':
+#                        delta.append(content.text.value)
+#                        response = "".join(item for item in delta if item).strip()
+#                        container.markdown(response)
+#     st.session_state.messages.append({"role": "assistant", "content": response})
+
 if st.session_state.prompt:
-    delta = [] 
-    response = ""
+    delta = []
+    annotations = []
+    response = ''
+    annotations_text = ''
     st.session_state.messages.append({"role": "user", "content": st.session_state.prompt})
-    with st.chat_message('user',avatar='https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png'):
+    with st.chat_message('user', avatar='https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png'):
         st.markdown(st.session_state.prompt)
     with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
         container = st.empty()
-        st.session_state.thread_messages= client.beta.threads.messages.create(
-              st.session_state.thread.id, role="user",content=st.session_state.prompt
+        st.session_state.thread_messages = client.beta.threads.messages.create(
+            st.session_state.thread.id, role="user", content=st.session_state.prompt
         )
-
         stream = client.beta.threads.runs.create(
             assistant_id=st.session_state.assistant.id,
-            thread_id = st.session_state.thread.id,
-            additional_instructions = additional_instructions,
-            stream = True
+            thread_id=st.session_state.thread.id,
+            additional_instructions=additional_instructions,
+            stream=True
         )
         if stream:
-           for event in stream:
-              if event.data.object == "thread.message.delta":
-                 for content in event.data.delta.content:
-                    if content.type == 'text':
-                       delta.append(content.text.value)
-                       response = "".join(item for item in delta if item).strip()
-                       container.markdown(response)
+            for event in stream:
+                if event.data.object == "thread.message.delta":
+                    for content in event.data.delta.content:
+                        if content.type == 'text':
+                            delta.append(content.text.value)
+                            response = "".join(delta).strip()
+                            container.markdown(response + annotations_text)
+                        elif content.type == 'annotation':
+                            # Append footnote marker to response
+                            annotations.append(content.text.value)
+                            footnote_marker = f"[^{len(annotations)}]"
+                            delta.append(footnote_marker)
+                            response = "".join(delta).strip()
+                            # Reconstruct annotations_text
+                            annotations_text = "\n\n"
+                            for idx, note in enumerate(annotations, start=1):
+                                annotations_text += f"[^{idx}]: {note}\n"
+                            container.markdown(response + annotations_text)
     st.session_state.messages.append({"role": "assistant", "content": response})
