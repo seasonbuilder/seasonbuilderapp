@@ -528,7 +528,7 @@ if st.session_state.prompt:
                                     # Add annotation to the annotations list
                                     annotations.append(annotation)
                                     # Replace the annotation in the text with a footnote marker
-                                    footnote_marker = f"[^{len(annotations)}]"
+                                    footnote_marker = f"[{len(annotations)}]"
                                     response_text = response_text.replace(f"【{annotation}】", footnote_marker)
                             # Update the response placeholder
                             response_placeholder.markdown(response_text)
