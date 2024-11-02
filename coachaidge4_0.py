@@ -533,7 +533,7 @@ if st.session_state.prompt:
                                             annotations.append(annotation)
                                         # Replace the annotation in the text with a footnote marker as a tooltip
                                         footnote_number = len(annotations)
-                                        tooltip = f'<span style="text-decoration:underline;cursor:help;" title="{annotation}">[{footnote_number}]</span>'
+                                        tooltip = f'<span style="cursor:help;" title="{annotation}">[{footnote_number}]</span>'
                                         incomplete_annotation = incomplete_annotation.replace(f"【{annotation}】", tooltip)
                                         display_text += incomplete_annotation
                                         incomplete_annotation = ''
