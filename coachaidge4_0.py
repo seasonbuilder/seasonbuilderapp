@@ -517,26 +517,36 @@ if st.session_state.prompt:
                 if event.data.object == "thread.message.delta":
                     for content in event.data.delta.content:
                         if content.type == 'text':
+                            # Append the new text to response_text
                             response_text += content.text.value
+                            # Process the response_text to replace annotations with footnote markers
+                            # Find all annotations in the text
+                            annotations_in_text = re.findall(r'【(.*?)】', response_text)
+                            # For each annotation found
+                            for annotation in annotations_in_text:
+                                if annotation not in annotations:
+                                    # Add annotation to the annotations list
+                                    annotations.append(annotation)
+                                    # Replace the annotation in the text with a footnote marker
+                                    footnote_marker = f"[^{len(annotations)}]"
+                                    response_text = response_text.replace(f"【{annotation}】", footnote_marker)
                             # Update the response placeholder
-                            # Process the text to remove annotations
-                            processed_text = re.sub(r'【.*?】', '', response_text)
-                            response_placeholder.markdown(processed_text)
-                        elif content.type == 'annotation':
-                            # Extract the annotation text
-                            annotation_text = content.text.value
-                            # Collect the annotation text
-                            annotations.append(annotation_text)
-                            # Replace the inline annotation marker with a footnote marker
-                            response_text = response_text.rstrip('【')  # Remove the opening marker
-                            footnote_marker = f"[^{len(annotations)}]"
-                            response_text += footnote_marker
-                            # Update the response placeholder
-                            processed_text = re.sub(r'【.*?】', '', response_text)
-                            response_placeholder.markdown(processed_text)
+                            response_placeholder.markdown(response_text)
                             # Update footnotes placeholder
                             annotations_text = ""
                             for idx, note in enumerate(annotations, start=1):
                                 annotations_text += f"[^{idx}]: {note}\n"
                             footnotes_placeholder.markdown(annotations_text)
-        st.session_state.messages.append({"role": "assistant", "content": response_text})            
+                        elif content.type == 'annotation':
+                            # If annotations are sent separately, collect them
+                            annotation_text = content.text.value
+                            if annotation_text not in annotations:
+                                annotations.append(annotation_text)
+                                footnote_marker = f"[^{len(annotations)}]"
+                                # Since the annotation might not be in the response_text yet, we don't replace it here
+                                # Update footnotes placeholder
+                                annotations_text = ""
+                                for idx, note in enumerate(annotations, start=1):
+                                    annotations_text += f"[^{idx}]: {note}\n"
+                                footnotes_placeholder.markdown(annotations_text)
+        st.session_state.messages.append({"role": "assistant", "content": response_text})
