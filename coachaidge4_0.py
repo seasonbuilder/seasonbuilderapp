@@ -548,7 +548,7 @@ if st.session_state.prompt:
                             # Update footnotes placeholder
                             annotations_text = ""
                             for idx, note in enumerate(annotations, start=1):
-                                annotations_text += f"[^{idx}]: {note}\n"
+                                annotations_text += f"[{idx}]: {note}\n"
                             footnotes_placeholder.markdown(annotations_text)
                         elif content.type == 'annotation':
                             # Handle separately sent annotations if any
