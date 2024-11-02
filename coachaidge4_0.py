@@ -555,11 +555,11 @@ if st.session_state.prompt:
                             annotation_text = content.text.value
                             if annotation_text not in annotations:
                                 annotations.append(annotation_text)
-                                footnote_marker = f"[^{len(annotations)}]"
+                                footnote_marker = f"[{len(annotations)}]"
                                 # Since the annotation might not be in the display_text yet, we don't replace it here
                                 # Update footnotes placeholder
                                 annotations_text = ""
                                 for idx, note in enumerate(annotations, start=1):
-                                    annotations_text += f"[^{idx}]: {note}\n"
+                                    annotations_text += f"[{idx}]: {note}\n"
                                 footnotes_placeholder.markdown(annotations_text)
         st.session_state.messages.append({"role": "assistant", "content": display_text})
