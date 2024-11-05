@@ -492,39 +492,13 @@ for message in st.session_state.messages:
         with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
             st.markdown(message["content"])
 
+
 if st.session_state.prompt:
     # Initialize variables
     st.session_state.messages.append({"role": "user", "content": st.session_state.prompt})
     with st.chat_message('user', avatar='https://example.com/user_avatar.png'):
         st.markdown(st.session_state.prompt)
     with st.chat_message('assistant', avatar='https://example.com/assistant_avatar.png'):
-        # Add custom CSS for tooltips
-        st.markdown("""
-        <style>
-        .footnote-ref {
-            text-decoration: none;
-            position: relative;
-            cursor: pointer;
-            color: blue;
-        }
-        .footnote-ref:focus .footnote-content {
-            display: block;
-        }
-        .footnote-content {
-            display: none;
-            position: absolute;
-            top: 1.2em;
-            left: 0;
-            z-index: 100;
-            background-color: #f9f9f9;
-            border: 1px solid #d4d4d4;
-            padding: 5px;
-            max-width: 300px;
-            word-wrap: break-word;
-        }
-        </style>
-        """, unsafe_allow_html=True)
-
         # Create placeholder for response
         response_placeholder = st.empty()
         st.session_state.thread_messages = client.beta.threads.messages.create(
@@ -560,12 +534,7 @@ if st.session_state.prompt:
                                             annotations.append(annotation)
                                         # Replace the annotation in the text with a footnote marker
                                         footnote_number = len(annotations)
-                                        footnote_html = f'''
-                                        <a class="footnote-ref" tabindex="0">[{footnote_number}]
-                                            <span class="footnote-content">{annotation}</span>
-                                        </a>
-                                        '''
-                                        incomplete_annotation = incomplete_annotation.replace(f"【{annotation}】", footnote_html)
+                                        incomplete_annotation = incomplete_annotation.replace(f"【{annotation}】", f'[^{footnote_number}]')
                                         display_text += incomplete_annotation
                                         incomplete_annotation = ''
                                     else:
@@ -577,10 +546,19 @@ if st.session_state.prompt:
                             else:
                                 display_text += new_text
                             # Update the response placeholder
-                            response_placeholder.markdown(display_text, unsafe_allow_html=True)
+                            response_placeholder.markdown(display_text)
                         elif content.type == 'annotation':
                             # Handle separately sent annotations if any
                             annotation_text = content.text.value
                             if annotation_text not in annotations:
                                 annotations.append(annotation_text)
-        st.session_state.messages.append({"role": "assistant", "content": display_text})
+        # After the response is complete, display the footnotes
+        if annotations:
+            footnotes_text = "\n\n"
+            for idx, note in enumerate(annotations, start=1):
+                footnotes_text += f"[^{idx}]: {note}\n"
+            # Update the response placeholder with the complete text and footnotes
+            response_placeholder.markdown(display_text + footnotes_text)
+        else:
+            response_placeholder.markdown(display_text)
+    st.session_state.messages.append({"role": "assistant", "content": display_text})
