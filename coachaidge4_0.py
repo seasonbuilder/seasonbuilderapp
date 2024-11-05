@@ -532,9 +532,9 @@ if st.session_state.prompt:
                                         annotation = match.group(1)
                                         if annotation not in annotations:
                                             annotations.append(annotation)
-                                        # Replace the annotation in the text with a footnote marker
+                                        # Replace the annotation in the text with a superscript footnote marker
                                         footnote_number = len(annotations)
-                                        incomplete_annotation = incomplete_annotation.replace(f"【{annotation}】", f'[^{footnote_number}]')
+                                        incomplete_annotation = incomplete_annotation.replace(f"【{annotation}】", f'^[{footnote_number}]')
                                         display_text += incomplete_annotation
                                         incomplete_annotation = ''
                                     else:
@@ -556,7 +556,7 @@ if st.session_state.prompt:
         if annotations:
             footnotes_text = "\n\n"
             for idx, note in enumerate(annotations, start=1):
-                footnotes_text += f"[^{idx}]: {note}\n"
+                footnotes_text += f"^[{idx}]: {note}\n"
             # Update the response placeholder with the complete text and footnotes
             response_placeholder.markdown(display_text + footnotes_text)
         else:
