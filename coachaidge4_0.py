@@ -498,6 +498,33 @@ if st.session_state.prompt:
     with st.chat_message('user', avatar='https://example.com/user_avatar.png'):
         st.markdown(st.session_state.prompt)
     with st.chat_message('assistant', avatar='https://example.com/assistant_avatar.png'):
+        # Add custom CSS for tooltips
+        st.markdown("""
+        <style>
+        .footnote-ref {
+            text-decoration: none;
+            position: relative;
+            cursor: pointer;
+            color: blue;
+        }
+        .footnote-ref:focus .footnote-content {
+            display: block;
+        }
+        .footnote-content {
+            display: none;
+            position: absolute;
+            top: 1.2em;
+            left: 0;
+            z-index: 100;
+            background-color: #f9f9f9;
+            border: 1px solid #d4d4d4;
+            padding: 5px;
+            max-width: 300px;
+            word-wrap: break-word;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
         # Create placeholder for response
         response_placeholder = st.empty()
         st.session_state.thread_messages = client.beta.threads.messages.create(
@@ -533,7 +560,12 @@ if st.session_state.prompt:
                                             annotations.append(annotation)
                                         # Replace the annotation in the text with a footnote marker
                                         footnote_number = len(annotations)
-                                        incomplete_annotation = incomplete_annotation.replace(f"【{annotation}】", f'<sup>[{footnote_number}]</sup>')
+                                        footnote_html = f'''
+                                        <a class="footnote-ref" tabindex="0">[{footnote_number}]
+                                            <span class="footnote-content">{annotation}</span>
+                                        </a>
+                                        '''
+                                        incomplete_annotation = incomplete_annotation.replace(f"【{annotation}】", footnote_html)
                                         display_text += incomplete_annotation
                                         incomplete_annotation = ''
                                     else:
@@ -551,14 +583,4 @@ if st.session_state.prompt:
                             annotation_text = content.text.value
                             if annotation_text not in annotations:
                                 annotations.append(annotation_text)
-        # After the response is complete, display the footnotes
-        if annotations:
-            # Update the response placeholder with the complete text
-            response_placeholder.markdown(display_text, unsafe_allow_html=True)
-            # Display footnotes using st.expander
-            with st.expander("Footnotes"):
-                for idx, note in enumerate(annotations, start=1):
-                    st.markdown(f"<sup>[{idx}]</sup> {note}", unsafe_allow_html=True)
-        else:
-            response_placeholder.markdown(display_text, unsafe_allow_html=True)
-    st.session_state.messages.append({"role": "assistant", "content": display_text})
+        st.session_state.messages.append({"role": "assistant", "content": display_text})
