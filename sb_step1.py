@@ -348,7 +348,7 @@ Communicate with them in their native language.
 #         if st.button(button_text):
 #             st.session_state.prompt = lang_translations["prompts"][idx]
 
-typed_input = st.chat_input()
+typed_input = st.chat_input("Type your answers here")
 
 # Check if there is typed input
 if typed_input:
