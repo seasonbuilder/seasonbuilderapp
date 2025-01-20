@@ -187,7 +187,7 @@ additional_instructions = f"The user's name is {st.session_state.fname}. They ar
 #    - Then, provide **your same response translated into the user's native language** ({st.session_state.language}).
 # 4. **Ensure** that you **do not duplicate** the answer unnecessarily.
 # 5. **Follow these instructions precisely** for each response.
-"""
+#"""
 
 
 # Define translations for each supported language
