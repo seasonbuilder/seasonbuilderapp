@@ -56,9 +56,9 @@ additional_instructions = (
 # Translation data
 translations = {
     "English": {
-        "ask_question": "### **Ask a Question or Select a Topic**",
+        "ask_question": "### **Ask Coach Edge**",
         "expander_title": "Topics To Get You Started",
-        "typed_input_placeholder": "What's on your mind?",
+        "typed_input_placeholder": "How else can I help?",
         "button_prompts": [
             'Mental Health Struggles',
             'Relationships',
