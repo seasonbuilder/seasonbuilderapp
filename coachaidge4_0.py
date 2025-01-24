@@ -59,7 +59,54 @@ translations = {
         "ask_question": "### **Ask Coach Edge**",
         "typed_input_placeholder": "How else can I help?"
     },
-    # --- Other language dictionaries omitted for brevity, but same structure ---
+    "Spanish": {
+        "ask_question": "### **Pregunta a Coach Edge**",
+        "typed_input_placeholder": "¿En qué más puedo ayudarte?"
+    },
+    "Arabic": {
+        "ask_question": "### **اسأل كوتش إيدج**",
+        "typed_input_placeholder": "كيف يمكنني مساعدتك بأمر آخر؟"
+    },
+    "Japanese": {
+        "ask_question": "### **Coach Edgeに質問する**",
+        "typed_input_placeholder": "他にどのようにお手伝いできますか？"
+    },
+    "French": {
+        "ask_question": "### **Demandez à Coach Edge**",
+        "typed_input_placeholder": "Comment puis-je vous aider autrement ?"
+    },
+    "Portuguese": {
+        "ask_question": "### **Pergunte ao Coach Edge**",
+        "typed_input_placeholder": "Como mais posso te ajudar?"
+    },
+    "Greek": {
+        "ask_question": "### **Ρωτήστε τον Coach Edge**",
+        "typed_input_placeholder": "Πώς αλλιώς μπορώ να βοηθήσω;"
+    },
+    "Dutch": {
+        "ask_question": "### **Vraag het Coach Edge**",
+        "typed_input_placeholder": "Waarmee kan ik verder helpen?"
+    },
+    "Swedish": {
+        "ask_question": "### **Fråga Coach Edge**",
+        "typed_input_placeholder": "Hur kan jag hjälpa dig ytterligare?"
+    },
+    "Bengali": {
+        "ask_question": "### **Coach Edgeকে জিজ্ঞাসা করুন**",
+        "typed_input_placeholder": "আপনাকে আর কীভাবে সাহায্য করতে পারি?"
+    },
+    "Hindi": {
+        "ask_question": "### **Coach Edge से पूछें**",
+        "typed_input_placeholder": "मैं और कैसे आपकी मदद कर सकता हूँ?"
+    },
+    "Ukrainian": {
+        "ask_question": "### **Запитайте Coach Edge**",
+        "typed_input_placeholder": "Чим ще я можу допомогти?"
+    },
+    "Indonesian": {
+        "ask_question": "### **Tanyakan kepada Coach Edge**",
+        "typed_input_placeholder": "Bagaimana lagi saya bisa membantu?"
+    }
 }
 
 # Use the detected language; fall back to English if none
