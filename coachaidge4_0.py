@@ -84,11 +84,11 @@ lang_translations = translations.get(lang, translations["English"])
 
 st.markdown(lang_translations["ask_question"])
 
-# A small expander with helpful topic buttons
-with st.expander(lang_translations["expander_title"]):
-    for idx, button_text in enumerate(lang_translations["button_prompts"]):
-        if st.button(button_text):
-            st.session_state.prompt = lang_translations["prompts"][idx]
+# # A small expander with helpful topic buttons
+# with st.expander(lang_translations["expander_title"]):
+#     for idx, button_text in enumerate(lang_translations["button_prompts"]):
+#         if st.button(button_text):
+#             st.session_state.prompt = lang_translations["prompts"][idx]
 
 # Text input for user (typed) prompt
 typed_input = st.chat_input(lang_translations["typed_input_placeholder"])
