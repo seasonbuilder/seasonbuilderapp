@@ -54,41 +54,41 @@ additional_instructions = (
 )
 
 # Translation data
-translations = {
-    "English": {
-        "ask_question": "### **Ask a Question or Select a Topic**",
-        "expander_title": "Topics To Get You Started",
-        "typed_input_placeholder": "What's on your mind?",
-        "button_prompts": [
-            'Mental Health Struggles',
-            'Relationships',
-            'Leadership',
-            'Understanding Certain Verses in the Bible',
-            'Time Management',
-            'Grow My Faith'
-        ],
-        "prompts": [
-            'I am struggling with my mental health. Ask me one question at a time via role play ...',
-            'I need help with relationships. Ask me one question at a time via role play ...',
-            'I want to grow my leadership skills. Ask me one question at a time via role play ...',
-            'I do not understand this verse. Ask me which verse or verses I do not understand ...',
-            'I need help with my time management. Ask me one question at a time via role play ...',
-            'I want to grow my relationship with God. Ask me one question at a time via role play ...'
-        ]
-    },
-    # --- Other language dictionaries omitted for brevity, but same structure ---
-}
+# translations = {
+#     "English": {
+#         "ask_question": "### **Ask a Question or Select a Topic**",
+#         "expander_title": "Topics To Get You Started",
+#         "typed_input_placeholder": "What's on your mind?",
+#         "button_prompts": [
+#             'Mental Health Struggles',
+#             'Relationships',
+#             'Leadership',
+#             'Understanding Certain Verses in the Bible',
+#             'Time Management',
+#             'Grow My Faith'
+#         ],
+#         "prompts": [
+#             'I am struggling with my mental health. Ask me one question at a time via role play ...',
+#             'I need help with relationships. Ask me one question at a time via role play ...',
+#             'I want to grow my leadership skills. Ask me one question at a time via role play ...',
+#             'I do not understand this verse. Ask me which verse or verses I do not understand ...',
+#             'I need help with my time management. Ask me one question at a time via role play ...',
+#             'I want to grow my relationship with God. Ask me one question at a time via role play ...'
+#         ]
+#     },
+#     # --- Other language dictionaries omitted for brevity, but same structure ---
+# }
 
-# Use the detected language; fall back to English if none
-lang_translations = translations.get(lang, translations["English"])
+# # Use the detected language; fall back to English if none
+# lang_translations = translations.get(lang, translations["English"])
 
-st.markdown(lang_translations["ask_question"])
+# st.markdown(lang_translations["ask_question"])
 
-# A small expander with helpful topic buttons
-with st.expander(lang_translations["expander_title"]):
-    for idx, button_text in enumerate(lang_translations["button_prompts"]):
-        if st.button(button_text):
-            st.session_state.prompt = lang_translations["prompts"][idx]
+# # A small expander with helpful topic buttons
+# with st.expander(lang_translations["expander_title"]):
+#     for idx, button_text in enumerate(lang_translations["button_prompts"]):
+#         if st.button(button_text):
+#             st.session_state.prompt = lang_translations["prompts"][idx]
 
 # Text input for user (typed) prompt
 typed_input = st.chat_input(lang_translations["typed_input_placeholder"])
