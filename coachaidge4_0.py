@@ -57,24 +57,7 @@ additional_instructions = (
 translations = {
     "English": {
         "ask_question": "### **Ask Coach Edge**",
-        "expander_title": "Topics To Get You Started",
-        "typed_input_placeholder": "How else can I help?",
-        "button_prompts": [
-            'Mental Health Struggles',
-            'Relationships',
-            'Leadership',
-            'Understanding Certain Verses in the Bible',
-            'Time Management',
-            'Grow My Faith'
-        ],
-        "prompts": [
-            'I am struggling with my mental health. Ask me one question at a time via role play ...',
-            'I need help with relationships. Ask me one question at a time via role play ...',
-            'I want to grow my leadership skills. Ask me one question at a time via role play ...',
-            'I do not understand this verse. Ask me which verse or verses I do not understand ...',
-            'I need help with my time management. Ask me one question at a time via role play ...',
-            'I want to grow my relationship with God. Ask me one question at a time via role play ...'
-        ]
+        "typed_input_placeholder": "How else can I help?"
     },
     # --- Other language dictionaries omitted for brevity, but same structure ---
 }
