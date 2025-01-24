@@ -112,7 +112,7 @@ translations = {
 # Use the detected language; fall back to English if none
 lang_translations = translations.get(lang, translations["English"])
 
-st.markdown(lang_translations["ask_question"])
+#st.markdown(lang_translations["ask_question"])
 
 # Text input for user (typed) prompt
 typed_input = st.chat_input(lang_translations["typed_input_placeholder"])
