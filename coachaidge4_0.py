@@ -173,4 +173,4 @@ if st.session_state.prompt:
                             container.markdown(response)
 
     # Save assistant's final response to message history
-    st.session_state.messages.append({"role": "assistant", "content": response})
+    st.session_state.messages.append({"role": "assistant", "content": response}) 
