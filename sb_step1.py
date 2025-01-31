@@ -64,55 +64,55 @@ additional_instructions = (
 translations = {
     "English": {
         "ask_question": "### **Ask Coach Edge**",
-        "typed_input_placeholder": "How else can I help?"
+        "typed_input_placeholder": "Type Answers Here"
     },
     "Spanish": {
         "ask_question": "### **Pregunta a Coach Edge**",
-        "typed_input_placeholder": "¿En qué más puedo ayudarte?"
+        "typed_input_placeholder": "Escribe tus respuestas aquí"
     },
     "Arabic": {
         "ask_question": "### **اسأل كوتش إيدج**",
-        "typed_input_placeholder": "كيف يمكنني مساعدتك بأمر آخر؟"
+        "typed_input_placeholder": "اكتب إجاباتك هنا"
     },
     "Japanese": {
         "ask_question": "### **Coach Edgeに質問する**",
-        "typed_input_placeholder": "他にどのようにお手伝いできますか？"
+        "typed_input_placeholder": "ここに回答を入力してください"
     },
     "French": {
         "ask_question": "### **Demandez à Coach Edge**",
-        "typed_input_placeholder": "Comment puis-je vous aider autrement ?"
+        "typed_input_placeholder": "Tapez vos réponses ici"
     },
     "Portuguese": {
         "ask_question": "### **Pergunte ao Coach Edge**",
-        "typed_input_placeholder": "Como mais posso te ajudar?"
+        "typed_input_placeholder": "Digite suas respostas aqui"
     },
     "Greek": {
         "ask_question": "### **Ρωτήστε τον Coach Edge**",
-        "typed_input_placeholder": "Πώς αλλιώς μπορώ να βοηθήσω;"
+        "typed_input_placeholder": "Πληκτρολογήστε τις απαντήσεις σας εδώ"
     },
     "Dutch": {
         "ask_question": "### **Vraag het Coach Edge**",
-        "typed_input_placeholder": "Waarmee kan ik verder helpen?"
+        "typed_input_placeholder": "Typ hier je antwoorden"
     },
     "Swedish": {
         "ask_question": "### **Fråga Coach Edge**",
-        "typed_input_placeholder": "Hur kan jag hjälpa dig ytterligare?"
+        "typed_input_placeholder": "Skriv dina svar här"
     },
     "Bengali": {
         "ask_question": "### **Coach Edgeকে জিজ্ঞাসা করুন**",
-        "typed_input_placeholder": "আপনাকে আর কীভাবে সাহায্য করতে পারি?"
+        "typed_input_placeholder": "এখানে আপনার উত্তর লিখুন"
     },
     "Hindi": {
         "ask_question": "### **Coach Edge से पूछें**",
-        "typed_input_placeholder": "मैं और कैसे आपकी मदद कर सकता हूँ?"
+        "typed_input_placeholder": "यहाँ अपने उत्तर टाइप करें"
     },
     "Ukrainian": {
         "ask_question": "### **Запитайте Coach Edge**",
-        "typed_input_placeholder": "Чим ще я можу допомогти?"
+        "typed_input_placeholder": "Введіть відповіді тут"
     },
     "Indonesian": {
         "ask_question": "### **Tanyakan kepada Coach Edge**",
-        "typed_input_placeholder": "Bagaimana lagi saya bisa membantu?"
+        "typed_input_placeholder": "Ketik jawaban Anda di sini"
     }
 }
 
@@ -122,8 +122,8 @@ lang_translations = translations.get(lang, translations["English"])
 #st.markdown(lang_translations["ask_question"])
 
 # Text input for user (typed) prompt
-#typed_input = st.chat_input(lang_translations["typed_input_placeholder"])
-typed_input = st.chat_input()
+typed_input = st.chat_input(lang_translations["typed_input_placeholder"])
+#typed_input = st.chat_input()
 
 # Decide which prompt to use: typed prompt (highest priority) or URL prompt (if typed is empty)
 if typed_input:
