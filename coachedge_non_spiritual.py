@@ -170,7 +170,7 @@ if len(parts) > 1:
 else:
     lang = "Unknown"
 
-additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of {st.session_state.team} at the {st.session_state.school}.  Please note that my native language is {st.session_state.language}. THIS IS IMPORTANT ... When I ask a question or provide a response, please respond in my native language regardless of the language I use to ask the question or provide the response."
+additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of {st.session_state.team} at the {st.session_state.school}.  Please note that their native language is {st.session_state.language}. THIS IS IMPORTANT ... When I ask a question or provide a response, please respond in their native language regardless of the language they use to ask the question or they provide a response. Pay special attention not to accidentally use words from another language when providing a response."
 # additional_instructions = f"""
 # The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of {st.session_state.team} at the {st.session_state.school}.
 
