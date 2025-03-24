@@ -2,6 +2,7 @@ import openai
 import streamlit as st
 from openai import OpenAI
 import uuid
+import os
 
 client = OpenAI()
 
@@ -25,8 +26,8 @@ if 'language' not in st.session_state:
 
 # Initialize OpenAI assistant and thread
 if "assistant" not in st.session_state or "thread" not in st.session_state:
-    openai.api_key = st.secrets["OPENAI_API_KEY"]
-    st.session_state.assistant = openai.beta.assistants.retrieve(st.secrets["OPENAI_ASSISTANT"])
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+    st.session_state.assistant = openai.beta.assistants.retrieve(os.getenv("OPENAI_ASSISTANT"))
     st.session_state.thread = client.beta.threads.create()
 
 # Retrieve URL Parameters
