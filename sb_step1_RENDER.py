@@ -2,8 +2,8 @@ import openai
 import streamlit as st
 from openai import OpenAI
 import uuid
+import os
 
-# IS THIS ONLY IN THE RENDER BRANCH
 client = OpenAI()
 
 st.set_page_config(page_title="Coach Edge - Virtual Life Coach",layout="wide")
