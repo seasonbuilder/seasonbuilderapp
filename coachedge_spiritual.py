@@ -118,6 +118,8 @@
 #                        container.markdown(response)
 #     st.session_state.messages.append({"role": "assistant", "content": response})
 
+# This is for a test commit
+
 import openai
 import streamlit as st
 from openai import OpenAI
@@ -519,5 +521,4 @@ if st.session_state.prompt:
                        response = "".join(item for item in delta if item).strip()
                        container.markdown(response)
     st.session_state.messages.append({"role": "assistant", "content": response}) 
-                                                           
                                                            
