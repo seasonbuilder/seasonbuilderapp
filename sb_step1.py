@@ -3,7 +3,7 @@ import streamlit as st
 from openai import OpenAI
 import uuid
 
-# IS THIS ONLY IN THE RENDER BRANCH
+# IS THIS ONLY IN THE MAIN BRANCH
 client = OpenAI()
 
 st.set_page_config(page_title="Coach Edge - Virtual Life Coach",layout="wide")
