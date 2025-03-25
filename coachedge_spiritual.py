@@ -118,7 +118,7 @@
 #                        container.markdown(response)
 #     st.session_state.messages.append({"role": "assistant", "content": response})
 
-# This is for a test commit 2
+# This is for a test
 
 import openai
 import streamlit as st
@@ -129,7 +129,7 @@ client = OpenAI()
 
 st.set_page_config(page_title="Coach Edge - Virtual Life Coach",layout="wide")
 
-#Initialize session state variables
+#Initialize session state variables   
 
 if "messages" not in st.session_state:
    st.session_state.messages = []
