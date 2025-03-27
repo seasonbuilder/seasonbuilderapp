@@ -1,10 +1,14 @@
-# This is a workflow to keep CoachAidge Streamlit Apps active
+# This is a workflow to keep CoachEdge Streamlit Apps active
 name: commit_scheduler
 
 on:
-  # Triggers the workflow every day at 6:00 am CT (0 12 * * *, Noon UTC Time)
   schedule:
-   - cron: '0 12 * * *'
+    # 6:00 AM CT (12:00 UTC)
+    - cron: '0 12 * * *'
+    # 3:00 PM CT (21:00 UTC)
+    - cron: '0 21 * * *'
+    # 11:00 PM CT (05:00 UTC)
+    - cron: '0 5 * * *'
   workflow_dispatch:
 
 jobs:
@@ -24,5 +28,4 @@ jobs:
           git add coachaidge4_0.py
           git add coachedge_coach.py
           git add sb_step1.py
-          git commit -m "Scheduled-Commit"
-          git push
+          git commit -m "Scheduled-Commit"  git push
