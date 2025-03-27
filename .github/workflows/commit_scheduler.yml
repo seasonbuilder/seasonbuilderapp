@@ -28,4 +28,5 @@ jobs:
           git add coachaidge4_0.py
           git add coachedge_coach.py
           git add sb_step1.py
-          git commit -m "Scheduled-Commit"  git push
+          git commit -m "Scheduled-Commit"  
+          git push
