@@ -3,19 +3,9 @@ import openai
 import streamlit as st
 from openai import OpenAI
 import uuid
-from translation_non_spiritual import translations  # Your translations file
+from translation_non_spiritual import translations  # Ensure this file defines your translations dictionary
 
-# ----------------------------
-# Cache the static OpenAI assistant
-# ----------------------------
-@st.cache_resource
-def get_openai_assistant():
-    # Set up the API key (static for all users)
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-    # Retrieve and return the assistant (static object)
-    return openai.beta.assistants.retrieve(os.getenv("OPENAI_ASSISTANT"))
-
-# Initialize the OpenAI client (no need to cache this if it's lightweight)
+# Initialize the OpenAI client globally
 client = OpenAI()
 
 # ----------------------------
@@ -27,7 +17,7 @@ st.set_page_config(
 )
 
 # ----------------------------
-# Session State Initialization (per user)
+# Session State Initialization (if not already set)
 # ----------------------------
 default_state = {
     "messages": [],
@@ -39,23 +29,22 @@ default_state = {
     "language": "",
     "assistant": None,
     "thread": None,
+    "processing": False,
 }
 for key, value in default_state.items():
     if key not in st.session_state:
         st.session_state[key] = value
 
 # ----------------------------
-# Initialize Assistant and Thread
+# Initialize OpenAI Assistant and Thread (per session)
 # ----------------------------
-# Retrieve the static assistant from the cache.
-if st.session_state.assistant is None:
-    st.session_state.assistant = get_openai_assistant()
-# Create a new thread for the user (do not cache this globally)
-if st.session_state.thread is None:
+if st.session_state.assistant is None or st.session_state.thread is None:
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+    st.session_state.assistant = openai.beta.assistants.retrieve(os.getenv("OPENAI_ASSISTANT"))
     st.session_state.thread = client.beta.threads.create()
 
 # ----------------------------
-# Retrieve Query Parameters
+# Retrieve URL Parameters (once)
 # ----------------------------
 params = st.query_params
 st.session_state.fname = params.get("fname", "Unknown")
@@ -97,9 +86,13 @@ with st.expander(lang_translations["expander_title"]):
         if st.button(button_text):
             st.session_state.prompt = lang_translations["prompts"][idx]
 
-typed_input = st.chat_input(lang_translations["typed_input_placeholder"])
-if typed_input:
-    st.session_state.prompt = typed_input
+# Only show the chat input if not processing a previous request
+if not st.session_state.processing:
+    typed_input = st.chat_input(lang_translations["typed_input_placeholder"])
+    if typed_input:
+        st.session_state.prompt = typed_input
+else:
+    st.info("Please wait while the assistant is processing your previous request...")
 
 # Display conversation history
 for message in st.session_state.messages:
@@ -114,18 +107,10 @@ for message in st.session_state.messages:
 # ----------------------------
 # Process New Input and Stream Assistant Response
 # ----------------------------
-
-# Initialize the processing flag if not present
-if "processing" not in st.session_state:
-    st.session_state.processing = False
-
-# Only process input if there's a prompt and we're not already processing
 if st.session_state.prompt and not st.session_state.processing:
-    # Immediately capture and clear the prompt
+    # Immediately capture and clear the prompt to prevent later submissions from interfering
     current_prompt = st.session_state.prompt
     st.session_state.prompt = ""
-    
-    # Set the processing flag
     st.session_state.processing = True
 
     # Append the captured prompt to the conversation history
@@ -137,7 +122,9 @@ if st.session_state.prompt and not st.session_state.processing:
         container = st.empty()
         # Record the user's message in the thread
         st.session_state.thread_messages = client.beta.threads.messages.create(
-            st.session_state.thread.id, role="user", content=current_prompt
+            st.session_state.thread.id,
+            role="user",
+            content=current_prompt
         )
         # Start streaming the assistant's response from OpenAI
         stream = client.beta.threads.runs.create(
@@ -159,5 +146,5 @@ if st.session_state.prompt and not st.session_state.processing:
         # Append the assistant's response to the conversation history
         st.session_state.messages.append({"role": "assistant", "content": response})
 
-    # Reset the processing flag once finished
+    # Reset processing flag
     st.session_state.processing = False
