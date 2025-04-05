@@ -3,7 +3,7 @@ import os
 import streamlit as st
 from openai import OpenAI
 import uuid
-import translations_spiritual as translations 
+from translations_spiritual import translations 
 
 client = OpenAI()
 
