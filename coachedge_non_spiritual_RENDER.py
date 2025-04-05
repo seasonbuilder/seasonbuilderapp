@@ -3,8 +3,20 @@ import openai
 import streamlit as st
 from openai import OpenAI
 import uuid
-from translation_non_spiritual import translations  # Ensure this file defines your translations dictionary
+from translation_non_spiritual import translations  # Your translations file
 
+# ----------------------------
+# Cache the static OpenAI assistant
+# ----------------------------
+@st.cache_resource
+def get_openai_assistant():
+    # Set up the API key (static for all users)
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+    # Retrieve and return the assistant (static object)
+    return openai.beta.assistants.retrieve(os.getenv("OPENAI_ASSISTANT"))
+
+# Initialize the OpenAI client (no need to cache this if it's lightweight)
+client = OpenAI()
 
 # ----------------------------
 # Page Configuration
@@ -14,11 +26,8 @@ st.set_page_config(
     layout="wide"
 )
 
-# Initialize the OpenAI client globally
-client = OpenAI()
-
 # ----------------------------
-# Session State Initialization
+# Session State Initialization (per user)
 # ----------------------------
 default_state = {
     "messages": [],
@@ -36,15 +45,17 @@ for key, value in default_state.items():
         st.session_state[key] = value
 
 # ----------------------------
-# Initialize OpenAI Assistant and Thread (Only Once)
+# Initialize Assistant and Thread
 # ----------------------------
-if st.session_state.assistant is None or st.session_state.thread is None:
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-    st.session_state.assistant = openai.beta.assistants.retrieve(os.getenv("OPENAI_ASSISTANT"))
+# Retrieve the static assistant from the cache.
+if st.session_state.assistant is None:
+    st.session_state.assistant = get_openai_assistant()
+# Create a new thread for the user (do not cache this globally)
+if st.session_state.thread is None:
     st.session_state.thread = client.beta.threads.create()
 
 # ----------------------------
-# Retrieve Query Parameters Once
+# Retrieve Query Parameters
 # ----------------------------
 params = st.query_params
 st.session_state.fname = params.get("fname", "Unknown")
@@ -54,11 +65,11 @@ st.session_state.role = params.get("role", "Unknown")
 st.session_state.language = params.get("language", "Unknown")
 st.session_state.prompt = params.get("prompt", "")
 
-# Extract language from parentheses if provided (e.g., "English (English)")
+# Extract language from parentheses if provided
 if "(" in st.session_state.language and ")" in st.session_state.language:
     lang = st.session_state.language.split("(")[1].split(")")[0]
 else:
-    lang = st.session_state.language if st.session_state.language else "English"
+    lang = st.session_state.language or "English"
 
 # ----------------------------
 # Additional Instructions for the Assistant
@@ -79,7 +90,6 @@ lang_translations = translations.get(lang, translations["English"])
 # ----------------------------
 # Render the Chat Interface
 # ----------------------------
-
 st.markdown(lang_translations["ask_question"])
 
 with st.expander(lang_translations["expander_title"]):
@@ -102,23 +112,18 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 # ----------------------------
-# Process New Input and Stream Response
+# Process New Input and Stream Assistant Response
 # ----------------------------
 if st.session_state.prompt:
-    # Append user's prompt to conversation history
     st.session_state.messages.append({"role": "user", "content": st.session_state.prompt})
     with st.chat_message("user", avatar="https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png"):
         st.markdown(st.session_state.prompt)
     
     with st.chat_message("assistant", avatar="https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png"):
         container = st.empty()
-        # Record user's message in the thread
         st.session_state.thread_messages = client.beta.threads.messages.create(
-            st.session_state.thread.id,
-            role="user",
-            content=st.session_state.prompt
+            st.session_state.thread.id, role="user", content=st.session_state.prompt
         )
-        # Stream assistant's response from OpenAI
         stream = client.beta.threads.runs.create(
             assistant_id=st.session_state.assistant.id,
             thread_id=st.session_state.thread.id,
