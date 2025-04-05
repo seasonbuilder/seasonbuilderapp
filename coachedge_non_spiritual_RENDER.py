@@ -2,9 +2,10 @@ import os
 import openai
 import streamlit as st
 from openai import OpenAI
-from translation_non_spiritual import translations  # Ensure this file exists and defines your translations
+import uuid
+from translations_spiritual import translations  # Ensure this file exists and defines your translations dictionary
 
-# Initialize OpenAI client globally
+# Initialize the OpenAI client globally
 client = OpenAI()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -29,7 +30,7 @@ default_state = {
     "language": "",
     "assistant": None,
     "thread": None,
-    "waiting_for_response": False,
+    "processing": False,
 }
 for key, value in default_state.items():
     if key not in st.session_state:
@@ -51,10 +52,10 @@ st.session_state.school = params.get("school", "Unknown")
 st.session_state.team = params.get("team", "Unknown")
 st.session_state.role = params.get("role", "Unknown")
 st.session_state.language = params.get("language", "Unknown")
-# Also load any pre-set prompt from URL if provided
+# Optionally load preset prompt from URL if provided:
 st.session_state.prompt = params.get("prompt", "")
 
-# Determine language (if provided with parentheses, extract inner value; otherwise default to "English")
+# Extract language from parentheses if provided; default to "English"
 if "(" in st.session_state.language and ")" in st.session_state.language:
     lang = st.session_state.language.split("(")[1].split(")")[0]
 else:
@@ -66,7 +67,9 @@ else:
 additional_instructions = (
     f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of "
     f"{st.session_state.team} at the {st.session_state.school}. Please note that their native language is "
-    f"{st.session_state.language}. When I ask a question, please respond in their native language."
+    f"{st.session_state.language}. THIS IS IMPORTANT ... When I ask a question or provide a response, please "
+    "respond in their native language regardless of the language they use to ask the question or provide a response. "
+    "Pay special attention not to accidentally use words from another language when providing a response."
 )
 
 # ----------------------------
@@ -75,7 +78,28 @@ additional_instructions = (
 lang_translations = translations.get(lang, translations["English"])
 
 # ----------------------------
-# Render Conversation History
+# Render the Chat Interface (Instructions & Topic Buttons)
+# ----------------------------
+st.markdown(lang_translations["ask_question"])
+with st.expander(lang_translations["expander_title"]):
+    for idx, button_text in enumerate(lang_translations["button_prompts"]):
+        if st.button(button_text, disabled=st.session_state.processing):
+            st.session_state.prompt = lang_translations["prompts"][idx]
+
+# ----------------------------
+# Chat Input: Use disabled parameter based on processing flag
+# ----------------------------
+# When processing, the chat input is disabled so that users cannot enter a new prompt.
+user_input = st.chat_input(
+    lang_translations["typed_input_placeholder"],
+    disabled=st.session_state.processing
+)
+if user_input:
+    st.session_state.prompt = user_input
+    st.session_state.processing = True  # Immediately set the processing flag
+
+# ----------------------------
+# Display Conversation History
 # ----------------------------
 for message in st.session_state.messages:
     avatar = (
@@ -87,62 +111,44 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 # ----------------------------
-# Chat Input (disabled if waiting for response)
-# ----------------------------
-# Use a container for the chat input so we can hide it when processing
-chat_input_container = st.empty()
-
-if st.session_state.waiting_for_response:
-    # If waiting, display a message and disable input
-    _ = chat_input_container.chat_input(lang_translations["typed_input_placeholder"], disabled=True)
-    st.info("Coach Edge is processing your previous response. Please wait...")
-else:
-    # If not waiting, allow user input
-    st.markdown(lang_translations["ask_question"])
-
-    with st.expander(lang_translations["expander_title"]):
-        for idx, button_text in enumerate(lang_translations["button_prompts"]):
-            if st.button(button_text):
-                st.session_state.prompt = lang_translations["prompts"][idx]
-
-    prompt = chat_input_container.chat_input(lang_translations["typed_input_placeholder"], disabled=False)
-    # If user submits a prompt and we are not waiting
-    if prompt:
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        st.session_state.waiting_for_response = True
-        st.rerun()  # Rerun to process the prompt
-
-# ----------------------------
 # Process the Prompt and Stream Assistant Response
 # ----------------------------
-# If waiting is True (i.e. a prompt has been submitted) and the last message is from the user, process it.
-if st.session_state.waiting_for_response and st.session_state.messages:
-    last_message = st.session_state.messages[-1]
-    if last_message["role"] == "user":
-        with st.chat_message("assistant", avatar="https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png"):
-            response_container = st.empty()
-            # Record the user's message in the thread
-            client.beta.threads.messages.create(
-                st.session_state.thread.id, role="user", content=last_message["content"]
-            )
-            # Start streaming the assistant's response
-            stream = client.beta.threads.runs.create(
-                assistant_id=st.session_state.assistant.id,
-                thread_id=st.session_state.thread.id,
-                additional_instructions=additional_instructions,
-                stream=True
-            )
-            delta = []
-            response_text = ""
-            if stream:
-                for event in stream:
-                    if event.data.object == "thread.message.delta":
-                        for content in event.data.delta.content:
-                            if content.type == "text":
-                                delta.append(content.text.value)
-                                response_text = "".join(delta).strip()
-                                response_container.markdown(response_text)
-            st.session_state.messages.append({"role": "assistant", "content": response_text})
-    # After processing, clear the waiting flag and rerun
-    st.session_state.waiting_for_response = False
-    st.rerun()
+if st.session_state.processing and st.session_state.prompt:
+    # Capture and clear the prompt to prevent reprocessing
+    current_prompt = st.session_state.prompt
+    st.session_state.prompt = ""
+    
+    # Append user's prompt to conversation history and display it
+    st.session_state.messages.append({"role": "user", "content": current_prompt})
+    with st.chat_message("user", avatar="https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png"):
+        st.markdown(current_prompt)
+    
+    with st.chat_message("assistant", avatar="https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png"):
+        container = st.empty()
+        # Record the user's message in the thread
+        st.session_state.thread_messages = client.beta.threads.messages.create(
+            st.session_state.thread.id, role="user", content=current_prompt
+        )
+        # Stream the assistant's response from OpenAI
+        stream = client.beta.threads.runs.create(
+            assistant_id=st.session_state.assistant.id,
+            thread_id=st.session_state.thread.id,
+            additional_instructions=additional_instructions,
+            stream=True
+        )
+        delta = []
+        response_text = ""
+        if stream:
+            for event in stream:
+                if event.data.object == "thread.message.delta":
+                    for content in event.data.delta.content:
+                        if content.type == "text":
+                            delta.append(content.text.value)
+                            response_text = "".join(delta).strip()
+                            container.markdown(response_text)
+        # Append the assistant's response to conversation history
+        st.session_state.messages.append({"role": "assistant", "content": response_text})
+    
+    # Reset processing flag so new input can be accepted
+    st.session_state.processing = False
+    st.experimental_rerun()  # Force a rerun to refresh the UI
