@@ -98,6 +98,13 @@ if st.session_state.waiting_for_response:
     st.info("Coach Edge is processing your previous response. Please wait...")
 else:
     # If not waiting, allow user input
+    st.markdown(lang_translations["ask_question"])
+
+    with st.expander(lang_translations["expander_title"]):
+        for idx, button_text in enumerate(lang_translations["button_prompts"]):
+            if st.button(button_text):
+                st.session_state.prompt = lang_translations["prompts"][idx]
+
     prompt = chat_input_container.chat_input(lang_translations["typed_input_placeholder"], disabled=False)
     # If user submits a prompt and we are not waiting
     if prompt:
