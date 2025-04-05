@@ -76,9 +76,7 @@ additional_instructions = (
 # ----------------------------
 lang_translations = translations.get(lang, translations["English"])
 
-# ----------------------------
-# Render the Chat Interface
-# ----------------------------
+# Render the chat interface (buttons, etc.)
 st.markdown(lang_translations["ask_question"])
 
 with st.expander(lang_translations["expander_title"]):
@@ -86,7 +84,7 @@ with st.expander(lang_translations["expander_title"]):
         if st.button(button_text):
             st.session_state.prompt = lang_translations["prompts"][idx]
 
-# Only show the chat input if not processing a previous request
+# Only allow new input when not processing
 if not st.session_state.processing:
     typed_input = st.chat_input(lang_translations["typed_input_placeholder"])
     if typed_input:
@@ -107,17 +105,26 @@ for message in st.session_state.messages:
 # ----------------------------
 # Process New Input and Stream Assistant Response
 # ----------------------------
+
+# Initialize the processing flag if not present
+if "processing" not in st.session_state:
+    st.session_state.processing = False
+
+# Only process new input if prompt exists and we're not already processing
 if st.session_state.prompt and not st.session_state.processing:
-    # Immediately capture and clear the prompt to prevent later submissions from interfering
-    current_prompt = st.session_state.prompt
+    # Capture the current prompt and clear it to avoid later interference
+    st.session_state.current_prompt = st.session_state.prompt
     st.session_state.prompt = ""
     st.session_state.processing = True
 
-    # Append the captured prompt to the conversation history
+    current_prompt = st.session_state.current_prompt
+
+    # Append user's prompt to conversation history
     st.session_state.messages.append({"role": "user", "content": current_prompt})
     with st.chat_message("user", avatar="https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png"):
         st.markdown(current_prompt)
 
+    # Process the prompt and stream the assistant's response
     with st.chat_message("assistant", avatar="https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png"):
         container = st.empty()
         # Record the user's message in the thread
@@ -126,7 +133,7 @@ if st.session_state.prompt and not st.session_state.processing:
             role="user",
             content=current_prompt
         )
-        # Start streaming the assistant's response from OpenAI
+        # Stream response from OpenAI
         stream = client.beta.threads.runs.create(
             assistant_id=st.session_state.assistant.id,
             thread_id=st.session_state.thread.id,
@@ -146,5 +153,6 @@ if st.session_state.prompt and not st.session_state.processing:
         # Append the assistant's response to the conversation history
         st.session_state.messages.append({"role": "assistant", "content": response})
 
-    # Reset processing flag
+    # Reset processing and clear the temporary current_prompt variable
     st.session_state.processing = False
+    st.session_state.current_prompt = ""
