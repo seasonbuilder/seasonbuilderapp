@@ -3,7 +3,7 @@ import openai
 import streamlit as st
 from openai import OpenAI
 import uuid
-from translation_non_spiritual import translations  # Ensure this file exists and defines your translations
+from translation_non_spiritual import translations  # Ensure this file exists with your translations
 
 # Initialize the OpenAI client globally
 client = OpenAI()
@@ -55,7 +55,7 @@ st.session_state.role = params.get("role", "Unknown")
 st.session_state.language = params.get("language", "Unknown")
 st.session_state.prompt = params.get("prompt", "")
 
-# Extract language from parentheses if provided; otherwise default to English
+# Extract language from parentheses if provided; default to English if empty
 if "(" in st.session_state.language and ")" in st.session_state.language:
     lang = st.session_state.language.split("(")[1].split(")")[0]
 else:
@@ -81,14 +81,13 @@ lang_translations = translations.get(lang, translations["English"])
 # Render the Chat Interface (Question, Topic Buttons)
 # ----------------------------
 st.markdown(lang_translations["ask_question"])
-
 with st.expander(lang_translations["expander_title"]):
     for idx, button_text in enumerate(lang_translations["button_prompts"]):
         if st.button(button_text):
             st.session_state.prompt = lang_translations["prompts"][idx]
 
 # ----------------------------
-# Chat Input Container: Only show if not processing
+# Chat Input Container: Show only if not processing
 # ----------------------------
 chat_input_container = st.empty()
 if not st.session_state.processing:
@@ -114,18 +113,20 @@ for message in st.session_state.messages:
 # Process New Input and Stream Assistant Response
 # ----------------------------
 if st.session_state.prompt and not st.session_state.processing:
-    # Capture and clear the prompt immediately
+    # Capture and immediately clear the prompt
     current_prompt = st.session_state.prompt
     st.session_state.prompt = ""
     st.session_state.processing = True
     st.session_state.current_prompt = current_prompt
+
+    # Clear/hide chat input container to prevent new input while processing
+    chat_input_container.empty()
 
     # Append user's prompt to conversation history and display it
     st.session_state.messages.append({"role": "user", "content": current_prompt})
     with st.chat_message("user", avatar="https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png"):
         st.markdown(current_prompt)
 
-    # Process the prompt and stream the assistant's response
     with st.chat_message("assistant", avatar="https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png"):
         container = st.empty()
         # Record the user's message in the thread
@@ -134,7 +135,7 @@ if st.session_state.prompt and not st.session_state.processing:
             role="user",
             content=current_prompt
         )
-        # Start streaming the response from OpenAI
+        # Start streaming the assistant's response from OpenAI
         stream = client.beta.threads.runs.create(
             assistant_id=st.session_state.assistant.id,
             thread_id=st.session_state.thread.id,
@@ -154,6 +155,6 @@ if st.session_state.prompt and not st.session_state.processing:
         # Append the assistant's response to conversation history
         st.session_state.messages.append({"role": "assistant", "content": response})
 
-    # Reset the processing flag and clear the temporary prompt storage
+    # Reset processing flags and temporary prompt
     st.session_state.processing = False
     st.session_state.current_prompt = ""
