@@ -6,6 +6,14 @@ import uuid
 from translation_non_spiritual import translations  # Ensure this file defines your translations dictionary
 
 
+# ----------------------------
+# Page Configuration
+# ----------------------------
+st.set_page_config(
+    page_title="Coach Edge - Virtual Life Coach",
+    layout="wide"
+)
+
 # Create a placeholder for the animated GIF
 loading_placeholder = st.empty()
 
@@ -15,13 +23,6 @@ loading_placeholder.image("https://static.wixstatic.com/media/b748e0_296304c79fd
 # Initialize the OpenAI client globally
 client = OpenAI()
 
-# ----------------------------
-# Page Configuration
-# ----------------------------
-st.set_page_config(
-    page_title="Coach Edge - Virtual Life Coach",
-    layout="wide"
-)
 
 # ----------------------------
 # Session State Initialization
