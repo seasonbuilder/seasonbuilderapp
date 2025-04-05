@@ -1,160 +1,98 @@
 import os
-import openai
 import streamlit as st
+import openai
 from openai import OpenAI
-import uuid
-from translation_non_spiritual import translations  # Ensure this file exists with your translations
+from translation_non_spiritual import translations
 
-# Initialize the OpenAI client globally
+# Initialize OpenAI client globally
 client = OpenAI()
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# ----------------------------
-# Page Configuration
-# ----------------------------
-st.set_page_config(
-    page_title="Coach Edge - Virtual Life Coach",
-    layout="wide"
-)
-
-# ----------------------------
-# Session State Initialization (if not already set)
-# ----------------------------
-default_state = {
-    "messages": [],
-    "prompt": "",
-    "fname": "",
-    "school": "",
-    "team": "",
-    "role": "",
-    "language": "",
-    "assistant": None,
-    "thread": None,
-    "processing": False,
-    "current_prompt": ""
-}
-for key, value in default_state.items():
-    if key not in st.session_state:
-        st.session_state[key] = value
-
-# ----------------------------
-# Initialize OpenAI Assistant and Thread (per session)
-# ----------------------------
-if st.session_state.assistant is None or st.session_state.thread is None:
-    openai.api_key = os.getenv("OPENAI_API_KEY")
+# Session state initialization
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+if "processing" not in st.session_state:
+    st.session_state.processing = False
+if "assistant" not in st.session_state:
     st.session_state.assistant = openai.beta.assistants.retrieve(os.getenv("OPENAI_ASSISTANT"))
+if "thread" not in st.session_state:
     st.session_state.thread = client.beta.threads.create()
 
-# ----------------------------
-# Retrieve Query Parameters (once)
-# ----------------------------
+# Retrieve URL parameters once
 params = st.query_params
-st.session_state.fname = params.get("fname", "Unknown")
-st.session_state.school = params.get("school", "Unknown")
-st.session_state.team = params.get("team", "Unknown")
-st.session_state.role = params.get("role", "Unknown")
-st.session_state.language = params.get("language", "Unknown")
-st.session_state.prompt = params.get("prompt", "")
+fname = params.get("fname", "Unknown")
+school = params.get("school", "Unknown")
+team = params.get("team", "Unknown")
+role = params.get("role", "Unknown")
+language = params.get("language", "English")
+prompt_param = params.get("prompt", "")
 
-# Extract language from parentheses if provided; default to English if empty
-if "(" in st.session_state.language and ")" in st.session_state.language:
-    lang = st.session_state.language.split("(")[1].split(")")[0]
-else:
-    lang = st.session_state.language if st.session_state.language else "English"
-
-# ----------------------------
-# Additional Instructions for the Assistant
-# ----------------------------
-additional_instructions = (
-    f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of "
-    f"{st.session_state.team} at the {st.session_state.school}. Please note that their native language is "
-    f"{st.session_state.language}. THIS IS IMPORTANT ... When I ask a question or provide a response, please "
-    "respond in their native language regardless of the language they use to ask the question or provide a response. "
-    "Pay special attention not to accidentally use words from another language when providing a response."
-)
-
-# ----------------------------
-# Load Translations from External File
-# ----------------------------
+# Get language translations
+lang = language.split("(")[-1].replace(")", "") if "(" in language else language
 lang_translations = translations.get(lang, translations["English"])
 
-# ----------------------------
-# Render the Chat Interface (Question, Topic Buttons)
-# ----------------------------
+# Display UI
 st.markdown(lang_translations["ask_question"])
 with st.expander(lang_translations["expander_title"]):
     for idx, button_text in enumerate(lang_translations["button_prompts"]):
-        if st.button(button_text):
+        if st.button(button_text, disabled=st.session_state.processing):
             st.session_state.prompt = lang_translations["prompts"][idx]
 
-# ----------------------------
-# Chat Input Container: Show only if not processing
-# ----------------------------
+# Chat Input Container (conditionally displayed)
 chat_input_container = st.empty()
-if not st.session_state.processing:
-    typed_input = chat_input_container.chat_input(lang_translations["typed_input_placeholder"])
-    if typed_input:
-        st.session_state.prompt = typed_input
-else:
-    chat_input_container.info("Processing your previous request, please wait...")
 
-# ----------------------------
-# Display Conversation History
-# ----------------------------
+# Only show input if not processing
+if not st.session_state.processing:
+    user_input = chat_input_container.chat_input(lang_translations["typed_input_placeholder"])
+    if user_input:
+        st.session_state.prompt = user_input
+        st.session_state.processing = True  # Set processing flag immediately
+else:
+    chat_input_container.info("⏳ Please wait while Coach Edge responds...")
+
+# Display chat history (always)
 for message in st.session_state.messages:
-    avatar = (
-        "https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png"
-        if message["role"] == "user"
-        else "https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png"
-    )
-    with st.chat_message(message["role"], avatar=avatar):
+    avatar_url = "https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png" if message["role"] == "user" else "https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png"
+    with st.chat_message(message["role"], avatar=avatar_url):
         st.markdown(message["content"])
 
-# ----------------------------
-# Process New Input and Stream Assistant Response
-# ----------------------------
-if st.session_state.prompt and not st.session_state.processing:
-    # Capture and immediately clear the prompt
+# If there's a prompt and we are in processing mode, process it
+if st.session_state.processing and "prompt" in st.session_state:
     current_prompt = st.session_state.prompt
-    st.session_state.prompt = ""
-    st.session_state.processing = True
-    st.session_state.current_prompt = current_prompt
+    del st.session_state.prompt  # Clear immediately to avoid conflicts
 
-    # Clear/hide chat input container to prevent new input while processing
-    chat_input_container.empty()
-
-    # Append user's prompt to conversation history and display it
+    # Display user's prompt immediately
     st.session_state.messages.append({"role": "user", "content": current_prompt})
     with st.chat_message("user", avatar="https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png"):
         st.markdown(current_prompt)
 
+    # Display assistant avatar immediately
     with st.chat_message("assistant", avatar="https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png"):
-        container = st.empty()
-        # Record the user's message in the thread
-        st.session_state.thread_messages = client.beta.threads.messages.create(
-            st.session_state.thread.id,
-            role="user",
-            content=current_prompt
+        response_placeholder = st.empty()
+
+        # Create message in thread
+        client.beta.threads.messages.create(
+            st.session_state.thread.id, role="user", content=current_prompt
         )
-        # Start streaming the assistant's response from OpenAI
+
+        # Stream the response
         stream = client.beta.threads.runs.create(
             assistant_id=st.session_state.assistant.id,
             thread_id=st.session_state.thread.id,
-            additional_instructions=additional_instructions,
+            additional_instructions=f"User's name: {fname}. They are a {role} in {team} at {school}. Respond in their native language ({language}).",
             stream=True
         )
-        delta = []
-        response = ""
-        if stream:
-            for event in stream:
-                if event.data.object == "thread.message.delta":
-                    for content in event.data.delta.content:
-                        if content.type == "text":
-                            delta.append(content.text.value)
-                            response = "".join(delta).strip()
-                            container.markdown(response)
-        # Append the assistant's response to conversation history
-        st.session_state.messages.append({"role": "assistant", "content": response})
 
-    # Reset processing flags and temporary prompt
-    st.session_state.processing = False
-    st.session_state.current_prompt = ""
+        full_response = ""
+        for event in stream:
+            if event.data.object == "thread.message.delta":
+                for content in event.data.delta.content:
+                    if content.type == "text":
+                        full_response += content.text.value
+                        response_placeholder.markdown(full_response)
+
+        # Save final response
+        st.session_state.messages.append({"role": "assistant", "content": full_response})
+
+    st.session_state.processing = False  # Reset flag once complete
+    st.rerun()  # Force a clean rerun to refresh UI immediately after response completion
