@@ -14,15 +14,8 @@ st.set_page_config(
     layout="wide"
 )
 
-# Create a placeholder for the animated GIF
-loading_placeholder = st.empty()
-
-# Display the animated GIF (this does not block or delay the app)
-loading_placeholder.image("https://static.wixstatic.com/media/b748e0_296304c79fd84576ae5609d37f1e0f2d~mv2.gif", width=150)
-
 # Initialize the OpenAI client globally
 client = OpenAI()
-
 
 # ----------------------------
 # Session State Initialization
@@ -86,9 +79,6 @@ lang_translations = translations.get(lang, translations["English"])
 # ----------------------------
 # Render the Chat Interface
 # ----------------------------
-
-# Optionally, clear the placeholder after the components have loaded
-loading_placeholder.empty()
 
 st.markdown(lang_translations["ask_question"])
 
