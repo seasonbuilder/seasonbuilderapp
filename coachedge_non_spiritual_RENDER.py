@@ -209,10 +209,11 @@ def process_user_prompt(prompt, additional_instructions):
     final_response = "".join(response_chunks).strip()
     st.session_state.messages.append({"role": "assistant", "content": final_response})
     
-    # Clear the submitted prompt and re-enable the chat input.
+    # Clear the submitted prompt and re-enable chat input.
     st.session_state.submitted_prompt = ""
     st.session_state.processing = False
     st.write("DEBUG: Finished processing prompt.")  # DEBUG
+    st.rerun()  # Force a UI refresh so the chat input is re-enabled.
 
 def chat_submit_callback():
     """Callback invoked on chat input submission.
