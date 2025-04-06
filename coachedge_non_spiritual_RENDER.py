@@ -175,7 +175,6 @@ def display_chat_messages():
 
 def process_user_prompt(prompt, additional_instructions):
     """Send the user prompt to the assistant and stream the response."""
-    st.write("DEBUG: Processing prompt...")  # DEBUG
     # Append and display the user's message.
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar=USER_AVATAR):
@@ -189,7 +188,6 @@ def process_user_prompt(prompt, additional_instructions):
     response_chunks = []
     with st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
         container = st.empty()
-        st.write("DEBUG: Calling OpenAI API...")  # DEBUG
         stream = client.beta.threads.runs.create(
             assistant_id=st.session_state.assistant.id,
             thread_id=st.session_state.thread.id,
@@ -204,7 +202,6 @@ def process_user_prompt(prompt, additional_instructions):
                             response_chunks.append(content.text.value)
                             current_response = "".join(response_chunks).strip()
                             container.markdown(current_response)
-        st.write("DEBUG: API call complete.")  # DEBUG
 
     final_response = "".join(response_chunks).strip()
     st.session_state.messages.append({"role": "assistant", "content": final_response})
@@ -212,7 +209,6 @@ def process_user_prompt(prompt, additional_instructions):
     # Clear the submitted prompt and re-enable chat input.
     st.session_state.submitted_prompt = ""
     st.session_state.processing = False
-    st.write("DEBUG: Finished processing prompt.")  # DEBUG
     st.rerun()  # Force a UI refresh so the chat input is re-enabled.
 
 def chat_submit_callback():
@@ -221,7 +217,6 @@ def chat_submit_callback():
     """
     st.session_state.submitted_prompt = st.session_state.user_input
     st.session_state.processing = True
-    st.write("DEBUG: Chat input submitted; submitted_prompt set and processing flag enabled.")  # DEBUG
 
 # Main execution flow
 initialize_openai_assistant()
@@ -239,7 +234,6 @@ with st.expander(lang_translations["expander_title"]):
         if st.button(button_text):
             st.session_state.submitted_prompt = lang_translations["prompts"][idx]
             st.session_state.processing = True
-            st.write("DEBUG: Button prompt selected; submitted_prompt set and processing flag enabled.")  # DEBUG
 
 # Display existing chat messages.
 display_chat_messages()
@@ -254,13 +248,8 @@ else:
         on_submit=chat_submit_callback
     )
 
-# Debug: Check session state values before processing prompt.
-st.write("DEBUG: Bottom block values: submitted_prompt =", st.session_state.submitted_prompt,
-         ", processing =", st.session_state.processing)
-
 # Process the prompt if set.
 if st.session_state.submitted_prompt and st.session_state.processing:
-    st.write("DEBUG: Detected submitted_prompt in session_state; processing it now.")  # DEBUG
     additional_instructions = (
         f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of "
         f"{st.session_state.team} at the {st.session_state.school}. Please note that their native language is "
