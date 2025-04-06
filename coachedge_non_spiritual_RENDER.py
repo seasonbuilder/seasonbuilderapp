@@ -129,13 +129,12 @@ st.set_page_config(page_title="Coach Edge - Virtual Life Coach", layout="wide")
 defaults = {
     "messages": [],
     "prompt": "",
-    "chat_input_value": "",
     "fname": "",
     "school": "",
     "team": "",
     "role": "",
     "language": "",
-    "processing": False,  # Controls whether the chat input is disabled
+    "processing": False,  # Flag that controls whether the chat input is enabled
 }
 for key, default in defaults.items():
     st.session_state.setdefault(key, default)
@@ -212,18 +211,9 @@ def process_user_prompt(prompt, additional_instructions):
     final_response = "".join(response_chunks).strip()
     st.session_state.messages.append({"role": "assistant", "content": final_response})
     
-    # Re-enable chat input and clear the prompt (do not modify chat_input_value)
+    # Re-enable chat input and clear the prompt
     st.session_state.processing = False
     st.session_state.prompt = ""
-
-
-def chat_submit_callback():
-    """Callback invoked on chat input submission.
-    
-    It copies the chat input value to the prompt and disables further input immediately.
-    """
-    st.session_state.prompt = st.session_state.chat_input_value
-    st.session_state.processing = True
 
 
 # Main execution flow
@@ -243,19 +233,21 @@ with st.expander(lang_translations["expander_title"]):
             st.session_state.prompt = lang_translations["prompts"][idx]
             st.session_state.processing = True
 
-# Display existing chat messages
+# Display all previous chat messages
 display_chat_messages()
 
-# Render the chat input widget with the on_submit callback.
-# If processing is True, the widget will be rendered as disabled.
-_ = st.chat_input(
-    lang_translations["typed_input_placeholder"],
-    key="chat_input_value",
-    on_submit=chat_submit_callback,
-    disabled=st.session_state.processing
-)
+# Render chat input:
+# If processing is True, render the widget as disabled;
+# otherwise, capture new user input.
+if st.session_state.processing:
+    st.chat_input(lang_translations["typed_input_placeholder"], disabled=True)
+else:
+    user_input = st.chat_input(lang_translations["typed_input_placeholder"])
+    if user_input:
+        st.session_state.prompt = user_input
+        st.session_state.processing = True
 
-# If a prompt is set and we're processing, call the API to generate a response.
+# Process the prompt if one exists and processing is True
 if st.session_state.prompt and st.session_state.processing:
     additional_instructions = (
         f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of "
@@ -265,3 +257,4 @@ if st.session_state.prompt and st.session_state.processing:
         "Pay special attention not to accidentally use words from another language when providing a response."
     )
     process_user_prompt(st.session_state.prompt, additional_instructions)
+    
