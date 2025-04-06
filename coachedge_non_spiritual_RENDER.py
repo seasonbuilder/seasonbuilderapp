@@ -133,7 +133,8 @@ defaults = {
     "school": "",
     "team": "",
     "role": "",
-    "language": ""
+    "language": "",
+    "processing": False,  # new flag to control chat_input
 }
 for key, default in defaults.items():
     st.session_state.setdefault(key, default)
@@ -179,6 +180,9 @@ def display_chat_messages():
 
 def process_user_prompt(prompt, additional_instructions):
     """Send the user prompt to the assistant and stream the response."""
+    # Set processing flag to disable further input
+    st.session_state.processing = True
+
     # Append and display the user's message
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar=USER_AVATAR):
@@ -209,6 +213,10 @@ def process_user_prompt(prompt, additional_instructions):
 
     final_response = "".join(response_chunks).strip()
     st.session_state.messages.append({"role": "assistant", "content": final_response})
+    
+    # Reset processing flag and clear prompt to allow new input
+    st.session_state.processing = False
+    st.session_state.prompt = ""
 
 
 # Main execution flow
@@ -227,16 +235,16 @@ with st.expander(lang_translations["expander_title"]):
         if st.button(button_text):
             st.session_state.prompt = lang_translations["prompts"][idx]
 
-# Check for typed input from the chat input box
-typed_input = st.chat_input(lang_translations["typed_input_placeholder"])
-if typed_input:
+# Chat input is now disabled when processing is True
+typed_input = st.chat_input(lang_translations["typed_input_placeholder"], disabled=st.session_state.processing)
+if typed_input and not st.session_state.processing:
     st.session_state.prompt = typed_input
 
 # Display all previous chat messages
 display_chat_messages()
 
-# If there's a prompt, build the instructions and process the prompt
-if st.session_state.prompt:
+# Process prompt if one exists and we're not already processing another request
+if st.session_state.prompt and not st.session_state.processing:
     additional_instructions = (
         f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of "
         f"{st.session_state.team} at the {st.session_state.school}. Please note that their native language is "
