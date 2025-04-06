@@ -134,21 +134,17 @@ defaults = {
     "team": "",
     "role": "",
     "language": "",
-    "processing": False,  # Flag that controls whether the chat input is enabled
+    "processing": False,  # When True, chat_input is disabled
 }
 for key, default in defaults.items():
     st.session_state.setdefault(key, default)
-
 
 def initialize_openai_assistant():
     """Initialize the OpenAI assistant and thread if not already set."""
     if "assistant" not in st.session_state or "thread" not in st.session_state:
         openai.api_key = os.getenv("OPENAI_API_KEY")
-        st.session_state.assistant = openai.beta.assistants.retrieve(
-            os.getenv("OPENAI_ASSISTANT")
-        )
+        st.session_state.assistant = openai.beta.assistants.retrieve(os.getenv("OPENAI_ASSISTANT"))
         st.session_state.thread = client.beta.threads.create()
-
 
 def get_url_parameters():
     """Retrieve URL parameters and update session state."""
@@ -158,8 +154,8 @@ def get_url_parameters():
     st.session_state.team = params.get("team", "Unknown")
     st.session_state.role = params.get("role", "Unknown")
     st.session_state.language = params.get("language", "Unknown")
+    # If a prompt is provided via URL, use it.
     st.session_state.prompt = params.get("prompt", "")
-
 
 def extract_language(lang_str):
     """Extract language from a string formatted as '... (Language)'."""
@@ -168,7 +164,6 @@ def extract_language(lang_str):
         return parts[1].split(')')[0]
     return "Unknown"
 
-
 def display_chat_messages():
     """Display all chat messages stored in session state."""
     for message in st.session_state.messages:
@@ -176,7 +171,6 @@ def display_chat_messages():
         avatar = USER_AVATAR if role == "user" else ASSISTANT_AVATAR
         with st.chat_message(role, avatar=avatar):
             st.markdown(message["content"])
-
 
 def process_user_prompt(prompt, additional_instructions):
     """Send the user prompt to the assistant and stream the response."""
@@ -211,10 +205,16 @@ def process_user_prompt(prompt, additional_instructions):
     final_response = "".join(response_chunks).strip()
     st.session_state.messages.append({"role": "assistant", "content": final_response})
     
-    # Re-enable chat input and clear the prompt
-    st.session_state.processing = False
+    # Re-enable the chat input by clearing the prompt and processing flag.
     st.session_state.prompt = ""
+    st.session_state.processing = False
 
+def chat_submit_callback():
+    """Callback invoked on chat input submission.
+    It copies the chat input value into the session state prompt and disables further input.
+    """
+    st.session_state.prompt = st.session_state.user_input  # 'user_input' is the key for the chat_input widget
+    st.session_state.processing = True
 
 # Main execution flow
 initialize_openai_assistant()
@@ -226,28 +226,30 @@ lang_translations = translations.get(lang, translations["English"])
 
 st.markdown(lang_translations["ask_question"])
 
-# Display buttons with preset prompts inside an expander
+# Display buttons with preset prompts inside an expander.
+# Clicking a button immediately sets the prompt and disables further input.
 with st.expander(lang_translations["expander_title"]):
     for idx, button_text in enumerate(lang_translations["button_prompts"]):
         if st.button(button_text):
             st.session_state.prompt = lang_translations["prompts"][idx]
             st.session_state.processing = True
 
-# Display all previous chat messages
+# Display existing chat messages.
 display_chat_messages()
 
-# Render chat input:
-# If processing is True, render the widget as disabled;
-# otherwise, capture new user input.
+# Render chat input.
+# When processing is True, the chat input is disabled.
 if st.session_state.processing:
     st.chat_input(lang_translations["typed_input_placeholder"], disabled=True)
 else:
-    user_input = st.chat_input(lang_translations["typed_input_placeholder"])
-    if user_input:
-        st.session_state.prompt = user_input
-        st.session_state.processing = True
+    # Use the on_submit callback so that as soon as input is submitted, it is processed.
+    _ = st.chat_input(
+        lang_translations["typed_input_placeholder"],
+        key="user_input",
+        on_submit=chat_submit_callback
+    )
 
-# Process the prompt if one exists and processing is True
+# If a prompt is set and processing is True, process it.
 if st.session_state.prompt and st.session_state.processing:
     additional_instructions = (
         f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of "
@@ -257,4 +259,3 @@ if st.session_state.prompt and st.session_state.processing:
         "Pay special attention not to accidentally use words from another language when providing a response."
     )
     process_user_prompt(st.session_state.prompt, additional_instructions)
-    
