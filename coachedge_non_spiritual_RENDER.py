@@ -174,12 +174,13 @@ def display_chat_messages():
 
 def process_user_prompt(prompt, additional_instructions):
     """Send the user prompt to the assistant and stream the response."""
-    # Append and display the user's message.
+    st.write("DEBUG: Processing prompt...")  # DEBUG
+    # Append and display the user's message
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar=USER_AVATAR):
         st.markdown(prompt)
 
-    # Send the user's prompt to the thread.
+    # Send the user prompt to the thread
     st.session_state.thread_messages = client.beta.threads.messages.create(
         st.session_state.thread.id, role="user", content=prompt
     )
@@ -187,6 +188,7 @@ def process_user_prompt(prompt, additional_instructions):
     response_chunks = []
     with st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
         container = st.empty()
+        st.write("DEBUG: Calling OpenAI API...")  # DEBUG
         stream = client.beta.threads.runs.create(
             assistant_id=st.session_state.assistant.id,
             thread_id=st.session_state.thread.id,
@@ -201,13 +203,15 @@ def process_user_prompt(prompt, additional_instructions):
                             response_chunks.append(content.text.value)
                             current_response = "".join(response_chunks).strip()
                             container.markdown(current_response)
+        st.write("DEBUG: API call complete.")  # DEBUG
 
     final_response = "".join(response_chunks).strip()
     st.session_state.messages.append({"role": "assistant", "content": final_response})
     
-    # Clear the prompt and re-enable chat input.
+    # Clear the prompt and re-enable the chat input
     st.session_state.prompt = ""
     st.session_state.processing = False
+    st.write("DEBUG: Finished processing prompt.")  # DEBUG
 
 def chat_submit_callback():
     """Callback invoked on chat input submission.
@@ -215,12 +219,13 @@ def chat_submit_callback():
     """
     st.session_state.prompt = st.session_state.user_input
     st.session_state.processing = True
+    st.write("DEBUG: Chat input submitted; prompt set and processing flag enabled.")  # DEBUG
 
-# Main execution flow.
+# Main execution flow
 initialize_openai_assistant()
 get_url_parameters()
 
-# Get language translations.
+# Get language translations
 lang = extract_language(st.session_state.language)
 lang_translations = translations.get(lang, translations["English"])
 
@@ -232,21 +237,24 @@ with st.expander(lang_translations["expander_title"]):
         if st.button(button_text):
             st.session_state.prompt = lang_translations["prompts"][idx]
             st.session_state.processing = True
+            st.write("DEBUG: Button prompt selected; prompt set and processing flag enabled.")  # DEBUG
 
-# Display existing chat messages.
+# Display existing chat messages
 display_chat_messages()
 
 # Render the chat input widget.
-# If processing is True, render the input as disabled.
 if st.session_state.processing:
     st.chat_input(lang_translations["typed_input_placeholder"], disabled=True)
 else:
-    user_input = st.chat_input(lang_translations["typed_input_placeholder"], key="user_input", on_submit=chat_submit_callback)
-    # Note: When the chat input widget is submitted, its on_submit callback fires,
-    # updating st.session_state.prompt and setting processing to True.
-    
-# If a prompt is set and processing is active, process it.
+    _ = st.chat_input(
+        lang_translations["typed_input_placeholder"],
+        key="user_input",
+        on_submit=chat_submit_callback
+    )
+
+# Process the prompt if set
 if st.session_state.prompt and st.session_state.processing:
+    st.write("DEBUG: Detected prompt in session_state; processing it now.")  # DEBUG
     additional_instructions = (
         f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of "
         f"{st.session_state.team} at the {st.session_state.school}. Please note that their native language is "
