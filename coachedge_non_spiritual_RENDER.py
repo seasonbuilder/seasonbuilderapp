@@ -154,7 +154,7 @@ def get_url_parameters():
     st.session_state.team = params.get("team", "Unknown")
     st.session_state.role = params.get("role", "Unknown")
     st.session_state.language = params.get("language", "Unknown")
-    # Optionally set an initial prompt from URL params
+    # If a prompt is provided via URL, use it.
     st.session_state.prompt = params.get("prompt", "")
 
 def extract_language(lang_str):
@@ -174,12 +174,12 @@ def display_chat_messages():
 
 def process_user_prompt(prompt, additional_instructions):
     """Send the user prompt to the assistant and stream the response."""
-    # Append and display the user's message
+    # Append and display the user's message.
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar=USER_AVATAR):
         st.markdown(prompt)
 
-    # Send the user prompt to the thread
+    # Send the user's prompt to the thread.
     st.session_state.thread_messages = client.beta.threads.messages.create(
         st.session_state.thread.id, role="user", content=prompt
     )
@@ -205,55 +205,47 @@ def process_user_prompt(prompt, additional_instructions):
     final_response = "".join(response_chunks).strip()
     st.session_state.messages.append({"role": "assistant", "content": final_response})
     
-    # Clear prompt and re-enable chat input, then rerun to update the UI
+    # Clear the prompt and re-enable chat input.
     st.session_state.prompt = ""
     st.session_state.processing = False
-    st.rerun()
 
 def chat_submit_callback():
     """Callback invoked on chat input submission.
-    
-    It copies the chat input value into the session state prompt, disables further input,
-    and forces a rerun to update the UI.
+    It copies the chat input value into the session state prompt and disables further input.
     """
     st.session_state.prompt = st.session_state.user_input
     st.session_state.processing = True
-    st.rerun()
 
-# Main execution flow
+# Main execution flow.
 initialize_openai_assistant()
 get_url_parameters()
 
-# Get language translations
+# Get language translations.
 lang = extract_language(st.session_state.language)
 lang_translations = translations.get(lang, translations["English"])
 
 st.markdown(lang_translations["ask_question"])
 
-# Display buttons with preset prompts inside an expander.
-# When clicked, they immediately set the prompt, disable input, and force a rerun.
+# Display preset prompt buttons inside an expander.
 with st.expander(lang_translations["expander_title"]):
     for idx, button_text in enumerate(lang_translations["button_prompts"]):
         if st.button(button_text):
             st.session_state.prompt = lang_translations["prompts"][idx]
             st.session_state.processing = True
-            st.rerun()
 
 # Display existing chat messages.
 display_chat_messages()
 
-# Render the chat input.
-# If processing is True, the widget is rendered as disabled.
+# Render the chat input widget.
+# If processing is True, render the input as disabled.
 if st.session_state.processing:
     st.chat_input(lang_translations["typed_input_placeholder"], disabled=True)
 else:
-    _ = st.chat_input(
-        lang_translations["typed_input_placeholder"],
-        key="user_input",
-        on_submit=chat_submit_callback
-    )
-
-# If a prompt is set and processing is active, call the API to generate a response.
+    user_input = st.chat_input(lang_translations["typed_input_placeholder"], key="user_input", on_submit=chat_submit_callback)
+    # Note: When the chat input widget is submitted, its on_submit callback fires,
+    # updating st.session_state.prompt and setting processing to True.
+    
+# If a prompt is set and processing is active, process it.
 if st.session_state.prompt and st.session_state.processing:
     additional_instructions = (
         f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of "
