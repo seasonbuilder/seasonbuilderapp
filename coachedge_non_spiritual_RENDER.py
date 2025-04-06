@@ -108,7 +108,6 @@
 #                        container.markdown(response)
 #     st.session_state.messages.append({"role": "assistant", "content": response}) 
 #                                                           
-
 import os
 import openai
 import streamlit as st
@@ -134,7 +133,7 @@ defaults = {
     "team": "",
     "role": "",
     "language": "",
-    "processing": False,  # new flag to control chat input
+    "processing": False,  # Flag to control chat input state
 }
 for key, default in defaults.items():
     st.session_state.setdefault(key, default)
@@ -220,7 +219,7 @@ def process_user_prompt(prompt, additional_instructions):
 initialize_openai_assistant()
 get_url_parameters()
 
-# Extract the language code (or default to "Unknown")
+# Get language translations
 lang = extract_language(st.session_state.language)
 lang_translations = translations.get(lang, translations["English"])
 
@@ -232,11 +231,21 @@ with st.expander(lang_translations["expander_title"]):
         if st.button(button_text):
             st.session_state.prompt = lang_translations["prompts"][idx]
 
-# Display all previous chat messages
+# Display existing chat messages
 display_chat_messages()
 
-# Process the prompt if one exists and no prompt is currently being processed
+# Render chat input widget. It appears disabled if processing is True.
+typed_input = st.chat_input(
+    lang_translations["typed_input_placeholder"],
+    disabled=st.session_state.processing
+)
+# Update prompt if new input is provided
+if typed_input and not st.session_state.processing:
+    st.session_state.prompt = typed_input
+
+# Process the prompt if one exists and we're not already processing a request
 if st.session_state.prompt and not st.session_state.processing:
+    st.session_state.processing = True
     additional_instructions = (
         f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of "
         f"{st.session_state.team} at the {st.session_state.school}. Please note that their native language is "
@@ -244,14 +253,4 @@ if st.session_state.prompt and not st.session_state.processing:
         f"respond in their native language regardless of the language they use to ask the question or provide a response. "
         "Pay special attention not to accidentally use words from another language when providing a response."
     )
-    # Set the processing flag before calling the API so the chat input gets disabled on the next rerun
-    st.session_state.processing = True
     process_user_prompt(st.session_state.prompt, additional_instructions)
-
-# Render the chat input widget at the bottom. It will appear disabled if processing is True.
-typed_input = st.chat_input(
-    lang_translations["typed_input_placeholder"],
-    disabled=st.session_state.processing
-)
-if typed_input and not st.session_state.processing:
-    st.session_state.prompt = typed_input
