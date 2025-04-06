@@ -108,6 +108,7 @@
 #                        container.markdown(response)
 #     st.session_state.messages.append({"role": "assistant", "content": response}) 
 #                                                           
+
 import os
 import openai
 import streamlit as st
@@ -128,12 +129,13 @@ st.set_page_config(page_title="Coach Edge - Virtual Life Coach", layout="wide")
 defaults = {
     "messages": [],
     "prompt": "",
+    "chat_input_value": "",
     "fname": "",
     "school": "",
     "team": "",
     "role": "",
     "language": "",
-    "processing": False,  # Flag to control chat input state
+    "processing": False,  # Controls whether the chat input is disabled
 }
 for key, default in defaults.items():
     st.session_state.setdefault(key, default)
@@ -157,6 +159,7 @@ def get_url_parameters():
     st.session_state.team = params.get("team", "Unknown")
     st.session_state.role = params.get("role", "Unknown")
     st.session_state.language = params.get("language", "Unknown")
+    # Optionally, set an initial prompt from URL params if provided
     st.session_state.prompt = params.get("prompt", "")
 
 
@@ -210,9 +213,19 @@ def process_user_prompt(prompt, additional_instructions):
     final_response = "".join(response_chunks).strip()
     st.session_state.messages.append({"role": "assistant", "content": final_response})
     
-    # Reset processing flag and clear prompt to allow new input
+    # Re-enable chat input and clear the prompt
     st.session_state.processing = False
     st.session_state.prompt = ""
+    st.session_state.chat_input_value = ""
+
+
+def chat_submit_callback():
+    """Callback invoked on chat input submission.
+    
+    It copies the chat input value to prompt and disables further input immediately.
+    """
+    st.session_state.prompt = st.session_state.chat_input_value
+    st.session_state.processing = True
 
 
 # Main execution flow
@@ -230,22 +243,22 @@ with st.expander(lang_translations["expander_title"]):
     for idx, button_text in enumerate(lang_translations["button_prompts"]):
         if st.button(button_text):
             st.session_state.prompt = lang_translations["prompts"][idx]
+            st.session_state.processing = True
 
 # Display existing chat messages
 display_chat_messages()
 
-# Render chat input widget. It appears disabled if processing is True.
-typed_input = st.chat_input(
+# Render the chat input widget with on_submit callback.
+# If processing is True, the chat input is disabled.
+_ = st.chat_input(
     lang_translations["typed_input_placeholder"],
+    key="chat_input_value",
+    on_submit=chat_submit_callback,
     disabled=st.session_state.processing
 )
-# Update prompt if new input is provided
-if typed_input and not st.session_state.processing:
-    st.session_state.prompt = typed_input
 
-# Process the prompt if one exists and we're not already processing a request
-if st.session_state.prompt and not st.session_state.processing:
-    st.session_state.processing = True
+# If a prompt is set and we're processing, call the API to generate a response.
+if st.session_state.prompt and st.session_state.processing:
     additional_instructions = (
         f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of "
         f"{st.session_state.team} at the {st.session_state.school}. Please note that their native language is "
