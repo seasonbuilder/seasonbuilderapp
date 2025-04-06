@@ -154,7 +154,6 @@ def get_url_parameters():
     st.session_state.team = params.get("team", "Unknown")
     st.session_state.role = params.get("role", "Unknown")
     st.session_state.language = params.get("language", "Unknown")
-    # If a prompt is provided via URL, use it.
     st.session_state.prompt = params.get("prompt", "")
 
 def extract_language(lang_str):
@@ -175,12 +174,12 @@ def display_chat_messages():
 def process_user_prompt(prompt, additional_instructions):
     """Send the user prompt to the assistant and stream the response."""
     st.write("DEBUG: Processing prompt...")  # DEBUG
-    # Append and display the user's message
+    # Append and display the user's message.
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar=USER_AVATAR):
         st.markdown(prompt)
 
-    # Send the user prompt to the thread
+    # Send the user's prompt to the thread.
     st.session_state.thread_messages = client.beta.threads.messages.create(
         st.session_state.thread.id, role="user", content=prompt
     )
@@ -208,7 +207,7 @@ def process_user_prompt(prompt, additional_instructions):
     final_response = "".join(response_chunks).strip()
     st.session_state.messages.append({"role": "assistant", "content": final_response})
     
-    # Clear the prompt and re-enable the chat input
+    # Clear the prompt and re-enable chat input.
     st.session_state.prompt = ""
     st.session_state.processing = False
     st.write("DEBUG: Finished processing prompt.")  # DEBUG
@@ -225,7 +224,7 @@ def chat_submit_callback():
 initialize_openai_assistant()
 get_url_parameters()
 
-# Get language translations
+# Get language translations.
 lang = extract_language(st.session_state.language)
 lang_translations = translations.get(lang, translations["English"])
 
@@ -239,7 +238,7 @@ with st.expander(lang_translations["expander_title"]):
             st.session_state.processing = True
             st.write("DEBUG: Button prompt selected; prompt set and processing flag enabled.")  # DEBUG
 
-# Display existing chat messages
+# Display existing chat messages.
 display_chat_messages()
 
 # Render the chat input widget.
@@ -252,7 +251,10 @@ else:
         on_submit=chat_submit_callback
     )
 
-# Process the prompt if set
+# DEBUG: Check session state values before processing prompt.
+st.write("DEBUG: Bottom block values: prompt =", st.session_state.prompt, ", processing =", st.session_state.processing)
+
+# Process the prompt if set.
 if st.session_state.prompt and st.session_state.processing:
     st.write("DEBUG: Detected prompt in session_state; processing it now.")  # DEBUG
     additional_instructions = (
