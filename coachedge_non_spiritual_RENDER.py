@@ -125,16 +125,17 @@ client = OpenAI()
 # Set page configuration
 st.set_page_config(page_title="Coach Edge - Virtual Life Coach", layout="wide")
 
-# Initialize session state with defaults
+# Initialize session state with defaults.
 defaults = {
     "messages": [],
-    "prompt": "",
+    "prompt": "",             # Not used for storing submitted text.
+    "submitted_prompt": "",   # This will hold the user's submitted prompt.
     "fname": "",
     "school": "",
     "team": "",
     "role": "",
     "language": "",
-    "processing": False,  # When True, chat_input is disabled
+    "processing": False,      # When True, chat_input is disabled.
 }
 for key, default in defaults.items():
     st.session_state.setdefault(key, default)
@@ -154,6 +155,7 @@ def get_url_parameters():
     st.session_state.team = params.get("team", "Unknown")
     st.session_state.role = params.get("role", "Unknown")
     st.session_state.language = params.get("language", "Unknown")
+    # Optionally, set an initial prompt from URL params.
     st.session_state.prompt = params.get("prompt", "")
 
 def extract_language(lang_str):
@@ -207,18 +209,18 @@ def process_user_prompt(prompt, additional_instructions):
     final_response = "".join(response_chunks).strip()
     st.session_state.messages.append({"role": "assistant", "content": final_response})
     
-    # Clear the prompt and re-enable chat input.
-    st.session_state.prompt = ""
+    # Clear the submitted prompt and re-enable the chat input.
+    st.session_state.submitted_prompt = ""
     st.session_state.processing = False
     st.write("DEBUG: Finished processing prompt.")  # DEBUG
 
 def chat_submit_callback():
     """Callback invoked on chat input submission.
-    It copies the chat input value into the session state prompt and disables further input.
+    It copies the chat input value into 'submitted_prompt' and disables further input.
     """
-    st.session_state.prompt = st.session_state.user_input
+    st.session_state.submitted_prompt = st.session_state.user_input
     st.session_state.processing = True
-    st.write("DEBUG: Chat input submitted; prompt set and processing flag enabled.")  # DEBUG
+    st.write("DEBUG: Chat input submitted; submitted_prompt set and processing flag enabled.")  # DEBUG
 
 # Main execution flow
 initialize_openai_assistant()
@@ -234,9 +236,9 @@ st.markdown(lang_translations["ask_question"])
 with st.expander(lang_translations["expander_title"]):
     for idx, button_text in enumerate(lang_translations["button_prompts"]):
         if st.button(button_text):
-            st.session_state.prompt = lang_translations["prompts"][idx]
+            st.session_state.submitted_prompt = lang_translations["prompts"][idx]
             st.session_state.processing = True
-            st.write("DEBUG: Button prompt selected; prompt set and processing flag enabled.")  # DEBUG
+            st.write("DEBUG: Button prompt selected; submitted_prompt set and processing flag enabled.")  # DEBUG
 
 # Display existing chat messages.
 display_chat_messages()
@@ -251,12 +253,13 @@ else:
         on_submit=chat_submit_callback
     )
 
-# DEBUG: Check session state values before processing prompt.
-st.write("DEBUG: Bottom block values: prompt =", st.session_state.prompt, ", processing =", st.session_state.processing)
+# Debug: Check session state values before processing prompt.
+st.write("DEBUG: Bottom block values: submitted_prompt =", st.session_state.submitted_prompt,
+         ", processing =", st.session_state.processing)
 
 # Process the prompt if set.
-if st.session_state.prompt and st.session_state.processing:
-    st.write("DEBUG: Detected prompt in session_state; processing it now.")  # DEBUG
+if st.session_state.submitted_prompt and st.session_state.processing:
+    st.write("DEBUG: Detected submitted_prompt in session_state; processing it now.")  # DEBUG
     additional_instructions = (
         f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of "
         f"{st.session_state.team} at the {st.session_state.school}. Please note that their native language is "
@@ -264,4 +267,4 @@ if st.session_state.prompt and st.session_state.processing:
         f"respond in their native language regardless of the language they use to ask the question or provide a response. "
         "Pay special attention not to accidentally use words from another language when providing a response."
     )
-    process_user_prompt(st.session_state.prompt, additional_instructions)
+    process_user_prompt(st.session_state.submitted_prompt, additional_instructions)
