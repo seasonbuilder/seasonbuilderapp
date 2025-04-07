@@ -1,110 +1,259 @@
-import openai
+# import openai
+# import os
+# import streamlit as st
+# from openai import OpenAI
+# import uuid
+# from translations_spiritual import translations 
+
+# client = OpenAI()
+
+# st.set_page_config(page_title="Coach Edge - Virtual Life Coach",layout="wide")
+
+# #Initialize session state variables
+
+# if "messages" not in st.session_state:
+#    st.session_state.messages = []
+
+# if 'prompt' not in st.session_state:
+#    st.session_state.prompt = ''
+
+# if 'fname' not in st.session_state:
+#     st.session_state.fname = ''  
+
+# if 'school' not in st.session_state:
+#     st.session_state.school = ''  
+
+# if 'team' not in st.session_state:
+#     st.session_state.team = ''  
+
+# if 'role' not in st.session_state:
+#     st.session_state.role = ''  
+
+# if 'language' not in st.session_state:
+#     st.session_state.language = ''  
+
+# # Initialize OpenAI assistant and thread
+# if "assistant" not in st.session_state or "thread" not in st.session_state:
+#     openai.api_key = os.getenv("OPENAI_API_KEY")
+#     st.session_state.assistant = openai.beta.assistants.retrieve(os.getenv("OPENAI_ASSISTANT"))
+#     st.session_state.thread = client.beta.threads.create()
+
+# # Retrieve URL Parameters
+# st.session_state.fname = st.query_params.get("fname", "Unknown")
+# st.session_state.school = st.query_params.get("school", "Unknown")
+# st.session_state.team = st.query_params.get("team", "Unknown")
+# st.session_state.role = st.query_params.get("role", "Unknown")
+# st.session_state.language = st.query_params.get("language", "Unknown")
+# st.session_state.prompt=st.query_params.get("prompt")
+
+# # Extract language from parentheses
+# parts = st.session_state.language.split('(')
+# if len(parts) > 1:
+#     lang = parts[1].split(')')[0]
+# else:
+#     lang = "Unknown"
+
+# additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of {st.session_state.team} at the {st.session_state.school}.  Please note that their native language is {st.session_state.language}. THIS IS IMPORTANT ... When I ask a question or provide a response, please respond in their native language regardless of the language they use to ask the question or they provide a response. Pay special attention not to accidentally use words from another language when providing a response."
+
+
+# # Get the translations for the selected language, default to English
+# lang_translations = translations.get(lang, translations["English"])
+
+# st.markdown(lang_translations["ask_question"])
+
+# with st.expander(lang_translations["expander_title"]):
+#     for idx, button_text in enumerate(lang_translations["button_prompts"]):
+#         if st.button(button_text):
+#             st.session_state.prompt = lang_translations["prompts"][idx]
+
+# typed_input = st.chat_input(lang_translations["typed_input_placeholder"])
+
+# # Check if there is typed input
+# if typed_input:
+#     st.session_state.prompt = typed_input
+
+# for message in st.session_state.messages:
+#     if message["role"] == "user":
+#        with st.chat_message('user', avatar='https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png'):
+#           st.markdown(message["content"])
+#     else:
+#        with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
+#           st.markdown(message["content"])
+
+# if st.session_state.prompt:
+#     delta = [] 
+#     response = ""
+#     st.session_state.messages.append({"role": "user", "content": st.session_state.prompt})
+#     with st.chat_message('user',avatar='https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png'):
+#         st.markdown(st.session_state.prompt)
+#     with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
+#         container = st.empty()
+#         st.session_state.thread_messages= client.beta.threads.messages.create(
+#               st.session_state.thread.id, role="user",content=st.session_state.prompt
+#         )
+
+#         stream = client.beta.threads.runs.create(
+#             assistant_id=st.session_state.assistant.id,
+#             thread_id = st.session_state.thread.id,
+#             additional_instructions = additional_instructions,
+#             stream = True
+#         )
+#         if stream:
+#            for event in stream:
+#               if event.data.object == "thread.message.delta":
+#                  for content in event.data.delta.content:
+#                     if content.type == 'text':
+#                        delta.append(content.text.value)
+#                        response = "".join(item for item in delta if item).strip()
+#                        container.markdown(response)
+#     st.session_state.messages.append({"role": "assistant", "content": response}) 
+#                                                           
 import os
+import openai
 import streamlit as st
 from openai import OpenAI
-import uuid
-from translations_spiritual import translations 
+from translations_spiritual import translations
 
+# Constants for avatar URLs
+USER_AVATAR = "https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png"
+ASSISTANT_AVATAR = "https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png"
+
+# Initialize OpenAI client
 client = OpenAI()
 
-st.set_page_config(page_title="Coach Edge - Virtual Life Coach",layout="wide")
+# Set page configuration
+st.set_page_config(page_title="Coach Edge - Virtual Life Coach", layout="wide")
 
-#Initialize session state variables
+# Initialize session state with defaults.
+defaults = {
+    "messages": [],
+    "prompt": "",             # Not used for storing submitted text.
+    "submitted_prompt": "",   # This will hold the user's submitted prompt.
+    "fname": "",
+    "school": "",
+    "team": "",
+    "role": "",
+    "language": "",
+    "processing": False,      # When True, chat_input is disabled.
+}
+for key, default in defaults.items():
+    st.session_state.setdefault(key, default)
 
-if "messages" not in st.session_state:
-   st.session_state.messages = []
+def initialize_openai_assistant():
+    """Initialize the OpenAI assistant and thread if not already set."""
+    if "assistant" not in st.session_state or "thread" not in st.session_state:
+        openai.api_key = os.getenv("OPENAI_API_KEY")
+        st.session_state.assistant = openai.beta.assistants.retrieve(os.getenv("OPENAI_ASSISTANT"))
+        st.session_state.thread = client.beta.threads.create()
 
-if 'prompt' not in st.session_state:
-   st.session_state.prompt = ''
+def get_url_parameters():
+    """Retrieve URL parameters and update session state."""
+    params = st.query_params
+    st.session_state.fname = params.get("fname", "Unknown")
+    st.session_state.school = params.get("school", "Unknown")
+    st.session_state.team = params.get("team", "Unknown")
+    st.session_state.role = params.get("role", "Unknown")
+    st.session_state.language = params.get("language", "Unknown")
+    # Optionally, set an initial prompt from URL params.
+    st.session_state.prompt = params.get("prompt", "")
 
-if 'fname' not in st.session_state:
-    st.session_state.fname = ''  
+def extract_language(lang_str):
+    """Extract language from a string formatted as '... (Language)'."""
+    parts = lang_str.split('(')
+    if len(parts) > 1:
+        return parts[1].split(')')[0]
+    return "Unknown"
 
-if 'school' not in st.session_state:
-    st.session_state.school = ''  
+def display_chat_messages():
+    """Display all chat messages stored in session state."""
+    for message in st.session_state.messages:
+        role = message["role"]
+        avatar = USER_AVATAR if role == "user" else ASSISTANT_AVATAR
+        with st.chat_message(role, avatar=avatar):
+            st.markdown(message["content"])
 
-if 'team' not in st.session_state:
-    st.session_state.team = ''  
+def process_user_prompt(prompt, additional_instructions):
+    """Send the user prompt to the assistant and stream the response."""
+    # Append and display the user's message.
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user", avatar=USER_AVATAR):
+        st.markdown(prompt)
 
-if 'role' not in st.session_state:
-    st.session_state.role = ''  
+    # Send the user's prompt to the thread.
+    st.session_state.thread_messages = client.beta.threads.messages.create(
+        st.session_state.thread.id, role="user", content=prompt
+    )
 
-if 'language' not in st.session_state:
-    st.session_state.language = ''  
+    response_chunks = []
+    with st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
+        container = st.empty()
+        stream = client.beta.threads.runs.create(
+            assistant_id=st.session_state.assistant.id,
+            thread_id=st.session_state.thread.id,
+            additional_instructions=additional_instructions,
+            stream=True
+        )
+        if stream:
+            for event in stream:
+                if event.data.object == "thread.message.delta":
+                    for content in event.data.delta.content:
+                        if content.type == "text":
+                            response_chunks.append(content.text.value)
+                            current_response = "".join(response_chunks).strip()
+                            container.markdown(current_response)
 
-# Initialize OpenAI assistant and thread
-if "assistant" not in st.session_state or "thread" not in st.session_state:
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-    st.session_state.assistant = openai.beta.assistants.retrieve(os.getenv("OPENAI_ASSISTANT"))
-    st.session_state.thread = client.beta.threads.create()
+    final_response = "".join(response_chunks).strip()
+    st.session_state.messages.append({"role": "assistant", "content": final_response})
+    
+    # Clear the submitted prompt and re-enable chat input.
+    st.session_state.submitted_prompt = ""
+    st.session_state.processing = False
+    st.rerun()  # Force a UI refresh so the chat input is re-enabled.
 
-# Retrieve URL Parameters
-st.session_state.fname = st.query_params.get("fname", "Unknown")
-st.session_state.school = st.query_params.get("school", "Unknown")
-st.session_state.team = st.query_params.get("team", "Unknown")
-st.session_state.role = st.query_params.get("role", "Unknown")
-st.session_state.language = st.query_params.get("language", "Unknown")
-st.session_state.prompt=st.query_params.get("prompt")
+def chat_submit_callback():
+    """Callback invoked on chat input submission.
+    It copies the chat input value into 'submitted_prompt' and disables further input.
+    """
+    st.session_state.submitted_prompt = st.session_state.user_input
+    st.session_state.processing = True
 
-# Extract language from parentheses
-parts = st.session_state.language.split('(')
-if len(parts) > 1:
-    lang = parts[1].split(')')[0]
-else:
-    lang = "Unknown"
+# Main execution flow
+initialize_openai_assistant()
+get_url_parameters()
 
-additional_instructions = f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of {st.session_state.team} at the {st.session_state.school}.  Please note that their native language is {st.session_state.language}. THIS IS IMPORTANT ... When I ask a question or provide a response, please respond in their native language regardless of the language they use to ask the question or they provide a response. Pay special attention not to accidentally use words from another language when providing a response."
-
-
-# Get the translations for the selected language, default to English
+# Get language translations.
+lang = extract_language(st.session_state.language)
 lang_translations = translations.get(lang, translations["English"])
 
 st.markdown(lang_translations["ask_question"])
 
+# Display preset prompt buttons inside an expander.
 with st.expander(lang_translations["expander_title"]):
     for idx, button_text in enumerate(lang_translations["button_prompts"]):
         if st.button(button_text):
-            st.session_state.prompt = lang_translations["prompts"][idx]
+            st.session_state.submitted_prompt = lang_translations["prompts"][idx]
+            st.session_state.processing = True
 
-typed_input = st.chat_input(lang_translations["typed_input_placeholder"])
+# Display existing chat messages.
+display_chat_messages()
 
-# Check if there is typed input
-if typed_input:
-    st.session_state.prompt = typed_input
+# Render the chat input widget.
+if st.session_state.processing:
+    st.chat_input(lang_translations["typed_input_placeholder"], disabled=True)
+else:
+    _ = st.chat_input(
+        lang_translations["typed_input_placeholder"],
+        key="user_input",
+        on_submit=chat_submit_callback
+    )
 
-for message in st.session_state.messages:
-    if message["role"] == "user":
-       with st.chat_message('user', avatar='https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png'):
-          st.markdown(message["content"])
-    else:
-       with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
-          st.markdown(message["content"])
-
-if st.session_state.prompt:
-    delta = [] 
-    response = ""
-    st.session_state.messages.append({"role": "user", "content": st.session_state.prompt})
-    with st.chat_message('user',avatar='https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png'):
-        st.markdown(st.session_state.prompt)
-    with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
-        container = st.empty()
-        st.session_state.thread_messages= client.beta.threads.messages.create(
-              st.session_state.thread.id, role="user",content=st.session_state.prompt
-        )
-
-        stream = client.beta.threads.runs.create(
-            assistant_id=st.session_state.assistant.id,
-            thread_id = st.session_state.thread.id,
-            additional_instructions = additional_instructions,
-            stream = True
-        )
-        if stream:
-           for event in stream:
-              if event.data.object == "thread.message.delta":
-                 for content in event.data.delta.content:
-                    if content.type == 'text':
-                       delta.append(content.text.value)
-                       response = "".join(item for item in delta if item).strip()
-                       container.markdown(response)
-    st.session_state.messages.append({"role": "assistant", "content": response}) 
-                                                          
+# Process the prompt if set.
+if st.session_state.submitted_prompt and st.session_state.processing:
+    additional_instructions = (
+        f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of "
+        f"{st.session_state.team} at the {st.session_state.school}. Please note that their native language is "
+        f"{st.session_state.language}. THIS IS IMPORTANT ... When I ask a question or provide a response, please "
+        f"respond in their native language regardless of the language they use to ask the question or provide a response. "
+        "Pay special attention not to accidentally use words from another language when providing a response."
+    )
+    process_user_prompt(st.session_state.submitted_prompt, additional_instructions)
