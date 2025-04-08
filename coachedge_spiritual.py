@@ -588,8 +588,8 @@ def update_adalo_user_thread(email, thread_id):
             record = data["records"][0]
             element_id = record.get("id")  # Adjust this if your field name is different.
             update_url = f"https://api.adalo.com/v0/apps/{ADALO_APP_ID}/collections/{ADALO_COLLECTION_ID}/{element_id}"
-            st.write("DEBUG:", update_url)
-            st.write("DEBUG:", headers)
+            # st.write("DEBUG:", update_url)
+            # st.write("DEBUG:", headers)
             payload = {"thread_id": thread_id}
             update_response = requests.patch(update_url, json=payload, headers=headers)
             if update_response.status_code == 200:
