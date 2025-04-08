@@ -575,8 +575,8 @@ def update_adalo_user_thread(email, thread_id):
     ADALO_COLLECTION_ID = st.secrets["ADALO_COLLECTION_ID"]
     ADALO_API_KEY = st.secrets["ADALO_API_KEY"]
     headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {ADALO_API_KEY}"
+        "Authorization": f"Bearer {ADALO_API_KEY}",
+        "Content-Type": "application/json"
     }
     # URL to get user records filtered by email.
     get_url = f"https://api.adalo.com/v0/apps/{ADALO_APP_ID}/collections/{ADALO_COLLECTION_ID}?filterKey=Email&filterValue={email}"
@@ -591,7 +591,7 @@ def update_adalo_user_thread(email, thread_id):
             # st.write("DEBUG:", update_url)
             # st.write("DEBUG:", headers)
             payload = {"thread_id": thread_id}
-            update_response = requests.put(update_url, json=payload, headers=headers)
+            update_response = requests.patch(update_url, json=payload, headers=headers)
             if update_response.status_code == 200:
                 st.write("DEBUG: Successfully updated Adalo user record with thread_id.")
             else:
