@@ -591,7 +591,7 @@ def update_adalo_user_thread(email, thread_id):
             # st.write("DEBUG:", update_url)
             # st.write("DEBUG:", headers)
             payload = {"thread_id": thread_id}
-            update_response = requests.patch(update_url, json=payload, headers=headers)
+            update_response = requests.put(update_url, json=payload, headers=headers)
             if update_response.status_code == 200:
                 st.write("DEBUG: Successfully updated Adalo user record with thread_id.")
             else:
