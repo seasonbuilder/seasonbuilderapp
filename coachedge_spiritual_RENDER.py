@@ -149,6 +149,7 @@
 #     process_user_prompt(st.session_state.submitted_prompt, additional_instructions)
 
 import openai
+import os
 import requests
 import streamlit as st
 from openai import OpenAI
@@ -211,7 +212,7 @@ def update_adalo_user_thread(email, thread_id):
             payload = {"thread_id": thread_id}
             update_response = requests.put(update_url, json=payload, headers=headers)
             if update_response.status_code == 200:
-                st.write("DEBUG: Successfully updated Adalo user record with thread_id.")
+                #st.write("DEBUG: Successfully updated Adalo user record with thread_id.")
             else:
                 st.write("DEBUG: Failed to update Adalo record:", update_response.text)
         else:
@@ -238,12 +239,12 @@ def handle_thread():
     if "thread_id" in params and params["thread_id"]:
         thread_id = params["thread_id"]
         st.session_state.thread = openai.beta.threads.retrieve(thread_id)
-        st.write("DEBUG: Retrieved thread with id:", thread_id)
+       # st.write("DEBUG: Retrieved thread with id:", thread_id)
     else:
         # Create a new thread.
         new_thread = client.beta.threads.create()
         st.session_state.thread = new_thread
-        st.write("DEBUG: Created new thread with id:", new_thread.id)
+       # st.write("DEBUG: Created new thread with id:", new_thread.id)
         # Update the Adalo user record with the new thread id.
         email = params.get("email", "")
         if email:
@@ -365,6 +366,6 @@ if st.session_state.submitted_prompt and st.session_state.processing:
         f"{st.session_state.team} at the {st.session_state.school}. Please note that their native language is "
         f"{st.session_state.language}. THIS IS IMPORTANT ... When I ask a question or provide a response, please "
         f"respond in their native language regardless of the language they use to ask the question or provide a response. "
-        "Pay special attention not to accidentally use words from another language when providing a response."
+        f"Pay special attention not to accidentally use words from another language when providing a response."
     )
     process_user_prompt(st.session_state.submitted_prompt, additional_instructions)
