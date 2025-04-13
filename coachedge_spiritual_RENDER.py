@@ -247,8 +247,8 @@ def handle_thread():
         email = params.get("email", "")
         if email:
             update_adalo_user_thread(email, new_thread.id)
-        else:
-            st.write("DEBUG: No email provided; cannot update Adalo record.")
+        #else:
+            #st.write("DEBUG: No email provided; cannot update Adalo record.")
 
 def get_url_parameters():
     """Retrieve URL parameters and update session state."""
