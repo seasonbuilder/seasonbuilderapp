@@ -213,10 +213,10 @@ def update_adalo_user_thread(email, thread_id):
             update_response = requests.put(update_url, json=payload, headers=headers)
             if update_response.status_code != 200:
                 st.write("DEBUG: Failed to update Adalo record:", update_response.text)
-        else:
-            st.write("DEBUG: No Adalo record found for email:", email)
-    else:
-        st.write("DEBUG: Failed to retrieve Adalo records:", response.text)
+        #else:
+            #st.write("DEBUG: No Adalo record found for email:", email)
+    #else:
+        #st.write("DEBUG: Failed to retrieve Adalo records:", response.text)
 
 # -----------------------------
 # OpenAI Thread Handling
