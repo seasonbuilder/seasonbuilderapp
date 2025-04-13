@@ -25,7 +25,7 @@ def main():
             """
             <a href="https://play.google.com/store/apps/details?id=com.coachedge.android" target="_blank">
                 <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" 
-                     alt="Get it on Google Play" style="height: 60px;">
+                     alt="Get it on Google Play" style="height: 80px;">
             </a>
             """,
             unsafe_allow_html=True
