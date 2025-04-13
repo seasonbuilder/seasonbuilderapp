@@ -13,7 +13,7 @@ def main():
             """
             <a href="https://apps.apple.com/us/app/coach-edge/id6505067739" target="_blank">
                 <img src="https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg" 
-                     alt="Download on the App Store" style="height: 60px;">
+                     alt="Download on the App Store" >
             </a>
             """,
             unsafe_allow_html=True
@@ -25,7 +25,7 @@ def main():
             """
             <a href="https://play.google.com/store/apps/details?id=com.coachedge.android" target="_blank">
                 <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" 
-                     alt="Get it on Google Play" style="height: 80px;">
+                     alt="Get it on Google Play" >
             </a>
             """,
             unsafe_allow_html=True
