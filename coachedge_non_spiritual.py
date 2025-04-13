@@ -24,8 +24,9 @@ def main():
         st.markdown(
             """
             <a href="https://play.google.com/store/apps/details?id=com.coachedge.android" target="_blank">
-                <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" 
-                     alt="Get it on Google Play" >
+                <img src="https://en.m.wikipedia.org/wiki/File:Google_Play_Store_badge_EN.svg#/media/File%3AGoogle_Play_Store_badge_EN.svg" 
+                     alt="Get it on Google Play" style="height: 100px;">
+                     
             </a>
             """,
             unsafe_allow_html=True
