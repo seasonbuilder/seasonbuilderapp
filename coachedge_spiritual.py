@@ -54,17 +54,16 @@ for key, default in defaults.items():
     st.session_state.setdefault(key, default)
 
 # Streamed TTS, output as BytesIO (no disk files, user/session safe)
+# This function will stream TTS output into a BytesIO object
 def generate_speech_streaming(text, voice="alloy"):
-    """Generate speech audio as BytesIO in streaming mode."""
     if not text or not text.strip():
         return None
     buffer = io.BytesIO()
+    # No 'stream=' argument!
     with client.audio.speech.with_streaming_response.create(
         model="tts-1",
         input=text,
-        voice=voice,
-        response_format="mp3",
-        stream=True
+        voice=voice
     ) as response:
         for chunk in response.iter_bytes():
             buffer.write(chunk)
@@ -211,7 +210,6 @@ else:
 # --- In your main Streamlit section, REGARDLESS OF NUMBER OF USERS:
 if st.session_state.last_assistant_response:
     if st.button("🔊 Listen to last response"):
-        # Stream TTS and play in-memory (no disk)
         audio_bytesio = generate_speech_streaming(st.session_state.last_assistant_response)
         if audio_bytesio:
             st.audio(audio_bytesio, format="audio/mp3")
