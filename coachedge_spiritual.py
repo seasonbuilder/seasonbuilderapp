@@ -20,6 +20,7 @@
 
 import openai
 import os
+import io
 import requests
 import streamlit as st
 from openai import OpenAI
