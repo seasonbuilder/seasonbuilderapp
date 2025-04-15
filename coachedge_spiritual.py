@@ -26,16 +26,22 @@ import streamlit as st
 from openai import OpenAI
 from translations_spiritual import translations
 
+# -----------------------------
 # Constants for avatar URLs
+# -----------------------------
 USER_AVATAR = "https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png"
 ASSISTANT_AVATAR = "https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png"
 
+# -----------------------------
 # Initialize OpenAI client
+# -----------------------------
 client = OpenAI()
 
 st.set_page_config(page_title="Coach Edge - Virtual Life Coach", layout="wide")
 
+# -----------------------------
 # Initialize session state with defaults
+# -----------------------------
 defaults = {
     "messages": [],
     "prompt": "",             
@@ -48,18 +54,22 @@ defaults = {
     "processing": False,     
     "thread": None,           
     "assistant": None,        
-    "last_assistant_response": "",   # New: To store TTS-able text
+    "last_assistant_response": "",   # To store TTS-able text
+
+    # === NEW FOR AUTOPLAY ===
+    "audio_played": False,       # Tracks if we've already auto-played for this response
+    "audio_bytesio": None,       # Stores most recent audio
 }
 for key, default in defaults.items():
     st.session_state.setdefault(key, default)
 
+# -----------------------------
 # Streamed TTS, output as BytesIO (no disk files, user/session safe)
-# This function will stream TTS output into a BytesIO object
+# -----------------------------
 def generate_speech_streaming(text, voice="alloy"):
     if not text or not text.strip():
         return None
     buffer = io.BytesIO()
-    # No 'stream=' argument!
     with client.audio.speech.with_streaming_response.create(
         model="tts-1",
         input=text,
@@ -169,6 +179,10 @@ def process_user_prompt(prompt, additional_instructions):
     st.session_state.messages.append({"role": "assistant", "content": final_response})
     st.session_state.last_assistant_response = final_response  # Save for TTS
 
+    # === NEW: Reset audio flags for new assistant reply ===
+    st.session_state.audio_played = False
+    st.session_state.audio_bytesio = None
+
     st.session_state.submitted_prompt = ""
     st.session_state.processing = False
     st.rerun()
@@ -206,16 +220,25 @@ else:
         on_submit=chat_submit_callback
     )
 
-
-# --- In your main Streamlit section, REGARDLESS OF NUMBER OF USERS:
+# --- AUTOPLAY + "LISTEN AGAIN" BUTTON BELOW – replaces your old Listen button section ---
 if st.session_state.last_assistant_response:
-    if st.button("🔊 Listen to last response"):
+    if not st.session_state.audio_played:
+        # Autoplay: generate TTS audio, play, cache for replay
         audio_bytesio = generate_speech_streaming(st.session_state.last_assistant_response)
         if audio_bytesio:
             st.audio(audio_bytesio, format="audio/mp3")
+            st.session_state.audio_bytesio = audio_bytesio
+            st.session_state.audio_played = True
         else:
             st.warning("Audio generation failed.")
-
+    else:
+        # Allow replay
+        if st.button("🔊 Listen again"):
+            audio_bytesio = st.session_state.audio_bytesio
+            if audio_bytesio:
+                st.audio(audio_bytesio, format="audio/mp3")
+            else:
+                st.warning("Audio not found.")
 
 if st.session_state.submitted_prompt and st.session_state.processing:
     additional_instructions = (
