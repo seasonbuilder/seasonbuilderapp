@@ -52,19 +52,23 @@ defaults = {
 for key, default in defaults.items():
     st.session_state.setdefault(key, default)
 
-# --- TTS FUNCTION ---
-def generate_speech(text, filename="output.mp3", voice="alloy"):
-    """Convert text to speech using OpenAI and save as MP3."""
+# Streamed TTS, output as BytesIO (no disk files, user/session safe)
+def generate_speech_streaming(text, voice="alloy"):
+    """Generate speech audio as BytesIO in streaming mode."""
     if not text or not text.strip():
         return None
-    speech_response = client.audio.speech.create(
+    buffer = io.BytesIO()
+    with client.audio.speech.with_streaming_response.create(
         model="tts-1",
         input=text,
-        voice=voice
-    )
-    with open(filename, "wb") as f:
-        f.write(speech_response.content)
-    return filename
+        voice=voice,
+        response_format="mp3",
+        stream=True
+    ) as response:
+        for chunk in response.iter_bytes():
+            buffer.write(chunk)
+    buffer.seek(0)
+    return buffer
 
 # -----------------------------
 # Adalo Integration Functions
@@ -202,13 +206,17 @@ else:
         on_submit=chat_submit_callback
     )
 
-# --- OPTIONAL: TTS for last assistant response ---
+
+# --- In your main Streamlit section, REGARDLESS OF NUMBER OF USERS:
 if st.session_state.last_assistant_response:
     if st.button("🔊 Listen to last response"):
-        mp3_filename = f"assistant_reply_{st.session_state.thread.id}.mp3"
-        generate_speech(st.session_state.last_assistant_response, mp3_filename)
-        with open(mp3_filename, "rb") as audio_file:
-            st.audio(audio_file.read(), format="audio/mp3")
+        # Stream TTS and play in-memory (no disk)
+        audio_bytesio = generate_speech_streaming(st.session_state.last_assistant_response)
+        if audio_bytesio:
+            st.audio(audio_bytesio, format="audio/mp3")
+        else:
+            st.warning("Audio generation failed.")
+
 
 if st.session_state.submitted_prompt and st.session_state.processing:
     additional_instructions = (
