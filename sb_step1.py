@@ -14,7 +14,7 @@ def save_answers (answer):
         "Authorization": ADALO_AUTH,
         "Content-Type": "application/json"
     }
-    st.write (payload)
+
     response = requests.post(ADALO_COLLECTION_URL, headers=headers, json=payload)
     if response.status_code == 201:
         return {"status": "success", "data": response.json()}
@@ -158,7 +158,8 @@ typed_input = st.chat_input(lang_translations["typed_input_placeholder"])
 # Decide which prompt to use: typed prompt (highest priority) or URL prompt (if typed is empty)
 if typed_input:
     st.session_state.prompt = typed_input
-    save_answers (answer=typed_input)
+    if st.session_state.sb_id != "Unknown"
+        save_answers (answer=typed_input)
 elif url_prompt:
     st.session_state.prompt = url_prompt
 else:
