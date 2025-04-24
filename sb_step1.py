@@ -14,7 +14,7 @@ def save_answers (answer):
         "Authorization": ADALO_AUTH,
         "Content-Type": "application/json"
     }
-    st.write (st.session_state.sb_id)
+    st.write (payload)
     response = requests.post(ADALO_COLLECTION_URL, headers=headers, json=payload)
     if response.status_code == 201:
         return {"status": "success", "data": response.json()}
