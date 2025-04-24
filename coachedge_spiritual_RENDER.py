@@ -362,8 +362,8 @@ if st.session_state.submitted_prompt and st.session_state.processing:
     additional_instructions = (
         f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in the sport of "
         f"{st.session_state.team} at the {st.session_state.school}. Please note that their native language is "
-        f"{st.session_state.language}. THIS IS IMPORTANT ... When I ask a question or provide a response, please "
+        f"{st.session_state.language}. THIS IS IMPORTANT ... When they ask a question or provide a response, please "
         f"respond in their native language regardless of the language they use to ask the question or provide a response. "
-        f"Pay special attention not to accidentally use words from another language when providing a response."
+        f"Pay special attention not to accidentally use words from another language when providing a response. If the native language is Unknown, use English as the default."
     )
     process_user_prompt(st.session_state.submitted_prompt, additional_instructions)
