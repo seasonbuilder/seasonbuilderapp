@@ -2,6 +2,7 @@ import openai
 import streamlit as st
 from openai import OpenAI
 import uuid
+import requests
 
 # ====== Adalo Save Function ===========
 def save_answers (answer):
