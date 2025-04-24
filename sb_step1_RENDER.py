@@ -3,6 +3,25 @@ import streamlit as st
 from openai import OpenAI
 import uuid
 import os
+import requests
+
+# ====== Adalo Save Function ===========
+def save_answers (answer):
+    payload = {
+        "Season Builder Main": int(st.session_state.sb_id),
+        "Answers": answer
+    }
+    headers = {
+        "Authorization": ADALO_AUTH,
+        "Content-Type": "application/json"
+    }
+
+    response = requests.post(ADALO_COLLECTION_URL, headers=headers, json=payload)
+    if response.status_code == 200:
+        return {"status": "success", "data": response.json()}
+    else:
+        st.error(f"Failed to save to Adalo: {response.status_code}\n{response.text}")
+        return {"status": "error", "detail": response.text}
 
 client = OpenAI()
 
@@ -31,6 +50,16 @@ if 'role' not in st.session_state:
 if 'language' not in st.session_state:
     st.session_state.language = ''  
 
+if 'sb_id' not in st.session_state:
+    st.session_state.sb_id = ''  
+
+# ======== ENV VARIABLES  ========
+ADALO_COLLECTION_ID = os.getenv("ADALO_COLLECTION_ID")
+ADALO_APP_ID = os.getenv("ADALO_APP_ID")
+ADALO_API_KEY = os.getenv("ADALO_API_KEY")
+ADALO_COLLECTION_URL = f"https://api.adalo.com/v0/apps/{ADALO_APP_ID}/collections/{ADALO_COLLECTION_ID}"
+ADALO_AUTH = f"Bearer {ADALO_API_KEY}"
+
 # Initialize OpenAI assistant and thread
 if "assistant" not in st.session_state or "thread" not in st.session_state:
     openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -44,6 +73,7 @@ st.session_state.school = st.query_params.get("school", "Unknown")
 st.session_state.team = st.query_params.get("team", "Unknown")
 st.session_state.role = st.query_params.get("role", "Unknown")
 st.session_state.language = st.query_params.get("language", "Unknown")
+st.session_state.sb_id = st.query_params.get("sb_id", "Unknown")
 
 # Grab the prompt from URL (if any)
 url_prompt = st.query_params.get("prompt", None)
@@ -125,11 +155,13 @@ lang_translations = translations.get(lang, translations["English"])
 
 # Text input for user (typed) prompt
 typed_input = st.chat_input(lang_translations["typed_input_placeholder"])
-#typed_input = st.chat_input()
+
 
 # Decide which prompt to use: typed prompt (highest priority) or URL prompt (if typed is empty)
 if typed_input:
     st.session_state.prompt = typed_input
+    if st.session_state.sb_id != "Unknown":
+        save_answers (answer=typed_input)
 elif url_prompt:
     st.session_state.prompt = url_prompt
 else:
