@@ -17,11 +17,11 @@ def save_answers (answer):
     }
 
     response = requests.post(ADALO_COLLECTION_URL, headers=headers, json=payload)
-    if response.status_code == 200:
-        return {"status": "success", "data": response.json()}
-    else:
-        st.error(f"Failed to save to Adalo: {response.status_code}\n{response.text}")
-        return {"status": "error", "detail": response.text}
+    # if response.status_code == 200:
+    #     return {"status": "success", "data": response.json()}
+    # else:
+    #     st.error(f"Failed to save to Adalo: {response.status_code}\n{response.text}")
+    #     return {"status": "error", "detail": response.text}
 
 client = OpenAI()
 
