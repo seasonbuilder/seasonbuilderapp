@@ -52,6 +52,7 @@ additional_instructions = (
     f"{st.session_state.team} at the {st.session_state.school}. Please note that their native language is "
     f"{st.session_state.language}. THIS IS IMPORTANT ... When they ask a question or provide a response, "
     f"please respond in their native language regardless of the language they use to ask the question or provide the response. Pay special attention not to accidentally use words from another language when providing a response."
+    f"If native language is Unknown, default to English."
 )
 
 # Translation data
