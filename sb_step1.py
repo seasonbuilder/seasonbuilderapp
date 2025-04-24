@@ -16,7 +16,7 @@ def save_answers (answer):
     }
 
     response = requests.post(ADALO_COLLECTION_URL, headers=headers, json=payload)
-    if response.status_code == 201:
+    if response.status_code == 200:
         return {"status": "success", "data": response.json()}
     else:
         st.error(f"Failed to save to Adalo: {response.status_code}\n{response.text}")
@@ -153,7 +153,7 @@ lang_translations = translations.get(lang, translations["English"])
 
 # Text input for user (typed) prompt
 typed_input = st.chat_input(lang_translations["typed_input_placeholder"])
-#typed_input = st.chat_input()
+
 
 # Decide which prompt to use: typed prompt (highest priority) or URL prompt (if typed is empty)
 if typed_input:
