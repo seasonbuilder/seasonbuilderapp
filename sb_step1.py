@@ -158,7 +158,7 @@ typed_input = st.chat_input(lang_translations["typed_input_placeholder"])
 # Decide which prompt to use: typed prompt (highest priority) or URL prompt (if typed is empty)
 if typed_input:
     st.session_state.prompt = typed_input
-    if st.session_state.sb_id != "Unknown"
+    if st.session_state.sb_id != "Unknown":
         save_answers (answer=typed_input)
 elif url_prompt:
     st.session_state.prompt = url_prompt
