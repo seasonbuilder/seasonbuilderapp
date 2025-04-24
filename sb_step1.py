@@ -7,7 +7,7 @@ import requests
 # ====== Adalo Save Function ===========
 def save_answers (answer):
     payload = {
-        "SB_ID": int(st.session_state.sb_id),
+        "Season Builder Main": int(st.session_state.sb_id),
         "Answers": answer
     }
     headers = {
