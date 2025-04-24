@@ -242,6 +242,9 @@ st.session_state.role = params.get("role", "Unknown")
 st.session_state.language = params.get("language", "Unknown")
 st.session_state.sb_id = params.get("sb_id", "Unknown")
 
+# # Grab the prompt from URL (if any)
+url_prompt = st.query_params.get("prompt", None)
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -266,8 +269,13 @@ lang_translations = translations.get(lang, translations["English"])
 
 # ====== Show Chat Session So Far ==========
 typed_input = st.chat_input(lang_translations["typed_input_placeholder"])
+# Decide which prompt to use: typed prompt (highest priority) or URL prompt (if typed is empty)
 if typed_input:
     st.session_state.prompt = typed_input
+elif url_prompt:
+    st.session_state.prompt = url_prompt
+else:
+    st.session_state.prompt = ''
 
 for message in st.session_state.messages:
     if message["role"] == "user":
