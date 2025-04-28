@@ -390,4 +390,4 @@ if st.session_state.prompt:
 #             st.session_state.messages.append({"role": "assistant", "content": reply_text})
 #             with st.chat_message('assistant', avatar='https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png'):
 #                 st.markdown(reply_text)
-#             break  # only display one latest assistant reply            
+#             break  # only display one latest assistant reply             
