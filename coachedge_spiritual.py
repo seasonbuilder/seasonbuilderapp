@@ -248,4 +248,4 @@ if __name__ == "__main__":
 #         f"respond in their native language regardless of the language they use to ask the question or provide a response. "
 #         f"Pay special attention not to accidentally use words from another language when providing a response."
 #     )
-#     process_user_prompt(st.session_state.submitted_prompt, additional_instructions)                                                                                                                                                                        
+#     process_user_prompt(st.session_state.submitted_prompt, additional_instructions)                                                                                                                                                                         
