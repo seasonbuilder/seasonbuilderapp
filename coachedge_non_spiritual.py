@@ -16,4 +16,4 @@ def main():
         st.markdown("[Get it on Google Play](https://play.google.com/store/apps/details?id=com.coachedge.android)")
 
 if __name__ == "__main__":
-    main()                                                                                                                                                                                                                    
+    main()                                                                                                                                                                                                                     
