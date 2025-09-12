@@ -217,7 +217,6 @@
 #         f"Pay special attention not to accidentally use words from another language when providing a response. If the native language is Unknown, use English as the default."
 #     )
 #     process_user_prompt(st.session_state.submitted_prompt, additional_instructions)
-
 import os, requests, streamlit as st
 from openai import OpenAI
 from translations_spiritual import translations
@@ -240,7 +239,7 @@ def get_openai():
 def get_http_session():
     s = requests.Session()
     s.headers.update({"Content-Type": "application/json"})
-    s.timeout = 10  # default per-call timeout; can override
+    s.timeout = 10  # default per-call timeout; can override per request
     return s
 
 @st.cache_data
@@ -291,7 +290,6 @@ def update_adalo_user_thread_once(email: str, thread_id: str):
 
     headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
     base = f"https://api.adalo.com/v0/apps/{app_id}/collections/{col_id}"
-    # Find user by Email
     try:
         r = http.get(f"{base}?filterKey=Email&filterValue={email}", headers=headers, timeout=10)
         if r.status_code != 200:
@@ -302,7 +300,6 @@ def update_adalo_user_thread_once(email: str, thread_id: str):
         element_id = data["records"][0].get("id")
         if not element_id:
             return
-        # Update thread_id (PUT or PATCH per your setup; you used PUT)
         payload = {"thread_id": thread_id}
         upd = http.put(f"{base}/{element_id}", json=payload, headers=headers, timeout=10)
         if upd.status_code == 200:
@@ -366,34 +363,37 @@ def process_user_prompt(prompt: str, additional_instructions: str):
     chunks = []
     with st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
         container = st.empty()
-        stream = client.beta.threads.runs.create(
-            assistant_id=assistant.id,
-            thread_id=st.session_state.thread_id,
-            additional_instructions=additional_instructions,
-            stream=True,
-        )
-        if stream:
-            tick = 0
-            for event in stream:
-                if event.data.object == "thread.message.delta":
-                    for c in event.data.delta.content:
-                        if c.type == "text":
-                            chunks.append(c.text.value)
-                            tick += 1
-                            # update every ~8 chunks for smoother UX
-                            if tick % 8 == 0:
-                                container.markdown("".join(chunks).strip())
+        try:
+            stream = client.beta.threads.runs.create(
+                assistant_id=assistant.id,
+                thread_id=st.session_state.thread_id,
+                additional_instructions=additional_instructions,
+                stream=True,
+            )
+            if stream:
+                tick = 0
+                for event in stream:
+                    if event.data.object == "thread.message.delta":
+                        for c in event.data.delta.content:
+                            if c.type == "text":
+                                chunks.append(c.text.value)
+                                tick += 1
+                                # update every ~8 chunks for smoother UX
+                                if tick % 8 == 0:
+                                    container.markdown("".join(chunks).strip())
+        except Exception as e:
+            chunks.append(f"\n\n_(Sorry, something went wrong: {e})_")
+
         # final flush
         container.markdown("".join(chunks).strip())
 
     final = "".join(chunks).strip()
     st.session_state.messages.append({"role": "assistant", "content": final})
 
-    # Reset UI state
+    # Reset UI state so input can enable on this same render pass
     st.session_state.submitted_prompt = ""
     st.session_state.processing = False
-    # Usually not needed; if your WebView requires, keep it:
-    # st.rerun()
+    # No st.rerun() needed since we processed before rendering input
 
 # -----------------------------
 # UI
@@ -415,15 +415,7 @@ def chat_submit_callback():
     st.session_state.submitted_prompt = st.session_state.user_input
     st.session_state.processing = True
 
-if st.session_state.processing:
-    st.chat_input(active_trans["typed_input_placeholder"], disabled=True)
-else:
-    _ = st.chat_input(
-        active_trans["typed_input_placeholder"],
-        key="user_input",
-        on_submit=chat_submit_callback
-    )
-
+# --- PROCESS FIRST (so flags reset before drawing the input) ---
 if st.session_state.submitted_prompt and st.session_state.processing:
     # keep this short; put long policy in Assistant instructions
     additional_instructions = (
@@ -432,3 +424,13 @@ if st.session_state.submitted_prompt and st.session_state.processing:
         f"If their native language is 'Unknown', use English."
     )
     process_user_prompt(st.session_state.submitted_prompt, additional_instructions)
+
+# --- THEN draw the chat input with the up-to-date processing flag ---
+if st.session_state.processing:
+    st.chat_input(active_trans["typed_input_placeholder"], disabled=True)
+else:
+    _ = st.chat_input(
+        active_trans["typed_input_placeholder"],
+        key="user_input",
+        on_submit=chat_submit_callback
+    )
