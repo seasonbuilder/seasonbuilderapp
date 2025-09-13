@@ -263,7 +263,7 @@ if st.session_state.prompt:
     # Add to UI history
     st.session_state.messages.append({"role": "user", "content": user_text})
     with st.chat_message("user", avatar="https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png"):
-        st.markdown(user_text)
+        st.markdown(Thinking ...)
 
     # Add to thread (no retrieve needed)
     client.beta.threads.messages.create(
