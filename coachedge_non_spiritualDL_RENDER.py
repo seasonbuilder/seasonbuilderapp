@@ -181,8 +181,6 @@
 import os
 import streamlit as st
 from openai import OpenAI
-# use your centralized translations file
-from translation_non_spiritual import translations as T
 
 # ---------- Page config ----------
 st.set_page_config(page_title="Coach Edge - Virtual Life Coach", layout="wide")
@@ -238,24 +236,8 @@ def extract_language(lang_str: str) -> str:
     parts = lang_str.split("(")
     return parts[1].split(")")[0] if len(parts) > 1 else "Unknown"
 
-def t_for(lang_label: str) -> dict:
-    """Fetch language dict with safe fallback to English."""
-    if lang_label in T:
-        return T[lang_label]
-    return T.get("English", {})
-
-def tkey(lang_dict: dict, key: str, default: str) -> str:
-    """Safe key lookup with fallback to default text."""
-    return lang_dict.get(key, default)
-
 lang_label = extract_language(st.session_state.language)
-LANG = t_for(lang_label)
 
-# ---------- UI copy from translations_spiritual (with fallbacks) ----------
-ask_q = tkey(LANG, "ask_question", "### **Ask Coach Edge**")
-placeholder = tkey(LANG, "typed_input_placeholder", "How else can I help?")
-
-st.markdown(ask_q)
 
 # ---------- Chat input ----------
 typed_input = st.chat_input(placeholder)
@@ -294,7 +276,7 @@ if st.session_state.prompt:
     addl = (
         f"User name: {st.session_state.fname}. Role: {st.session_state.role}. "
         f"Team: {st.session_state.team}. School: {st.session_state.school}. "
-        f"Native language: {st.session_state.language}. If native language is 'Unknown', use English. "
+        f"Native language: {lang_label}. If native language is 'Unknown', use English. "
         f"Always respond in the user's native language regardless of the language used in their message."
     )
 
