@@ -265,3 +265,48 @@ if st.session_state.prompt:
     st.session_state.messages.append({"role": "user", "content": user_text})
     with st.chat_message("user", avatar="https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png"):
         st.markdown(user_text)
+
+    # Add to thread (no retrieve needed)
+    client.beta.threads.messages.create(
+        thread_id=st.session_state.thread_id,
+        role="user",
+        content=user_text,
+    )
+
+    # Keep per-turn instructions short (put heavy policy in Assistant config)
+    addl = (
+        f"User name: {st.session_state.fname}. Role: {st.session_state.role}. "
+        f"Team: {st.session_state.team}. School: {st.session_state.school}. "
+        f"Native language: {lang_label}. If native language is 'Unknown', use English. "
+        f"Always respond in the user's native language regardless of the language used in their message."
+    )
+
+    # Stream response with light throttling
+    chunks, tick = [], 0
+    with st.chat_message("assistant", avatar="https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png"):
+        container = st.empty()
+        try:
+            stream = client.beta.threads.runs.create(
+                assistant_id=assistant.id,
+                thread_id=st.session_state.thread_id,
+                additional_instructions=addl,
+                stream=True,
+            )
+            if stream:
+                for event in stream:
+                    if event.data.object == "thread.message.delta":
+                        for c in event.data.delta.content:
+                            if c.type == "text":
+                                chunks.append(c.text.value)
+                                tick += 1
+                                if tick % 8 == 0:  # fewer DOM writes
+                                    container.markdown("".join(chunks).strip())
+        except Exception as e:
+            chunks.append(f"\n\n_(Sorry, something went wrong: {e})_")
+
+        # final flush
+        assistant_text = "".join(chunks).strip() or "_(No response.)_"
+        container.markdown(assistant_text)
+
+    st.session_state.messages.append({"role": "assistant", "content": assistant_text})
+    st.session_state.prompt = ""
