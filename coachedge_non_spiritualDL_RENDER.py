@@ -182,7 +182,7 @@ import os
 import streamlit as st
 from openai import OpenAI
 # use your centralized translations file
-from translations_non_spiritual import translations as T
+from translation_non_spiritual import translations as T
 
 # ---------- Page config ----------
 st.set_page_config(page_title="Coach Edge - Virtual Life Coach", layout="wide")
