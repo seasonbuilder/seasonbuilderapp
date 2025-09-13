@@ -187,13 +187,9 @@ from openai import OpenAI
 st.set_page_config(page_title="Coach Edge - Virtual Life Coach", layout="wide")
 
 # ---------- Cache heavy/static things ----------
-@st.cache_resource
-def get_openai():
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-    assistant = client.beta.assistants.retrieve(os.getenv("OPENAI_ASSISTANT"))
-    return client, assistant
 
-client, assistant = get_openai()
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+assistant = client.beta.assistants.retrieve(os.getenv("OPENAI_ASSISTANT"))
 
 # ---------- Session state ----------
 defaults = {
