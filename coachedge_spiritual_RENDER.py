@@ -229,11 +229,9 @@ st.set_page_config(page_title="Coach Edge - Virtual Life Coach", layout="wide")
 # -----------------------------
 # Caching heavy/static things
 # -----------------------------
-@st.cache_resource
-def get_openai():
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-    assistant = client.beta.assistants.retrieve(os.getenv("OPENAI_ASSISTANT"))
-    return client, assistant
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+assistant = client.beta.assistants.retrieve(os.getenv("OPENAI_ASSISTANT"))
 
 @st.cache_resource
 def get_http_session():
