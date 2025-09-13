@@ -244,8 +244,6 @@ def get_http_session():
 def get_translations():
     return translations
 
-with st.spinner("Loading Coach Edge..."):
-    client, assistant = get_openai()
 http = get_http_session()
 lang_translations = get_translations()
 
