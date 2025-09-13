@@ -240,7 +240,7 @@ lang_label = extract_language(st.session_state.language)
 
 
 # ---------- Chat input ----------
-typed_input = st.chat_input(placeholder)
+typed_input = st.chat_input()
 if typed_input:
     st.session_state.prompt = typed_input
 
