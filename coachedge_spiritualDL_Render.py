@@ -125,7 +125,6 @@
 
 #     st.session_state.messages.append({"role": "assistant", "content": assistant_text})
 #     st.session_state.prompt = ""
-
 import os
 import streamlit as st
 from openai import OpenAI
@@ -133,10 +132,9 @@ from openai import OpenAI
 # ---------- Page config ----------
 st.set_page_config(page_title="Coach Edge - Virtual Life Coach", layout="wide")
 
-# ---------- OpenAI client & config ----------
+# ---------- OpenAI client ----------
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-MODEL_NAME = os.getenv("MODEL_NAME", "gpt-5.1-mini")  # REQUIRED by Responses API
-PROMPT_ID  = os.getenv("OPENAI_PROMPT_ID")            # e.g., "prompt_abc123"
+PROMPT_ID = os.getenv("OPENAI_PROMPT_ID")  # e.g., "prompt_abc123"
 
 # ---------- Session state ----------
 defaults = {
@@ -152,7 +150,6 @@ defaults = {
 }
 for k, v in defaults.items():
     st.session_state.setdefault(k, v)
-
 ss = st.session_state
 
 # ---------- URL parameters ----------
@@ -163,15 +160,15 @@ ss.team     = params.get("team",     ss.team or "Unknown")
 ss.role     = params.get("role",     ss.role or "Unknown")
 ss.language = params.get("language", ss.language or "Unknown")
 
-# Allow resuming a conversation from URL (conversation_id)
+# Resume conversation if provided
 url_convo_id = params.get("conversation_id")
 if url_convo_id and ss.conversation_id != url_convo_id:
     ss.conversation_id = url_convo_id
 
 # Create a conversation once if we still don't have one
 if not ss.conversation_id:
-    convo = client.conversations.create()
-    ss.conversation_id = convo.id
+    conv = client.conversations.create()
+    ss.conversation_id = conv.id
 
 # Optional URL prompt (consume once so it doesn’t repeat on reruns)
 url_prompt = params.get("prompt")
@@ -180,14 +177,14 @@ if url_prompt and not ss.consumed_url_prompt:
     ss.consumed_url_prompt = True
 
 # ---------- Helpers ----------
-def extract_language(lang_str: str) -> str:
-    parts = lang_str.split("(")
+USER_AVATAR = "https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png"
+ASSISTANT_AVATAR = "https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png"
+
+def extract_language(label: str) -> str:
+    parts = label.split("(")
     return parts[1].split(")")[0] if len(parts) > 1 else "Unknown"
 
 lang_label = extract_language(ss.language)
-
-USER_AVATAR = "https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png"
-ASSISTANT_AVATAR = "https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png"
 
 # ---------- Chat input ----------
 typed_input = st.chat_input()
@@ -196,63 +193,57 @@ if typed_input:
 
 # ---------- Show recent messages ----------
 MAX_UI_MESSAGES = 30
-for msg in ss.messages[-MAX_UI_MESSAGES:]:
-    role = msg["role"]
-    avatar = USER_AVATAR if role == "user" else ASSISTANT_AVATAR
-    with st.chat_message(role, avatar=avatar):
-        st.markdown(msg["content"])
+for m in ss.messages[-MAX_UI_MESSAGES:]:
+    avatar = USER_AVATAR if m["role"] == "user" else ASSISTANT_AVATAR
+    with st.chat_message(m["role"], avatar=avatar):
+        st.markdown(m["content"])
 
-# ---------- Process a new prompt (Responses + Conversations + Prompt Component) ----------
+# ---------- Process a new prompt (Prompt reference + per-turn system context) ----------
 if ss.prompt:
     user_text = ss.prompt
 
-    # Echo user message in UI
+    # Echo user message
     ss.messages.append({"role": "user", "content": user_text})
     with st.chat_message("user", avatar=USER_AVATAR):
-        st.markdown("Thinking ...")
+        st.markdown(user_text)
 
-    # Build instructions using your Prompt Component + dynamic per-turn context
-    instructions = []
-    if PROMPT_ID:
-        instructions.append({"type": "prompt_component", "id": PROMPT_ID})
-    instructions.append({
-        "type": "text",
-        "text": (
-            f"User name: {ss.fname}. Role: {ss.role}. Team: {ss.team}. School: {ss.school}. "
-            f"Native language: {lang_label}. "
-            f"Always respond in the user's native language; if 'Unknown', use English. "
-            f"Do not mix languages inadvertently."
-        )
-    })
+    # Build input items:
+    # 1) A small SYSTEM item with dynamic context for this user/turn
+    # 2) The USER item with the actual question
+    system_context = (
+        f"User name: {ss.fname}. "
+        f"Role: {ss.role}. Team: {ss.team}. School: {ss.school}. "
+        f"Native language: {lang_label}. "
+        f"Always respond in the user's native language; if 'Unknown', use English. "
+        f"Do not mix languages inadvertently."
+    )
+    input_items = [
+        {"role": "system", "content": system_context},
+        {"role": "user",   "content": user_text},
+    ]
 
-    # Stream response with throttled UI updates
+    # Stream response (prompt points to your Chat Prompt; no model/instructions inline)
     chunks, tick = [], 0
     with st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
         container = st.empty()
         try:
             stream = client.responses.create(
-                model=MODEL_NAME,                                # REQUIRED
-                conversation=ss.conversation_id,                 # conversation memory
-                instructions=instructions,                       # component + dynamic context
-                input=[{"role": "user", "content": user_text}],  # current user turn
+                prompt={"id": PROMPT_ID},          # Use your Chat Prompt (defines model/tools/instructions)
+                conversation=ss.conversation_id,   # Keep context
+                input=input_items,                 # Per-turn system + user
                 stream=True
             )
             for event in stream:
-                # Handle common event shapes from the SDK:
-                # Preferred: event.type == "response.output_text.delta" with event.delta
+                # Canonical text delta event
                 if getattr(event, "type", "") == "response.output_text.delta":
                     chunks.append(event.delta)
-                # Fallback: some SDKs expose a simple .delta string
-                elif hasattr(event, "delta") and isinstance(event.delta, str):
-                    chunks.append(event.delta)
-
-                tick += 1
-                if tick % 8 == 0:  # fewer DOM writes
-                    container.markdown("".join(chunks).strip())
+                    tick += 1
+                    if tick % 8 == 0:             # throttle DOM writes
+                        container.markdown("".join(chunks).strip())
         except Exception as e:
             chunks.append(f"\n\n_(Sorry, something went wrong: {e})_")
 
-        # final flush
+        # Final flush
         assistant_text = "".join(chunks).strip() or "_(No response.)_"
         container.markdown(assistant_text)
 
