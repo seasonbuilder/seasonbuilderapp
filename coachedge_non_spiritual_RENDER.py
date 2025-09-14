@@ -491,9 +491,8 @@ st.set_page_config(page_title="Coach Edge - Virtual Life Coach", layout="wide")
 # ---------- Cache heavy/static things ----------
 @st.cache_resource
 def get_openai():
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-    assistant = client.beta.assistants.retrieve(os.getenv("OPENAI_ASSISTANT"))
-    return client, assistant
+    # Only return the client (no Assistant retrieval needed with Responses+Prompts)
+    return OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 @st.cache_resource
 def get_http_session():
@@ -505,9 +504,12 @@ def get_http_session():
 def get_translations():
     return T
 
-client, assistant = get_openai()
+client = get_openai()
 http = get_http_session()
 LANGS = get_translations()
+
+# Chat Prompt ID from env (created in the OpenAI dashboard)
+PROMPT_ID = os.getenv("OPENAI_PROMPT_ID")  # e.g., "prompt_abc123"
 
 # ---------- Session state ----------
 ss = st.session_state
@@ -520,8 +522,8 @@ ss.setdefault("language", "")
 ss.setdefault("submitted_prompt", "")
 ss.setdefault("processing", False)
 ss.setdefault("consumed_url_prompt", False)
-ss.setdefault("thread_id", None)      # store ID only
-ss.setdefault("adalo_synced", False)  # ensure we only update Adalo once
+ss.setdefault("conversation_id", None)  # replaces thread_id
+ss.setdefault("adalo_synced", False)    # ensure we only update Adalo once
 
 # ---------- URL parameters ----------
 qp = st.query_params
@@ -530,12 +532,16 @@ ss.school   = qp.get("school",   ss.school or "Unknown")
 ss.team     = qp.get("team",     ss.team or "Unknown")
 ss.role     = qp.get("role",     ss.role or "Unknown")
 ss.language = qp.get("language", ss.language or "Unknown")
-passed_thread_id = qp.get("thread_id") or None
+passed_conversation_id = qp.get("conversation_id") or None
 email = qp.get("email") or ""
 
-# ---------- Adalo sync (only when we create a new thread) ----------
-def update_adalo_user_thread_once(email: str, thread_id: str):
-    if not email or not thread_id or ss.adalo_synced:
+# ---------- Adalo sync (only when we create a new conversation) ----------
+def update_adalo_user_conversation_once(email: str, conversation_id: str):
+    """
+    Look up the Adalo user record by email and attach the conversation_id.
+    Adjust the payload key ('conversation_id') to match your Adalo schema.
+    """
+    if not email or not conversation_id or ss.adalo_synced:
         return
     app_id = os.getenv("APP_ID")
     col_id = os.getenv("ADALO_COLLECTION_ID")
@@ -548,36 +554,36 @@ def update_adalo_user_thread_once(email: str, thread_id: str):
         r = http.get(f"{base}?filterKey=Email&filterValue={email}", headers=headers, timeout=10)
         if r.status_code != 200:
             return
-        data = r.json()
-        records = data.get("records") or []
+        records = (r.json() or {}).get("records") or []
         if not records:
             return
         element_id = records[0].get("id")
         if not element_id:
             return
-        payload = {"thread_id": thread_id}
+        # Update record with conversation_id; change key name if your schema differs
+        payload = {"conversation_id": conversation_id}
         upd = http.put(f"{base}/{element_id}", json=payload, headers=headers, timeout=10)
         if upd.status_code == 200:
             ss.adalo_synced = True
     except requests.RequestException:
-        # swallow; keep UX smooth
+        # Keep UX smooth if network hiccups
         pass
 
-# ---------- Thread bootstrapping (fast, no retrieve) ----------
-def ensure_thread():
-    # 1) if URL provides thread_id, just use it
-    if passed_thread_id:
-        ss.thread_id = passed_thread_id
+# ---------- Conversation bootstrapping ----------
+def ensure_conversation():
+    # 1) If URL provides conversation_id, use it
+    if passed_conversation_id:
+        ss.conversation_id = passed_conversation_id
         return
-    # 2) if already have one this session, keep it
-    if ss.thread_id:
+    # 2) If already have one, keep it
+    if ss.conversation_id:
         return
-    # 3) create once and (optionally) sync to Adalo
-    new_thread = client.beta.threads.create()
-    ss.thread_id = new_thread.id
-    update_adalo_user_thread_once(email, new_thread.id)
+    # 3) Create once and (optionally) sync to Adalo
+    conv = client.conversations.create()
+    ss.conversation_id = conv.id
+    update_adalo_user_conversation_once(email, conv.id)
 
-ensure_thread()
+ensure_conversation()
 
 # ---------- Language helpers ----------
 def extract_language(label: str) -> str:
@@ -608,7 +614,6 @@ st.markdown(ask_q)
 with st.expander(expander_title):
     for idx, button_text in enumerate(button_prompts):
         if st.button(button_text):
-            # set prompt; disable input until processed
             if idx < len(button_prompt_vals):
                 ss.submitted_prompt = button_prompt_vals[idx]
                 ss.processing = True
@@ -622,47 +627,45 @@ for m in ss.messages:
     with st.chat_message(role, avatar=avatar):
         st.markdown(m["content"])
 
-# ---------- Per-turn instructions (keep short; put policy in Assistant) ----------
-additional_instructions = (
-    f"User name: {ss.fname}. Role: {ss.role}. Team: {ss.team}. School: {ss.school}. "
-    f"Native language: {ss.language}. "
-    f"Always respond in the user's native language; if 'Unknown', use English."
-)
-
 # ---------- PROCESS FIRST (Option A) ----------
 def process_user_prompt(prompt: str):
-    # 1) Append + show user message
+    # 1) Append + show user message (you said you want the echo)
     ss.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar=USER_AVATAR):
         st.markdown(prompt)
 
-    # 2) Add to thread (id only, no retrieve)
-    client.beta.threads.messages.create(
-        thread_id=ss.thread_id,
-        role="user",
-        content=prompt,
+    # 2) Build input items:
+    #    a) SYSTEM item with dynamic per-turn context
+    #    b) USER item with the actual question
+    system_context = (
+        f"User name: {ss.fname}. Role: {ss.role}. Team: {ss.team}. School: {ss.school}. "
+        f"Native language label (parsed): {lang_label}. "
+        f"Always respond in the user's native language; if 'Unknown', use English. "
+        f"Do not mix languages inadvertently."
     )
+    input_items = [
+        {"role": "system", "content": system_context},
+        {"role": "user",   "content": prompt},
+    ]
 
-    # 3) Stream assistant response (throttled UI updates)
+    # 3) Stream assistant response via Responses API using your Chat Prompt ID + Conversation
     chunks, tick = [], 0
     with st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
         container = st.empty()
         try:
-            stream = client.beta.threads.runs.create(
-                assistant_id=assistant.id,
-                thread_id=ss.thread_id,
-                additional_instructions=additional_instructions,
-                stream=True,
+            stream = client.responses.create(
+                prompt={"id": PROMPT_ID},           # Chat Prompt holds model/tools/instructions
+                conversation=ss.conversation_id,    # Stateful context (replaces thread)
+                input=input_items,                  # Per-turn items (system + user)
+                stream=True
             )
-            if stream:
-                for event in stream:
-                    if event.data.object == "thread.message.delta":
-                        for c in event.data.delta.content:
-                            if c.type == "text":
-                                chunks.append(c.text.value)
-                                tick += 1
-                                if tick % 8 == 0:  # throttle DOM writes
-                                    container.markdown("".join(chunks).strip())
+            for event in stream:
+                # Canonical streaming delta
+                if getattr(event, "type", "") == "response.output_text.delta":
+                    chunks.append(event.delta)
+                    tick += 1
+                    if tick % 8 == 0:              # throttle DOM writes
+                        container.markdown("".join(chunks).strip())
         except Exception as e:
             chunks.append(f"\n\n_(Sorry, something went wrong: {e})_")
 
@@ -683,11 +686,11 @@ if url_prompt and not ss.consumed_url_prompt and not ss.processing:
     ss.processing = True
     ss.consumed_url_prompt = True
 
-# If a prompt is waiting (from URL or button or input), handle it now
+# If a prompt is waiting (from URL or button or input), handle it now before rendering input
 if ss.submitted_prompt and ss.processing:
     process_user_prompt(ss.submitted_prompt)
 
-# ---------- Chat input (render AFTER processing so it's enabled) ----------
+# ---------- Chat input (render AFTER processing so it re-enables cleanly) ----------
 def on_submit():
     ss.submitted_prompt = ss.user_input
     ss.processing = True
