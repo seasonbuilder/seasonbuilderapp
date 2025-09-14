@@ -217,167 +217,194 @@
 #         f"Pay special attention not to accidentally use words from another language when providing a response. If the native language is Unknown, use English as the default."
 #     )
 #     process_user_prompt(st.session_state.submitted_prompt, additional_instructions)
-import os, requests, streamlit as st
+
+import os
+import requests
+import streamlit as st
 from openai import OpenAI
-from translations_spiritual import translations
+from translations_spiritual import translations as T  # external translations
 
-USER_AVATAR = "https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png"
-ASSISTANT_AVATAR = "https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png"
-
+# ---------- Page config ----------
 st.set_page_config(page_title="Coach Edge - Virtual Life Coach", layout="wide")
 
-# -----------------------------
-# Caching heavy/static things
-# -----------------------------
-
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-assistant = client.beta.assistants.retrieve(os.getenv("OPENAI_ASSISTANT"))
+# ---------- Cache heavy/static things ----------
+@st.cache_resource
+def get_openai():
+    # Only return the client (no Assistant retrieval needed with Responses+Prompts)
+    return OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 @st.cache_resource
 def get_http_session():
     s = requests.Session()
     s.headers.update({"Content-Type": "application/json"})
-    s.timeout = 10  # default per-call timeout; can override per request
     return s
 
 @st.cache_data
 def get_translations():
-    return translations
+    return T
 
+client = get_openai()
 http = get_http_session()
-lang_translations = get_translations()
+LANGS = get_translations()
 
-# -----------------------------
-# Session state
-# -----------------------------
-defaults = {
-    "messages": [],
-    "submitted_prompt": "",
-    "fname": "", "school": "", "team": "", "role": "", "language": "",
-    "processing": False,
-    "thread_id": None,           # use ID only; don't retrieve the thread object
-    "adalo_synced": False,       # ensure we only update Adalo once per new thread
-}
-for k, v in defaults.items():
-    st.session_state.setdefault(k, v)
+# Chat Prompt ID from env (created in the OpenAI dashboard)
+PROMPT_ID = os.getenv("OPENAI_PROMPT_ID")  # e.g., "prompt_abc123"
 
-# -----------------------------
-# URL parameters
-# -----------------------------
-params = st.query_params
-st.session_state.fname = params.get("fname", "Unknown")
-st.session_state.school = params.get("school", "Unknown")
-st.session_state.team = params.get("team", "Unknown")
-st.session_state.role = params.get("role", "Unknown")
-st.session_state.language = params.get("language", "Unknown")
-passed_thread_id = params.get("thread_id") or None
-email = params.get("email") or ""
+# ---------- Session state ----------
+ss = st.session_state
+ss.setdefault("messages", [])
+ss.setdefault("fname", "")
+ss.setdefault("school", "")
+ss.setdefault("team", "")
+ss.setdefault("role", "")
+ss.setdefault("language", "")
+ss.setdefault("submitted_prompt", "")
+ss.setdefault("processing", False)
+ss.setdefault("consumed_url_prompt", False)
+ss.setdefault("conversation_id", None)  # replaces thread_id
+ss.setdefault("adalo_synced", False)    # ensure we only update Adalo once
 
-# -----------------------------
-# Adalo helpers (only once)
-# -----------------------------
-def update_adalo_user_thread_once(email: str, thread_id: str):
-    if not email or not thread_id or st.session_state.adalo_synced:
+# ---------- URL parameters ----------
+qp = st.query_params
+ss.fname    = qp.get("fname",    ss.fname or "Unknown")
+ss.school   = qp.get("school",   ss.school or "Unknown")
+ss.team     = qp.get("team",     ss.team or "Unknown")
+ss.role     = qp.get("role",     ss.role or "Unknown")
+ss.language = qp.get("language", ss.language or "Unknown")
+passed_conversation_id = qp.get("conversation_id") or None
+email = qp.get("email") or ""
+
+# ---------- Adalo sync (only when we create a new conversation) ----------
+def update_adalo_user_conversation_once(email: str, conversation_id: str):
+    """
+    Look up the Adalo user record by email and attach the conversation_id.
+    Adjust the payload key ('conversation_id') to match your Adalo schema.
+    """
+    if not email or not conversation_id or ss.adalo_synced:
         return
     app_id = os.getenv("APP_ID")
     col_id = os.getenv("ADALO_COLLECTION_ID")
     api_key = os.getenv("ADALO_API_KEY")
     if not (app_id and col_id and api_key):
         return
-
     headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
     base = f"https://api.adalo.com/v0/apps/{app_id}/collections/{col_id}"
     try:
         r = http.get(f"{base}?filterKey=Email&filterValue={email}", headers=headers, timeout=10)
         if r.status_code != 200:
             return
-        data = r.json()
-        if not data.get("records"):
+        records = (r.json() or {}).get("records") or []
+        if not records:
             return
-        element_id = data["records"][0].get("id")
+        element_id = records[0].get("id")
         if not element_id:
             return
-        payload = {"thread_id": thread_id}
+        # Update record with conversation_id; change key name if your schema differs
+        payload = {"conversation_id": conversation_id}
         upd = http.put(f"{base}/{element_id}", json=payload, headers=headers, timeout=10)
         if upd.status_code == 200:
-            st.session_state.adalo_synced = True
+            ss.adalo_synced = True
     except requests.RequestException:
+        # Keep UX smooth if network hiccups
         pass
 
-# -----------------------------
-# Thread bootstrapping (fast)
-# -----------------------------
-def ensure_thread():
-    """
-    Logic:
-    1) If URL provided thread_id -> use it (no extra API call).
-    2) Else if we already created a thread in this session -> keep it.
-    3) Else create a new thread, then push its id to Adalo once.
-    """
-    if passed_thread_id:
-        st.session_state.thread_id = passed_thread_id
+# ---------- Conversation bootstrapping ----------
+def ensure_conversation():
+    # 1) If URL provides conversation_id, use it
+    if passed_conversation_id:
+        ss.conversation_id = passed_conversation_id
         return
+    # 2) If already have one, keep it
+    if ss.conversation_id:
+        return
+    # 3) Create once and (optionally) sync to Adalo
+    conv = client.conversations.create()
+    ss.conversation_id = conv.id
+    update_adalo_user_conversation_once(email, conv.id)
 
-    if st.session_state.thread_id:
-        return  # already created this session
+ensure_conversation()
 
-    # Create once
-    new_thread = client.beta.threads.create()
-    st.session_state.thread_id = new_thread.id
-    # Sync Adalo only once after creation
-    update_adalo_user_thread_once(email, new_thread.id)
-
-ensure_thread()
-
-# -----------------------------
-# Helpers
-# -----------------------------
-def extract_language(lang_str: str) -> str:
-    parts = lang_str.split("(")
+# ---------- Language helpers ----------
+def extract_language(label: str) -> str:
+    parts = label.split("(")
     return parts[1].split(")")[0] if len(parts) > 1 else "Unknown"
 
-def display_chat_messages():
-    for m in st.session_state.messages:
-        role = m["role"]
-        avatar = USER_AVATAR if role == "user" else ASSISTANT_AVATAR
-        with st.chat_message(role, avatar=avatar):
-            st.markdown(m["content"])
+def t_for(lang_label: str) -> dict:
+    return LANGS.get(lang_label, LANGS.get("English", {}))
 
-def process_user_prompt(prompt: str, additional_instructions: str):
-    # Append and display the user's message
-    st.session_state.messages.append({"role": "user", "content": prompt})
+def tkey(lang_dict: dict, key: str, default: str) -> str:
+    return lang_dict.get(key, default)
+
+lang_label = extract_language(ss.language)
+LANG = t_for(lang_label)
+
+# Expected keys in translation_non_spiritual:
+# "ask_question", "expander_title", "button_prompts", "prompts", "typed_input_placeholder"
+ask_q = tkey(LANG, "ask_question", "### **Ask Coach Edge**")
+expander_title = tkey(LANG, "expander_title", "Topics To Get You Started")
+button_prompts = LANG.get("button_prompts", [])
+button_prompt_vals = LANG.get("prompts", [])
+placeholder = tkey(LANG, "typed_input_placeholder", "How else can I help?")
+
+# ---------- UI Header ----------
+st.markdown(ask_q)
+
+# ---------- Preset buttons ----------
+with st.expander(expander_title):
+    for idx, button_text in enumerate(button_prompts):
+        if st.button(button_text):
+            if idx < len(button_prompt_vals):
+                ss.submitted_prompt = button_prompt_vals[idx]
+                ss.processing = True
+
+# ---------- Show history ----------
+USER_AVATAR = "https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png"
+ASSISTANT_AVATAR = "https://static.wixstatic.com/media/b748e0_fb82989e216f4e15b81dc26e8c773c20~mv2.png"
+for m in ss.messages:
+    role = m["role"]
+    avatar = USER_AVATAR if role == "user" else ASSISTANT_AVATAR
+    with st.chat_message(role, avatar=avatar):
+        st.markdown(m["content"])
+
+# ---------- PROCESS FIRST (Option A) ----------
+def process_user_prompt(prompt: str):
+    # 1) Append + show user message (you said you want the echo)
+    ss.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar=USER_AVATAR):
         st.markdown(prompt)
 
-    # Add to thread
-    client.beta.threads.messages.create(
-        thread_id=st.session_state.thread_id,
-        role="user",
-        content=prompt,
+    # 2) Build input items:
+    #    a) SYSTEM item with dynamic per-turn context
+    #    b) USER item with the actual question
+    system_context = (
+        f"User name: {ss.fname}. Role: {ss.role}. Team: {ss.team}. School: {ss.school}. "
+        f"Native language label (parsed): {lang_label}. "
+        f"Always respond in the user's native language; if 'Unknown', use English. "
+        f"Do not mix languages inadvertently."
     )
+    input_items = [
+        {"role": "system", "content": system_context},
+        {"role": "user",   "content": prompt},
+    ]
 
-    # Stream assistant output (throttled UI updates)
-    chunks = []
+    # 3) Stream assistant response via Responses API using your Chat Prompt ID + Conversation
+    chunks, tick = [], 0
     with st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
         container = st.empty()
         try:
-            stream = client.beta.threads.runs.create(
-                assistant_id=assistant.id,
-                thread_id=st.session_state.thread_id,
-                additional_instructions=additional_instructions,
-                stream=True,
+            stream = client.responses.create(
+                prompt={"id": PROMPT_ID},           # Chat Prompt holds model/tools/instructions
+                conversation=ss.conversation_id,    # Stateful context (replaces thread)
+                input=input_items,                  # Per-turn items (system + user)
+                stream=True
             )
-            if stream:
-                tick = 0
-                for event in stream:
-                    if event.data.object == "thread.message.delta":
-                        for c in event.data.delta.content:
-                            if c.type == "text":
-                                chunks.append(c.text.value)
-                                tick += 1
-                                # update every ~8 chunks for smoother UX
-                                if tick % 8 == 0:
-                                    container.markdown("".join(chunks).strip())
+            for event in stream:
+                # Canonical streaming delta
+                if getattr(event, "type", "") == "response.output_text.delta":
+                    chunks.append(event.delta)
+                    tick += 1
+                    if tick % 8 == 0:              # throttle DOM writes
+                        container.markdown("".join(chunks).strip())
         except Exception as e:
             chunks.append(f"\n\n_(Sorry, something went wrong: {e})_")
 
@@ -385,49 +412,33 @@ def process_user_prompt(prompt: str, additional_instructions: str):
         container.markdown("".join(chunks).strip())
 
     final = "".join(chunks).strip()
-    st.session_state.messages.append({"role": "assistant", "content": final})
+    ss.messages.append({"role": "assistant", "content": final})
 
-    # Reset UI state so input can enable on this same render pass
-    st.session_state.submitted_prompt = ""
-    st.session_state.processing = False
-    # No st.rerun() needed since we processed before rendering input
+    # 4) Clear flags so input enables on this render pass
+    ss.submitted_prompt = ""
+    ss.processing = False
 
-# -----------------------------
-# UI
-# -----------------------------
-lang = extract_language(st.session_state.language)
-active_trans = lang_translations.get(lang, lang_translations["English"])
+# Consume URL prompt exactly once (treat like a submission)
+url_prompt = qp.get("prompt")
+if url_prompt and not ss.consumed_url_prompt and not ss.processing:
+    ss.submitted_prompt = url_prompt
+    ss.processing = True
+    ss.consumed_url_prompt = True
 
-st.markdown(active_trans["ask_question"])
+# If a prompt is waiting (from URL or button or input), handle it now before rendering input
+if ss.submitted_prompt and ss.processing:
+    process_user_prompt(ss.submitted_prompt)
 
-with st.expander(active_trans["expander_title"]):
-    for idx, button_text in enumerate(active_trans["button_prompts"]):
-        if st.button(button_text):
-            st.session_state.submitted_prompt = active_trans["prompts"][idx]
-            st.session_state.processing = True
+# ---------- Chat input (render AFTER processing so it re-enables cleanly) ----------
+def on_submit():
+    ss.submitted_prompt = ss.user_input
+    ss.processing = True
 
-display_chat_messages()
-
-def chat_submit_callback():
-    st.session_state.submitted_prompt = st.session_state.user_input
-    st.session_state.processing = True
-
-# --- PROCESS FIRST (so flags reset before drawing the input) ---
-if st.session_state.submitted_prompt and st.session_state.processing:
-    # keep this short; put long policy in Assistant instructions
-    additional_instructions = (
-        f"The user's name is {st.session_state.fname}. They are a {st.session_state.role} in "
-        f"{st.session_state.team} at {st.session_state.school}. "
-        f"If their native language is 'Unknown', use English."
-    )
-    process_user_prompt(st.session_state.submitted_prompt, additional_instructions)
-
-# --- THEN draw the chat input with the up-to-date processing flag ---
-if st.session_state.processing:
-    st.chat_input(active_trans["typed_input_placeholder"], disabled=True)
+if ss.processing:
+    st.chat_input(placeholder, disabled=True)
 else:
     _ = st.chat_input(
-        active_trans["typed_input_placeholder"],
+        placeholder,
         key="user_input",
-        on_submit=chat_submit_callback
+        on_submit=on_submit
     )
