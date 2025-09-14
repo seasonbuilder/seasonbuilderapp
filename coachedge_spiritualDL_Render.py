@@ -125,6 +125,7 @@
 
 #     st.session_state.messages.append({"role": "assistant", "content": assistant_text})
 #     st.session_state.prompt = ""
+
 import os
 import streamlit as st
 from openai import OpenAI
