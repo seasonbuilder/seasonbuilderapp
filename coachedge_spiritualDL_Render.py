@@ -204,8 +204,8 @@ if ss.prompt:
 
     # Echo user message
     ss.messages.append({"role": "user", "content": user_text})
-    with st.chat_message("user", avatar=USER_AVATAR):
-        st.markdown(user_text)
+#    with st.chat_message("user", avatar=USER_AVATAR):
+#        st.markdown(user_text)
 
     # Build input items:
     # 1) A small SYSTEM item with dynamic context for this user/turn
