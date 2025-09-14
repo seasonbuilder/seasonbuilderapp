@@ -147,6 +147,7 @@ defaults = {
     "language": "",
     "conversation_id": None,        # replaces thread_id
     "consumed_url_prompt": False,   # consume ?prompt= once
+    "last_prompt_from_url": False,  # track the source of the current prompt
 }
 for k, v in defaults.items():
     st.session_state.setdefault(k, v)
@@ -175,6 +176,7 @@ url_prompt = params.get("prompt")
 if url_prompt and not ss.consumed_url_prompt:
     ss.prompt = url_prompt
     ss.consumed_url_prompt = True
+    ss.last_prompt_from_url = True  # mark source so we don't echo it
 
 # ---------- Helpers ----------
 USER_AVATAR = "https://static.wixstatic.com/media/b748e0_2cdbf70f0a8e477ba01940f6f1d19ab9~mv2.png"
@@ -190,6 +192,7 @@ lang_label = extract_language(ss.language)
 typed_input = st.chat_input()
 if typed_input:
     ss.prompt = typed_input
+    ss.last_prompt_from_url = False  # this one was typed by the user
 
 # ---------- Show recent messages ----------
 MAX_UI_MESSAGES = 30
@@ -202,10 +205,11 @@ for m in ss.messages[-MAX_UI_MESSAGES:]:
 if ss.prompt:
     user_text = ss.prompt
 
-    # Echo user message
-    ss.messages.append({"role": "user", "content": user_text})
-#    with st.chat_message("user", avatar=USER_AVATAR):
-#        st.markdown(user_text)
+    # Only echo user bubble if this prompt was NOT from the URL
+    if not ss.last_prompt_from_url:
+        ss.messages.append({"role": "user", "content": user_text})
+        with st.chat_message("user", avatar=USER_AVATAR):
+            st.markdown(user_text)
 
     # Build input items:
     # 1) A small SYSTEM item with dynamic context for this user/turn
@@ -248,4 +252,6 @@ if ss.prompt:
         container.markdown(assistant_text)
 
     ss.messages.append({"role": "assistant", "content": assistant_text})
+    # reset prompt + source flag
     ss.prompt = ""
+    ss.last_prompt_from_url = False
