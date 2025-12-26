@@ -227,7 +227,7 @@ import os
 import requests
 import streamlit as st
 from openai import OpenAI
-from translation_non_spiritual import translations as T  # external translations
+from translations_spiritual import translations as T  # external translations
 
 # ---------- Page config ----------
 st.set_page_config(page_title="Coach Edge - Virtual Life Coach", layout="wide")
