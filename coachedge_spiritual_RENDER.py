@@ -408,7 +408,7 @@ def process_user_prompt(prompt_text: str, echo_user: bool):
         container = st.empty()
         try:
             stream = client.responses.create(
-                model=OPENAI_MODEL,
+ #               model=OPENAI_MODEL,
                 prompt={"id": PROMPT_ID},
                 conversation=ss.conversation_id,
                 input=input_items,
