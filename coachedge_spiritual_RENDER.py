@@ -280,7 +280,7 @@ MAX_UI_MESSAGES = 30
 PROMPT_ID_SB = os.getenv("OPENAI_PROMPT_ID_SB") or os.getenv("OPENAI_PROMPT_ID")
 PROMPT_ID_CB = os.getenv("OPENAI_PROMPT_ID_CB") or os.getenv("OPENAI_PROMPT_ID")
 
-# Responses API currently still requires `model`
+# Responses API currently still requires `model` in many setups
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
 
 # ---------- Cache heavy/static things ----------
@@ -321,7 +321,7 @@ ss.setdefault("consumed_url_prompt", False)
 ss.setdefault("conversation_id", None)
 ss.setdefault("adalo_synced", False)
 
-# ---------- URL parameters (backward compatible) ----------
+# ---------- URL parameters (backward compatible; adds program= only) ----------
 qp = st.query_params
 
 ss.fname    = qp.get("fname",    ss.fname or "Unknown")
@@ -338,28 +338,52 @@ if program not in ("SB", "CB"):
     program = "SB"
 PROMPT_ID = PROMPT_ID_SB if program == "SB" else PROMPT_ID_CB
 
-# resume ONLY if conversation_id exists; ignore legacy thread_id entirely
-passed_convo_id = qp.get("conversation_id") or None
+# Resume ONLY if conversation_id is provided and non-blank.
+# Your URL will always include conversation_id=, but it may be blank.
+passed_convo_id = (qp.get("conversation_id") or "").strip() or None
 if passed_convo_id and ss.conversation_id != passed_convo_id:
     ss.conversation_id = passed_convo_id
 
-# ---------- Role helper ----------
-def is_athlete_role(role_str: str) -> bool:
-    """
-    Returns True if the role represents an athlete.
-    Handles: "Athlete", "athlete", "Athlete (Soccer)", "athlete - captain", etc.
-    """
-    if not role_str:
-        return False
-    role_norm = role_str.strip().lower()
-    return role_norm == "athlete" or role_norm.startswith("athlete")
+# ---------- Helpers ----------
+def is_athlete_role(role_value: str) -> bool:
+    return (role_value or "").strip().lower() == "athlete"
 
-# ---------- Adalo sync (only when we create a new conversation) ----------
+def extract_language(label: str) -> str:
+    parts = (label or "").split("(")
+    return parts[1].split(")")[0].strip() if len(parts) > 1 else "Unknown"
+
+def t_for(lang_label: str) -> dict:
+    return LANGS.get(lang_label, LANGS.get("English", {}))
+
+def tkey(lang_dict: dict, key: str, default: str) -> str:
+    return lang_dict.get(key, default)
+
+lang_label = extract_language(ss.language)
+LANG = t_for(lang_label)
+
+# If ?prompt= is passed, we will NOT use the translations UI.
+url_prompt = qp.get("prompt")
+use_translations_ui = not bool(url_prompt)
+
+if use_translations_ui:
+    ask_q = tkey(LANG, "ask_question", "### **Ask Coach Edge**")
+    expander_title = tkey(LANG, "expander_title", "Topics To Get You Started")
+    button_prompts = LANG.get("button_prompts", [])
+    button_prompt_vals = LANG.get("prompts", [])
+    placeholder = tkey(LANG, "typed_input_placeholder", "How else can I help?")
+else:
+    # Minimal UI when processing a URL prompt
+    ask_q = ""
+    expander_title = ""
+    button_prompts = []
+    button_prompt_vals = []
+    placeholder = "How else can I help?"
+
+# ---------- Adalo sync (only when we create a new conversation; NEVER for athletes) ----------
 def update_adalo_user_conversation_once(email_: str, conversation_id_: str):
-    # >>> KEY CHANGE: do not store conversation_id for athletes <<<
+    # Hard stop for athletes (your requirement)
     if is_athlete_role(ss.role):
         return
-
     if not email_ or not conversation_id_ or ss.adalo_synced:
         return
 
@@ -372,7 +396,7 @@ def update_adalo_user_conversation_once(email_: str, conversation_id_: str):
     headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
     base = f"https://api.adalo.com/v0/apps/{app_id}/collections/{col_id}"
 
-    # assumes you created a column named conversation_id in Adalo Users
+    # Assumes you created a column named conversation_id in Adalo Users
     payload = {"conversation_id": conversation_id_}
 
     try:
@@ -395,45 +419,24 @@ def update_adalo_user_conversation_once(email_: str, conversation_id_: str):
 
 # ---------- Conversation bootstrapping ----------
 def ensure_conversation():
+    """
+    1) If URL provides a usable conversation_id, use it (no creation, no Adalo write).
+    2) Else if we already have one in session, keep it.
+    3) Else create a new conversation.
+       - Only sync to Adalo if NOT athlete.
+    """
     if ss.conversation_id:
         return
+
     conv = client.conversations.create()
     ss.conversation_id = conv.id
-    update_adalo_user_conversation_once(email, conv.id)
+
+    # NEVER store conversation_id for athletes
+    if not is_athlete_role(ss.role):
+        update_adalo_user_conversation_once(email, conv.id)
 
 ensure_conversation()
 
-# ---------- Language helpers ----------
-def extract_language(label: str) -> str:
-    parts = label.split("(")
-    return parts[1].split(")")[0] if len(parts) > 1 else "Unknown"
-
-def t_for(lang_label: str) -> dict:
-    return LANGS.get(lang_label, LANGS.get("English", {}))
-
-def tkey(lang_dict: dict, key: str, default: str) -> str:
-    return lang_dict.get(key, default)
-
-lang_label = extract_language(ss.language)
-LANG = t_for(lang_label)
-
-url_prompt = qp.get("prompt")
-use_translations_ui = not bool(url_prompt)
-
-if use_translations_ui:
-    ask_q = tkey(LANG, "ask_question", "### **Ask Coach Edge**")
-    expander_title = tkey(LANG, "expander_title", "Topics To Get You Started")
-    button_prompts = LANG.get("button_prompts", [])
-    button_prompt_vals = LANG.get("prompts", [])
-    placeholder = tkey(LANG, "typed_input_placeholder", "How else can I help?")
-else:
-    ask_q = ""
-    expander_title = ""
-    button_prompts = []
-    button_prompt_vals = []
-    placeholder = "How else can I help?"
-
-# ---------- Build per-turn system context ----------
 def build_system_context() -> str:
     return (
         f"User name: {ss.fname}. "
@@ -445,6 +448,7 @@ def build_system_context() -> str:
 
 # ---------- PROCESS FIRST (Option A) ----------
 def process_user_prompt(prompt_text: str, echo_user: bool):
+    # Only echo if it came from chat_input (your requirement)
     if echo_user:
         ss.messages.append({"role": "user", "content": prompt_text})
         with st.chat_message("user", avatar=USER_AVATAR):
@@ -465,11 +469,10 @@ def process_user_prompt(prompt_text: str, echo_user: bool):
                 conversation=ss.conversation_id,
                 input=input_items,
                 stream=True,
-                store=True
+                store=True,
             )
             for event in stream:
-                etype = getattr(event, "type", "")
-                if etype == "response.output_text.delta":
+                if getattr(event, "type", "") == "response.output_text.delta":
                     chunks.append(event.delta)
                     tick += 1
                     if tick % 8 == 0:
@@ -482,9 +485,19 @@ def process_user_prompt(prompt_text: str, echo_user: bool):
 
     ss.messages.append({"role": "assistant", "content": assistant_text})
 
+    # Clear flags so input enables on this render pass
     ss.submitted_prompt = ""
     ss.processing = False
     ss.prompt_source = ""
+
+# =========================================================
+# UI ORDER (fixes the "echo above expander" and "no response" issues):
+# 1) header/buttons
+# 2) history
+# 3) queue URL prompt once (no echo)
+# 4) process queued prompt (renders assistant reply in-place)
+# 5) chat_input last
+# =========================================================
 
 # ---------- Header/buttons ----------
 if ask_q:
@@ -512,7 +525,7 @@ if url_prompt and not ss.consumed_url_prompt and not ss.processing:
     ss.prompt_source = "url"
     ss.consumed_url_prompt = True
 
-# ---------- If a prompt is waiting, handle it NOW ----------
+# ---------- If a prompt is waiting, handle it NOW (after history) ----------
 if ss.submitted_prompt and ss.processing:
     echo = (ss.prompt_source == "chat")  # ONLY chat_input echoes
     process_user_prompt(ss.submitted_prompt, echo_user=echo)
