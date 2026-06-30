@@ -627,22 +627,13 @@ def inject_css():
                 line-height: 1.46;
             }}
 
-            [data-testid="stChatInput"] {{
-                max-width: 430px;
-                margin: 0 auto;
-            }}
-
-            [data-testid="stChatInput"] textarea {{
-                border-radius: 18px !important;
-                border: 1px solid rgba(0, 52, 98, .12) !important;
-            }}
                           
             .small-divider {{
                 height: 1px;
                 background: rgba(0,52,98,.10);
                 margin: 16px 0 6px 0;
             }}
-            
+
         </style>
         """,
         unsafe_allow_html=True,
