@@ -449,7 +449,7 @@ def inject_css():
 
             .block-container {{
                 max-width: 430px !important;
-                padding: 0 14px 88px 14px !important;
+                padding: 0 14px 56px 14px !important;
                 margin: 0 auto !important;
             }}
 
@@ -576,7 +576,7 @@ def inject_css():
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 8px;
-                margin-bottom: 14px;
+                margin-bottom: 4px;
             }}
 
             div.stButton > button {{
@@ -631,10 +631,29 @@ def inject_css():
                 max-width: 430px;
                 margin: 0 auto;
             }}
+    
+
+            [data-testid="stChatInput"] > div {{
+                align-items: center !important;
+            }}
+
+            [data-testid="stChatInput"] button {{
+                position: absolute !important;
+                right: 12px !important;
+                bottom: 10px !important;
+                width: 34px !important;
+                height: 34px !important;
+                min-height: 34px !important;
+                border-radius: 12px !important;
+            }}
 
             [data-testid="stChatInput"] textarea {{
                 border-radius: 18px !important;
+                padding: 12px 46px 12px 18px !important;
                 border: 1px solid rgba(0, 52, 98, .12) !important;
+                min-height: 46px !important;
+                height: 46px !important;
+                line-height: 20px !important;
             }}
 
             .small-divider {{
