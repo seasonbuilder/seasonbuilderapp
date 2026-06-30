@@ -631,31 +631,32 @@ def inject_css():
                 max-width: 430px;
                 margin: 0 auto;
             }}
-    
 
             [data-testid="stChatInput"] > div {{
+                display: flex !important;
                 align-items: center !important;
-            }}
-
-            [data-testid="stChatInput"] button {{
-                position: absolute !important;
-                right: 12px !important;
-                bottom: 10px !important;
-                width: 34px !important;
-                height: 34px !important;
-                min-height: 34px !important;
-                border-radius: 12px !important;
+                gap: 8px !important;
             }}
 
             [data-testid="stChatInput"] textarea {{
                 border-radius: 18px !important;
-                padding: 12px 46px 12px 18px !important;
+                padding: 12px 16px !important;
                 border: 1px solid rgba(0, 52, 98, .12) !important;
                 min-height: 46px !important;
                 height: 46px !important;
                 line-height: 20px !important;
             }}
 
+            [data-testid="stChatInput"] button {{
+                position: static !important;
+                width: 38px !important;
+                height: 38px !important;
+                min-height: 38px !important;
+                border-radius: 12px !important;
+                margin: 0 !important;
+                flex: 0 0 38px !important;
+            }}
+              
             .small-divider {{
                 height: 1px;
                 background: rgba(0,52,98,.10);
