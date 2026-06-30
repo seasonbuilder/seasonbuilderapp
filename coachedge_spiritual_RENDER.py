@@ -286,7 +286,7 @@ import html
 import requests
 import streamlit as st
 from openai import OpenAI
-from translations_spiritual import translations as T  # external translations
+from translations_spiritual_new import translations as T  # external translations
 
 # ---------- Page config ----------
 st.set_page_config(
@@ -749,41 +749,32 @@ def process_user_prompt(prompt_text: str, echo_user: bool):
 # ---------- Branded landing UI ----------
 def render_landing():
     escaped_name = html.escape(first_name)
-    context_line = ""
-    if team and school:
-        context_line = f"<div class='profile-copy'>{html.escape(team)} • {html.escape(school)}</div>"
-    elif team or school:
-        context_line = f"<div class='profile-copy'>{html.escape(team or school)}</div>"
+    hero_kicker = html.escape(tkey(LANG, "coach_hero_kicker", "Coach Edge"))
+    hero_title_template = tkey(LANG, "coach_hero_title", "Hi {name} 👋")
+    hero_title = html.escape(hero_title_template.format(name=first_name))
+    hero_subtitle = html.escape(tkey(
+        LANG,
+        "coach_hero_subtitle",
+        "I’m here to help you think through life, sport, faith, leadership, pressure, and the person you are becoming."
+    ))
+    popular_title = html.escape(tkey(LANG, "popular_topics_title", "Popular Topics"))
+    topics_hint = html.escape(tkey(LANG, "topics_hint", "Tap a topic or type what is on your mind below."))
 
     st.markdown(
         f"""
         <div class="coach-hero">
             <div class="hero-topline">
                 <div>
-                    <div class="hero-kicker">Coach Edge</div>
-                    <h1 class="hero-title">Hi {escaped_name} 👋</h1>
-                    <p class="hero-subtitle">I’m here to help you think through life, sport, faith, leadership, pressure, and the person you are becoming.</p>
+                    <div class="hero-kicker">{hero_kicker}</div>
+                    <h1 class="hero-title">{hero_title}</h1>
+                    <p class="hero-subtitle">{hero_subtitle}</p>
                 </div>
                 <img class="coach-avatar" src="{COACH_EDGE_PHOTO_URL}" alt="Coach Edge" />
             </div>
         </div>
 
-        <div class="coach-card profile-card">
-            <img src="{COACH_EDGE_PHOTO_URL}" alt="Coach Edge" />
-            <div>
-                <div class="profile-title">Ask Coach Edge</div>
-                <div class="profile-copy">Advice, encouragement, and perspective for your Season Builder journey.</div>
-                {context_line}
-            </div>
-        </div>
-
-        <div class="coach-card thought-card">
-            <div class="thought-kicker">Today’s Thought</div>
-            <p class="thought-text">“The habits you repeat become the person you become.”</p>
-        </div>
-
-        <div class="section-label">Popular Topics</div>
-        <div class="hint-card"><strong>Tap a topic</strong> or type what is on your mind below.</div>
+        <div class="section-label">{popular_title}</div>
+        <div class="hint-card">{topics_hint}</div>
         """,
         unsafe_allow_html=True,
     )
@@ -814,8 +805,8 @@ def default_topics():
     return labels, prompts
 
 def render_topics():
-    labels = list(button_prompts or [])
-    prompts = list(button_prompt_vals or [])
+    labels = list(LANG.get("popular_topic_labels") or button_prompts or [])
+    prompts = list(LANG.get("popular_topic_prompts") or button_prompt_vals or [])
 
     if not labels or not prompts:
         labels, prompts = default_topics()
@@ -847,7 +838,8 @@ elif use_translations_ui and len(ss.messages) == 0:
 
 # ---------- Show last N messages ----------
 if ss.messages:
-    st.markdown('<div class="section-label">Conversation</div>', unsafe_allow_html=True)
+    conversation_label = html.escape(tkey(LANG, "conversation_label", "Conversation"))
+    st.markdown(f'<div class="section-label">{conversation_label}</div>', unsafe_allow_html=True)
 
 for m in ss.messages[-MAX_UI_MESSAGES:]:
     avatar = USER_AVATAR if m["role"] == "user" else ASSISTANT_AVATAR
