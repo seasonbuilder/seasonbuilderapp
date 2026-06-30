@@ -701,7 +701,7 @@ def build_system_context() -> str:
 def process_user_prompt(prompt_text: str, echo_user: bool):
     if echo_user:
         ss.messages.append({"role": "user", "content": prompt_text})
-        with st.chat_message("user", avatar=USER_AVATAR):
+        with st.chat_message("user", avatar=USER_AVATAR, width="stretch"):
             st.markdown(prompt_text)
 
     input_items = [
@@ -710,7 +710,7 @@ def process_user_prompt(prompt_text: str, echo_user: bool):
     ]
 
     chunks, tick = [], 0
-    with st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
+    with st.chat_message("assistant", avatar=ASSISTANT_AVATAR,width="stretch"):
         container = st.empty()
         try:
             stream = client.responses.create(
@@ -834,7 +834,7 @@ if ss.messages:
 
 for m in ss.messages[-MAX_UI_MESSAGES:]:
     avatar = USER_AVATAR if m["role"] == "user" else ASSISTANT_AVATAR
-    with st.chat_message(m["role"], avatar=avatar):
+    with st.chat_message(m["role"], avatar=avatar,width="stretch"):
         st.markdown(m["content"])
 
 # ---------- Consume URL prompt once without echo ----------
