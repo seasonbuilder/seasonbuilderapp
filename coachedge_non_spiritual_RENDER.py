@@ -447,8 +447,9 @@ def inject_css():
             }}
 
             .block-container {{
-                max-width: 430px !important;
-                padding: 0 14px 56px 14px !important;
+                width: 100%; 
+                max-width: 5200px !important;
+                padding: 0 16px 56px 16px !important;
                 margin: 0 auto !important;
             }}
 
@@ -458,7 +459,7 @@ def inject_css():
                 background-position: center right;
                 color: white;
                 border-radius: 0 0 22px 22px;
-                margin: -12px -14px 16px -14px;
+                margin: -12px -16px 16px -16px;
                 padding: 26px 18px 22px 18px;
                 box-shadow: 0 8px 24px rgba(0, 52, 98, .22);
             }}
