@@ -761,7 +761,6 @@ def render_landing():
                     <h1 class="hero-title">{hero_title}</h1>
                     <p class="hero-subtitle">{hero_subtitle}</p>
                 </div>
-                <img class="coach-avatar" src="{COACH_EDGE_PHOTO_URL}" alt="Coach Edge" />
             </div>
         </div>
 
