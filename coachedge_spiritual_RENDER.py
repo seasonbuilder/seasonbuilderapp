@@ -429,6 +429,8 @@ def inject_css():
         f"""
         <style>
             :root {{
+                color-scheme: light;
+                --primary: {PRIMARY};
                 --primary: {PRIMARY};
                 --primary-dark: {PRIMARY_DARK};
                 --gold: {GOLD};
@@ -438,8 +440,11 @@ def inject_css():
                 --muted: {MUTED};
             }}
 
-            html, body, [data-testid="stAppViewContainer"] {{
+            html, body, .stApp, 
+            [data-testid="stAppViewContainer"],
+            [data-testid="stMain"] {{
                 background: var(--soft-bg);
+                color: var(--text);
             }}
 
             [data-testid="stHeader"], [data-testid="stToolbar"], #MainMenu, footer {{
@@ -615,6 +620,7 @@ def inject_css():
 
             [data-testid="stChatMessage"] {{
                 background: white;
+                color: var(--text);
                 border-radius: 18px;
                 padding: 10px 12px;
                 margin: 10px 0;
@@ -622,12 +628,27 @@ def inject_css():
                 border: 1px solid rgba(0, 52, 98, .08);
             }}
 
+            [data-testid="stChatMessage"],
+            [data-testid="stChatMessage"] *,
+            [data-testid="stMarkdownContainer"],
+            [data-testid="stMarkdownContainer"] * {{
+                color: var(--text) !important;
+            }}
+
             [data-testid="stChatMessage"] p {{
                 font-size: 15px;
                 line-height: 1.46;
             }}
 
-                          
+            [data-testid="stChatInput"] textarea {{
+                color: var(--text) !important;
+                background: white !important;
+            }}
+
+            [data-testid="stChatInput"] textarea::placeholder {{
+                color: var(--muted) !important;
+            }}
+            
             .small-divider {{
                 height: 1px;
                 background: rgba(0,52,98,.10);
