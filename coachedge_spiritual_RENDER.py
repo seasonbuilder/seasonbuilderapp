@@ -760,18 +760,6 @@ def inject_css():
                 opacity: 1 !important;
             }}
 
-            [data-testid="stChatInput"] button {{
-                background: var(--primary) !important;
-                color: #ffffff !important;
-                border-radius: 12px !important;
-                color-scheme: light !important;
-            }}
-
-            [data-testid="stChatInput"] button svg {{
-                color: #ffffff !important;
-                fill: #ffffff !important;
-                stroke: #ffffff !important;
-            }}
 
             /* --------------------------------
                EXPANDER
