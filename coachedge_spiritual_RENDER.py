@@ -420,17 +420,25 @@ role = safe_text(ss.role)
 # ---------- Styling ----------
 def inject_css():
     mountain_rule = ""
+
     if MOUNTAIN_IMAGE_URL:
-        mountain_rule = f"background-image: linear-gradient(90deg, rgba(0,52,98,.97) 0%, rgba(0,52,98,.88) 48%, rgba(0,52,98,.45) 100%), url('{MOUNTAIN_IMAGE_URL}');"
+        mountain_rule = (
+            "background-image: "
+            f"linear-gradient(90deg, rgba(0,52,98,.97) 0%, "
+            f"rgba(0,52,98,.88) 48%, rgba(0,52,98,.45) 100%), "
+            f"url('{MOUNTAIN_IMAGE_URL}');"
+        )
     else:
-        mountain_rule = "background: radial-gradient(circle at 80% 20%, #0b5a92 0%, #003462 38%, #002847 100%);"
+        mountain_rule = (
+            "background: radial-gradient("
+            "circle at 80% 20%, #0b5a92 0%, #003462 38%, #002847 100%"
+            ");"
+        )
 
     st.markdown(
         f"""
         <style>
             :root {{
-                color-scheme: light;
-                --primary: {PRIMARY};
                 --primary: {PRIMARY};
                 --primary-dark: {PRIMARY_DARK};
                 --gold: {GOLD};
@@ -440,14 +448,21 @@ def inject_css():
                 --muted: {MUTED};
             }}
 
-            html, body, .stApp, 
-            [data-testid="stAppViewContainer"],
-            [data-testid="stMain"] {{
+            /*
+            Do not force a global color scheme.
+            Streamlit chat and input will follow the phone/browser theme.
+            */
+
+            html,
+            body,
+            [data-testid="stAppViewContainer"] {{
                 background: var(--soft-bg);
-                color: var(--text);
             }}
 
-            [data-testid="stHeader"], [data-testid="stToolbar"], #MainMenu, footer {{
+            [data-testid="stHeader"],
+            [data-testid="stToolbar"],
+            #MainMenu,
+            footer {{
                 visibility: hidden;
                 height: 0;
             }}
@@ -458,15 +473,26 @@ def inject_css():
                 margin: 0 auto !important;
             }}
 
+            /* --------------------------------
+               HERO: always Season Builder style
+               -------------------------------- */
+
             .coach-hero {{
                 {mountain_rule}
                 background-size: cover;
                 background-position: center right;
-                color: white;
+                color: #ffffff !important;
                 border-radius: 0 0 22px 22px;
                 margin: -12px -14px 16px -14px;
                 padding: 26px 18px 22px 18px;
                 box-shadow: 0 8px 24px rgba(0, 52, 98, .22);
+            }}
+
+            .coach-hero,
+            .coach-hero *,
+            .hero-title,
+            .hero-subtitle {{
+                color: #ffffff !important;
             }}
 
             .hero-topline {{
@@ -477,7 +503,7 @@ def inject_css():
             }}
 
             .hero-kicker {{
-                color: var(--gold);
+                color: var(--gold) !important;
                 font-size: 12px;
                 font-weight: 800;
                 letter-spacing: .13em;
@@ -506,9 +532,13 @@ def inject_css():
                 border-radius: 50%;
                 object-fit: cover;
                 border: 3px solid var(--gold);
-                box-shadow: 0 5px 16px rgba(0,0,0,.25);
+                box-shadow: 0 5px 16px rgba(0, 0, 0, .25);
                 flex: 0 0 auto;
             }}
+
+            /* --------------------------------
+               CUSTOM NON-CHAT UI
+               -------------------------------- */
 
             .section-label {{
                 font-size: 13px;
@@ -520,7 +550,8 @@ def inject_css():
             }}
 
             .coach-card {{
-                background: white;
+                background: #ffffff;
+                color: var(--text);
                 border: 1px solid rgba(0, 52, 98, .08);
                 border-radius: 18px;
                 padding: 15px;
@@ -528,8 +559,17 @@ def inject_css():
                 margin-bottom: 14px;
             }}
 
+            .coach-card,
+            .coach-card * {{
+                color: var(--text);
+            }}
+
             .thought-card {{
-                background: linear-gradient(135deg, #ffffff 0%, #fffdf2 100%);
+                background: linear-gradient(
+                    135deg,
+                    #ffffff 0%,
+                    #fffdf2 100%
+                );
                 border-left: 5px solid var(--gold);
             }}
 
@@ -589,7 +629,7 @@ def inject_css():
                 min-height: 42px;
                 border-radius: 14px;
                 border: 1px solid rgba(0, 52, 98, .13);
-                background: #fff;
+                background: #ffffff;
                 color: var(--primary);
                 font-weight: 750;
                 font-size: 13px;
@@ -618,21 +658,16 @@ def inject_css():
                 color: var(--primary);
             }}
 
+            /* --------------------------------
+               CHAT
+               Structural styling only.
+               No forced background or text color.
+               -------------------------------- */
+
             [data-testid="stChatMessage"] {{
-                background: white;
-                color: var(--text);
                 border-radius: 18px;
                 padding: 10px 12px;
                 margin: 10px 0;
-                box-shadow: 0 4px 16px rgba(16, 24, 40, .06);
-                border: 1px solid rgba(0, 52, 98, .08);
-            }}
-
-            [data-testid="stChatMessage"],
-            [data-testid="stChatMessage"] *,
-            [data-testid="stMarkdownContainer"],
-            [data-testid="stMarkdownContainer"] * {{
-                color: var(--text) !important;
             }}
 
             [data-testid="stChatMessage"] p {{
@@ -640,21 +675,22 @@ def inject_css():
                 line-height: 1.46;
             }}
 
-            [data-testid="stChatInput"] textarea {{
-                color: var(--text) !important;
-                background: white !important;
-            }}
+            /*
+            Intentionally do not set:
+            - background
+            - color
+            - markdown child colors
+            - textarea background
+            - textarea text color
 
-            [data-testid="stChatInput"] textarea::placeholder {{
-                color: var(--muted) !important;
-            }}
-            
+            Streamlit will provide the appropriate light/dark styling.
+            */
+
             .small-divider {{
                 height: 1px;
-                background: rgba(0,52,98,.10);
+                background: rgba(0, 52, 98, .10);
                 margin: 16px 0 6px 0;
             }}
-
         </style>
         """,
         unsafe_allow_html=True,
