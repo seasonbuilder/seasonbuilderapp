@@ -419,15 +419,27 @@ role = safe_text(ss.role)
 # ---------- Styling ----------
 def inject_css():
     mountain_rule = ""
+
     if MOUNTAIN_IMAGE_URL:
-        mountain_rule = f"background-image: linear-gradient(90deg, rgba(0,52,98,.97) 0%, rgba(0,52,98,.88) 48%, rgba(0,52,98,.45) 100%), url('{MOUNTAIN_IMAGE_URL}');"
+        mountain_rule = (
+            "background-image: "
+            f"linear-gradient(90deg, rgba(0,52,98,.97) 0%, "
+            f"rgba(0,52,98,.88) 48%, rgba(0,52,98,.45) 100%), "
+            f"url('{MOUNTAIN_IMAGE_URL}');"
+        )
     else:
-        mountain_rule = "background: radial-gradient(circle at 80% 20%, #0b5a92 0%, #003462 38%, #002847 100%);"
+        mountain_rule = (
+            "background: radial-gradient("
+            "circle at 80% 20%, #0b5a92 0%, #003462 38%, #002847 100%"
+            ");"
+        )
 
     st.markdown(
         f"""
         <style>
             :root {{
+                color-scheme: light !important;
+
                 --primary: {PRIMARY};
                 --primary-dark: {PRIMARY_DARK};
                 --gold: {GOLD};
@@ -437,31 +449,55 @@ def inject_css():
                 --muted: {MUTED};
             }}
 
-            html, body, [data-testid="stAppViewContainer"] {{
-                background: var(--soft-bg);
+            html,
+            body {{
+                color-scheme: light !important;
+                background: var(--soft-bg) !important;
+                color: var(--text) !important;
             }}
 
-            [data-testid="stHeader"], [data-testid="stToolbar"], #MainMenu, footer {{
+            .stApp,
+            [data-testid="stAppViewContainer"],
+            [data-testid="stMain"],
+            [data-testid="stMainBlockContainer"] {{
+                background: var(--soft-bg) !important;
+                color: var(--text) !important;
+            }}
+
+            [data-testid="stHeader"],
+            [data-testid="stToolbar"],
+            #MainMenu,
+            footer {{
                 visibility: hidden;
                 height: 0;
             }}
 
             .block-container {{
-                width: 100%; 
-                max-width: 5200px !important;
-                padding: 0 16px 56px 16px !important;
+                max-width: 430px !important;
+                padding: 0 14px 56px 14px !important;
                 margin: 0 auto !important;
             }}
+
+            /* --------------------------------
+               HERO
+               -------------------------------- */
 
             .coach-hero {{
                 {mountain_rule}
                 background-size: cover;
                 background-position: center right;
-                color: white;
+                color: #ffffff !important;
                 border-radius: 0 0 22px 22px;
-                margin: -12px -16px 16px -16px;
+                margin: -12px -14px 16px -14px;
                 padding: 26px 18px 22px 18px;
                 box-shadow: 0 8px 24px rgba(0, 52, 98, .22);
+            }}
+
+            .coach-hero,
+            .coach-hero *,
+            .hero-title,
+            .hero-subtitle {{
+                color: #ffffff !important;
             }}
 
             .hero-topline {{
@@ -472,7 +508,7 @@ def inject_css():
             }}
 
             .hero-kicker {{
-                color: var(--gold);
+                color: var(--gold) !important;
                 font-size: 12px;
                 font-weight: 800;
                 letter-spacing: .13em;
@@ -501,21 +537,26 @@ def inject_css():
                 border-radius: 50%;
                 object-fit: cover;
                 border: 3px solid var(--gold);
-                box-shadow: 0 5px 16px rgba(0,0,0,.25);
+                box-shadow: 0 5px 16px rgba(0, 0, 0, .25);
                 flex: 0 0 auto;
             }}
+
+            /* --------------------------------
+               CUSTOM UI
+               -------------------------------- */
 
             .section-label {{
                 font-size: 13px;
                 font-weight: 850;
                 letter-spacing: .04em;
-                color: var(--primary);
+                color: var(--primary) !important;
                 margin: 18px 0 8px 2px;
                 text-transform: uppercase;
             }}
 
             .coach-card {{
-                background: white;
+                background: #ffffff !important;
+                color: var(--text) !important;
                 border: 1px solid rgba(0, 52, 98, .08);
                 border-radius: 18px;
                 padding: 15px;
@@ -523,13 +564,22 @@ def inject_css():
                 margin-bottom: 14px;
             }}
 
+            .coach-card,
+            .coach-card * {{
+                color: var(--text) !important;
+            }}
+
             .thought-card {{
-                background: linear-gradient(135deg, #ffffff 0%, #fffdf2 100%);
+                background: linear-gradient(
+                    135deg,
+                    #ffffff 0%,
+                    #fffdf2 100%
+                ) !important;
                 border-left: 5px solid var(--gold);
             }}
 
             .thought-kicker {{
-                color: var(--primary);
+                color: var(--primary) !important;
                 font-size: 12px;
                 font-weight: 850;
                 letter-spacing: .08em;
@@ -538,7 +588,7 @@ def inject_css():
             }}
 
             .thought-text {{
-                color: var(--text);
+                color: var(--text) !important;
                 font-size: 17px;
                 line-height: 1.36;
                 font-weight: 720;
@@ -560,14 +610,14 @@ def inject_css():
             }}
 
             .profile-title {{
-                color: var(--primary);
+                color: var(--primary) !important;
                 font-weight: 850;
                 font-size: 16px;
                 margin-bottom: 2px;
             }}
 
             .profile-copy {{
-                color: var(--muted);
+                color: var(--muted) !important;
                 font-size: 13px;
                 line-height: 1.35;
             }}
@@ -583,43 +633,86 @@ def inject_css():
                 width: 100%;
                 min-height: 42px;
                 border-radius: 14px;
-                border: 1px solid rgba(0, 52, 98, .13);
-                background: #fff;
-                color: var(--primary);
+                border: 1px solid rgba(0, 52, 98, .13) !important;
+                background: #ffffff !important;
+                color: var(--primary) !important;
                 font-weight: 750;
                 font-size: 13px;
                 box-shadow: 0 3px 10px rgba(16, 24, 40, .05);
                 white-space: normal;
                 text-align: center;
+                color-scheme: light !important;
             }}
 
             div.stButton > button:hover {{
-                border-color: var(--primary);
-                background: #f1f6fb;
-                color: var(--primary);
+                border-color: var(--primary) !important;
+                background: #f1f6fb !important;
+                color: var(--primary) !important;
             }}
 
             .hint-card {{
-                background: #edf5fb;
+                background: #edf5fb !important;
                 border-radius: 16px;
                 padding: 13px 14px;
-                color: var(--primary);
+                color: var(--primary) !important;
                 font-size: 13px;
                 line-height: 1.4;
                 margin: 8px 0 12px 0;
             }}
 
+            .hint-card,
             .hint-card strong {{
-                color: var(--primary);
+                color: var(--primary) !important;
             }}
 
+            /* --------------------------------
+               STANDARD STREAMLIT TEXT
+               -------------------------------- */
+
+            [data-testid="stMarkdownContainer"] {{
+                color: var(--text);
+            }}
+
+            [data-testid="stMarkdownContainer"] p,
+            [data-testid="stMarkdownContainer"] li,
+            [data-testid="stMarkdownContainer"] strong,
+            [data-testid="stMarkdownContainer"] em {{
+                color: inherit;
+            }}
+
+            /* Reassert hero colors after generic Markdown rules */
+            .coach-hero,
+            .coach-hero *,
+            .coach-hero p,
+            .coach-hero strong,
+            .coach-hero em {{
+                color: #ffffff !important;
+            }}
+
+            .coach-hero .hero-kicker {{
+                color: var(--gold) !important;
+            }}
+
+            /* --------------------------------
+               CHAT MESSAGES
+               -------------------------------- */
+
             [data-testid="stChatMessage"] {{
-                background: white;
+                background: #ffffff !important;
+                color: var(--text) !important;
                 border-radius: 18px;
                 padding: 10px 12px;
                 margin: 10px 0;
                 box-shadow: 0 4px 16px rgba(16, 24, 40, .06);
-                border: 1px solid rgba(0, 52, 98, .08);
+                border: 1px solid rgba(0, 52, 98, .08) !important;
+                color-scheme: light !important;
+            }}
+
+            [data-testid="stChatMessage"],
+            [data-testid="stChatMessage"] *,
+            [data-testid="stChatMessageContent"],
+            [data-testid="stChatMessageContent"] * {{
+                color: var(--text) !important;
             }}
 
             [data-testid="stChatMessage"] p {{
@@ -627,17 +720,76 @@ def inject_css():
                 line-height: 1.46;
             }}
 
-                          
-            .small-divider {{
-                height: 1px;
-                background: rgba(0,52,98,.10);
-                margin: 16px 0 6px 0;
+            /* --------------------------------
+               BOTTOM CHAT INPUT AREA
+               -------------------------------- */
+
+            [data-testid="stBottom"],
+            [data-testid="stBottom"] > div,
+            [data-testid="stBottom"] > div > div,
+            [data-testid="stChatInputContainer"] {{
+                background: var(--soft-bg) !important;
+                color-scheme: light !important;
             }}
 
+            [data-testid="stChatInput"] {{
+                background: transparent !important;
+                color-scheme: light !important;
+            }}
+
+            [data-testid="stChatInput"] > div {{
+                background: #ffffff !important;
+                border: 1px solid rgba(0, 52, 98, .13) !important;
+                border-radius: 16px !important;
+                box-shadow: 0 4px 16px rgba(16, 24, 40, .08) !important;
+                color-scheme: light !important;
+            }}
+
+            [data-testid="stChatInput"] textarea {{
+                background: #ffffff !important;
+                color: var(--text) !important;
+                -webkit-text-fill-color: var(--text) !important;
+                caret-color: var(--primary) !important;
+                color-scheme: light !important;
+            }}
+
+            [data-testid="stChatInput"] textarea::placeholder {{
+                color: var(--muted) !important;
+                -webkit-text-fill-color: var(--muted) !important;
+                opacity: 1 !important;
+            }}
+
+
+            /* --------------------------------
+               EXPANDER
+               -------------------------------- */
+
+            [data-testid="stExpander"],
+            [data-testid="stExpander"] details,
+            [data-testid="stExpanderDetails"] {{
+                background: #ffffff !important;
+                color: var(--text) !important;
+                border-color: rgba(0, 52, 98, .08) !important;
+                color-scheme: light !important;
+            }}
+
+            [data-testid="stExpander"] summary,
+            [data-testid="stExpander"] summary *,
+            [data-testid="stExpanderDetails"],
+            [data-testid="stExpanderDetails"] * {{
+                color: var(--text) !important;
+            }}
+
+            .small-divider {{
+                height: 1px;
+                background: rgba(0, 52, 98, .10);
+                margin: 16px 0 6px 0;
+            }}
         </style>
         """,
         unsafe_allow_html=True,
     )
+
 
 inject_css()
 
