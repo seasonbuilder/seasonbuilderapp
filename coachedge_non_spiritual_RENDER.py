@@ -285,6 +285,7 @@ import html
 import requests
 import streamlit as st
 from openai import OpenAI
+from chat_prompt_profiles import build_code_response_kwargs, get_coach_edge_profile
 from translations_non_spiritual_new import translations as T  # external translations
 
 # ---------- Page config ----------
@@ -317,7 +318,7 @@ MOUNTAIN_IMAGE_URL = os.getenv("MOUNTAIN_IMAGE_URL", "")
 # ---------- Prompt routing (SB / CB) ----------
 PROMPT_ID_SB = os.getenv("OPENAI_PROMPT_ID_SB") or os.getenv("OPENAI_PROMPT_ID")
 PROMPT_ID_CB = os.getenv("OPENAI_PROMPT_ID_CB") or os.getenv("OPENAI_PROMPT_ID")
-OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
+OPENAI_PROMPT_MODE = os.getenv("OPENAI_PROMPT_MODE", "managed").strip().lower()
 
 # ---------- Cache heavy/static things ----------
 @st.cache_resource(show_spinner=False)
@@ -366,6 +367,7 @@ program = (qp.get("program") or "SB").strip().upper()
 if program not in ("SB", "CB"):
     program = "SB"
 PROMPT_ID = PROMPT_ID_SB if program == "SB" else PROMPT_ID_CB
+PROMPT_PROFILE = get_coach_edge_profile(spiritual=False, program=program)
 
 passed_convo_id = (qp.get("conversation_id") or "").strip() or None
 if passed_convo_id and ss.conversation_id != passed_convo_id:
@@ -866,13 +868,21 @@ def process_user_prompt(prompt_text: str, echo_user: bool):
     with st.chat_message("assistant", avatar=ASSISTANT_AVATAR,width="stretch"):
         container = st.empty()
         try:
-            stream = client.responses.create(
-                prompt={"id": PROMPT_ID},
-                conversation=ss.conversation_id,
-                input=input_items,
-                stream=True,
-                store=True,
-            )
+            if OPENAI_PROMPT_MODE == "code":
+                request_kwargs = build_code_response_kwargs(
+                    profile=PROMPT_PROFILE,
+                    input_items=input_items,
+                    conversation_id=ss.conversation_id,
+                )
+            else:
+                request_kwargs = {
+                    "prompt": {"id": PROMPT_ID},
+                    "conversation": ss.conversation_id,
+                    "input": input_items,
+                    "stream": True,
+                    "store": True,
+                }
+            stream = client.responses.create(**request_kwargs)
             for event in stream:
                 if getattr(event, "type", "") == "response.output_text.delta":
                     chunks.append(event.delta)

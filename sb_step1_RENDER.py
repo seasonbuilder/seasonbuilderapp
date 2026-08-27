@@ -2,6 +2,7 @@ import os
 import requests
 import streamlit as st
 from openai import OpenAI
+from chat_prompt_profiles import build_code_response_kwargs, get_box_top_profile
 
 # ====== Adalo Save Function ===========
 def save_answers(answer: str):
@@ -25,6 +26,8 @@ st.set_page_config(page_title="Coach Edge - Virtual Life Coach", layout="wide")
 # ---------- OpenAI client ----------
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 PROMPT_ID = os.getenv("OPENAI_PROMPT_ID")  # e.g., "prompt_abc123"
+OPENAI_PROMPT_MODE = os.getenv("OPENAI_PROMPT_MODE", "managed").strip().lower()
+PROMPT_PROFILE = get_box_top_profile()
 
 # ======== ENV VARIABLES  ========
 ADALO_COLLECTION_ID = os.getenv("ADALO_COLLECTION_ID")
@@ -151,12 +154,20 @@ if ss.prompt:
     with st.chat_message('assistant', avatar=ASSISTANT_AVATAR):
         container = st.empty()
         try:
-            stream = client.responses.create(
-                prompt={"id": PROMPT_ID},            # Use your Chat Prompt (model/tools/instructions)
-                conversation=ss.conversation_id,     # Keep context like Threads did
-                input=input_items,                   # Per-turn items (system + user)
-                stream=True
-            )
+            if OPENAI_PROMPT_MODE == "code":
+                request_kwargs = build_code_response_kwargs(
+                    profile=PROMPT_PROFILE,
+                    input_items=input_items,
+                    conversation_id=ss.conversation_id,
+                )
+            else:
+                request_kwargs = {
+                    "prompt": {"id": PROMPT_ID},
+                    "conversation": ss.conversation_id,
+                    "input": input_items,
+                    "stream": True,
+                }
+            stream = client.responses.create(**request_kwargs)
             if stream:
                 for event in stream:
                     # canonical streaming delta for Responses API
@@ -396,4 +407,4 @@ if ss.prompt:
 
 #     # Save assistant's final response to message history
 #     st.session_state.messages.append({"role": "assistant", "content": response}) 
-#     
+#
