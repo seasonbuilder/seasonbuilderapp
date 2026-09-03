@@ -31,19 +31,46 @@ class ChatPromptProfileTests(unittest.TestCase):
         self.assertEqual(profile.key, "season_builder_values")
 
     def test_code_request_has_no_managed_prompt_reference(self):
+        profile = get_coach_edge_profile(spiritual=False, program="SB")
         request = build_code_response_kwargs(
-            profile=get_coach_edge_profile(spiritual=False, program="SB"),
-            input_items=[{"role": "user", "content": "Help me grow."}],
+            profile=profile,
+            input_items=[
+                {"role": "system", "content": "User name: Taylor."},
+                {"role": "user", "content": "Help me grow."},
+            ],
             conversation_id="conv_test",
         )
         self.assertNotIn("prompt", request)
         self.assertEqual(request["model"], "gpt-5.6-luna")
         self.assertEqual(request["conversation"], "conv_test")
-        self.assertEqual(request["input"][0]["role"], "system")
+        self.assertEqual(
+            request["input"],
+            [{"role": "user", "content": "Help me grow."}],
+        )
+        self.assertTrue(request["instructions"].startswith(profile.instructions))
+        self.assertIn("User name: Taylor.", request["instructions"])
         self.assertEqual(
             request["tools"][0]["vector_store_ids"],
             ["vs_pSlnhqILn7dfy3rHgTo6fAiB"],
         )
+
+    def test_system_and_developer_messages_are_not_stored_as_conversation_input(self):
+        request = build_code_response_kwargs(
+            profile=get_box_top_profile(),
+            input_items=[
+                {"role": "system", "content": "Native language: Spanish."},
+                {"role": "developer", "content": "Use the athlete's name."},
+                {"role": "user", "content": "Begin."},
+            ],
+            conversation_id="conv_test",
+        )
+
+        self.assertEqual(
+            request["input"],
+            [{"role": "user", "content": "Begin."}],
+        )
+        self.assertIn("Native language: Spanish.", request["instructions"])
+        self.assertIn("Use the athlete's name.", request["instructions"])
 
     def test_culture_builder_does_not_enable_file_search(self):
         request = build_code_response_kwargs(

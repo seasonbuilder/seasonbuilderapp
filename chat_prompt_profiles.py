@@ -107,11 +107,30 @@ def build_code_response_kwargs(
     stream: bool = True,
     store: bool = True,
 ) -> Dict[str, Any]:
-    """Build a Responses API request without using a managed prompt object."""
+    """Build a Responses API request without storing repeated instructions.
+
+    Conversation input and output items are retained by the Responses API. Keep
+    static profile instructions and per-request system context in the top-level
+    ``instructions`` field so they are applied on every turn without becoming
+    additional conversation items.
+    """
+    instruction_parts = [profile.instructions.strip()]
+    conversation_items: List[Dict[str, str]] = []
+
+    for item in input_items:
+        role = (item.get("role") or "").strip().lower()
+        if role in {"system", "developer"}:
+            content = (item.get("content") or "").strip()
+            if content:
+                instruction_parts.append(content)
+        else:
+            conversation_items.append(item)
+
     request: Dict[str, Any] = {
         "model": profile.model,
         "conversation": conversation_id,
-        "input": [{"role": "system", "content": profile.instructions}, *input_items],
+        "instructions": "\n\n".join(instruction_parts),
+        "input": conversation_items,
         "reasoning": {
             "mode": profile.reasoning_mode,
             "effort": profile.reasoning_effort,
