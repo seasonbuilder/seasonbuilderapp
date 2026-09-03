@@ -481,6 +481,13 @@ def inject_css():
                 margin: 0 auto !important;
             }}
 
+            @media (min-width: 768px) {{
+                .block-container {{
+                    width: 90vw !important;
+                    max-width: 90vw !important;
+                }}
+            }}
+
             /* --------------------------------
                HERO
                -------------------------------- */
