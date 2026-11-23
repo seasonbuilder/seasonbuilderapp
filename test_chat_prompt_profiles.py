@@ -41,7 +41,7 @@ class ChatPromptProfileTests(unittest.TestCase):
             conversation_id="conv_test",
         )
         self.assertNotIn("prompt", request)
-        self.assertEqual(request["model"], "gpt-5.6-luna")
+        self.assertEqual(request["model"], "gpt-6-luna")
         self.assertEqual(request["conversation"], "conv_test")
         self.assertEqual(
             request["input"],
